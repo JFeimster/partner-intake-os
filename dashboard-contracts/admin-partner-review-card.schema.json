@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/dashboard-contracts/admin-partner-review-card.schema.json",
+  "title": "Admin Partner Review Card",
+  "description": "Internal admin review object for deciding partner approval, manual review, watchlist, or rejection.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^rev_[a-z0-9_\\-]{6,80}$"
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[a-z0-9_\\-]{6,64}$"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "flag": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "flag",
+          "severity",
+          "details"
+        ]
+      }
+    },
+    "manual_review_required": {
+      "type": "boolean"
+    },
+    "recommended_decision": {
+      "type": "string",
+      "enum": [
+        "approve",
+        "approve_with_conditions",
+        "request_more_info",
+        "watchlist",
+        "reject"
+      ]
+    },
+    "next_action": {
+      "type": "string",
+      "enum": [
+        "send_welcome",
+        "send_resources",
+        "schedule_call",
+        "request_more_info",
+        "manual_review",
+        "assign_campaign",
+        "create_hubspot_task",
+        "create_notion_record",
+        "activate_dashboard_access",
+        "reject",
+        "watchlist_nurture"
+      ]
+    },
+    "reviewer_notes": {
+      "type": "string",
+      "maxLength": 1500
+    },
+    "review_owner": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "review_id",
+    "partner_id",
+    "summary",
+    "score",
+    "risk_level",
+    "risk_flags",
+    "manual_review_required",
+    "recommended_decision",
+    "next_action",
+    "reviewer_notes"
+  ],
+  "examples": [
+    {
+      "schema_version": "1.0.0",
+      "review_id": "rev_harbor_cpa_001",
+      "partner_id": "ptr_harbor_cpa_001",
+      "summary": "CPA/bookkeeper with relevant SMB audience, moderate referral potential, and low compliance risk. Best suited for referral-only onboarding before any deeper strategic track.",
+      "score": 78,
+      "risk_level": "low",
+      "risk_flags": [],
+      "manual_review_required": false,
+      "recommended_decision": "approve",
+      "next_action": "send_resources",
+      "reviewer_notes": "Send cash-flow gap checklist and schedule quick partner process walkthrough.",
+      "review_owner": "Jason Feimster",
+      "created_at": "2026-07-06T14:10:00Z",
+      "updated_at": "2026-07-06T14:10:00Z"
+    }
+  ]
+}

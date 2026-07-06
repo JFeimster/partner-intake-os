@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-06T14:15:00Z",
+  "source": "partner_intake_os",
+  "environment": "sample",
+  "dashboard_context": {
+    "module": "partner_command_center_partner_intake",
+    "record_type": "partner_dashboard_payload",
+    "intended_consumers": [
+      "static_dashboard_mvp",
+      "future_authenticated_dashboard",
+      "admin_review_view",
+      "gpt_action_review"
+    ]
+  },
+  "partner_dashboard_card": {
+    "schema_version": "1.0.0",
+    "partner_id": "ptr_harbor_cpa_001",
+    "display_name": "Maya Chen",
+    "company": "Harbor Ledger CPA",
+    "email": "maya@example.com",
+    "partner_type": "cpa_bookkeeper",
+    "partner_tier": "tier_2",
+    "onboarding_path": "referral_only_partner",
+    "status": "pending_review",
+    "next_action": "send_resources",
+    "risk_level": "low",
+    "primary_audience": "service businesses with cash-flow gaps",
+    "lead_source": "tally",
+    "score": 78,
+    "tags": [
+      "coi",
+      "cpa",
+      "cash_flow_gap",
+      "referral_ready"
+    ],
+    "created_at": "2026-07-06T13:45:00Z",
+    "updated_at": "2026-07-06T13:45:00Z"
+  },
+  "partner_onboarding_checklist": {
+    "schema_version": "1.0.0",
+    "checklist_id": "chk_harbor_cpa_001",
+    "partner_id": "ptr_harbor_cpa_001",
+    "onboarding_path": "referral_only_partner",
+    "status": "in_progress",
+    "due_date": "2026-07-13",
+    "owner": {
+      "name": "Jason Feimster",
+      "role": "Partner Ops Lead"
+    },
+    "completion_percentage": 40,
+    "items": [
+      {
+        "item_id": "item_review_intake",
+        "label": "Review submitted partner profile",
+        "description": "Confirm partner type, audience, and compliance risk.",
+        "status": "completed",
+        "priority": "high",
+        "completed_at": "2026-07-06T14:00:00Z"
+      },
+      {
+        "item_id": "item_send_resource_pack",
+        "label": "Send referral partner resource pack",
+        "description": "Include readiness scorecard and referral language.",
+        "status": "in_progress",
+        "priority": "high"
+      },
+      {
+        "item_id": "item_schedule_partner_call",
+        "label": "Schedule 20-minute fit call",
+        "description": "Clarify referral process and audience fit.",
+        "status": "not_started",
+        "priority": "medium"
+      }
+    ],
+    "created_at": "2026-07-06T13:45:00Z",
+    "updated_at": "2026-07-06T14:00:00Z"
+  },
+  "partner_resource_cards": [
+    {
+      "schema_version": "1.0.0",
+      "resource_id": "res_cash_flow_gap_checklist",
+      "title": "Cash-Flow Gap Referral Checklist",
+      "description": "A short checklist CPAs and bookkeepers can use to identify clients who may need funding-readiness guidance.",
+      "url": "https://YOUR_DOMAIN/resources/cash-flow-gap-checklist",
+      "resource_type": "checklist",
+      "recommended_for": [
+        "cpa_bookkeeper",
+        "referral_partner"
+      ],
+      "audience": "service businesses and local SMBs",
+      "priority": "high",
+      "cta": "Review client funding readiness",
+      "usage_notes": "Send after initial approval or during referral partner onboarding.",
+      "compliance_notes": "Use readiness language only. Do not imply approval certainty or guaranteed funding.",
+      "created_at": "2026-07-06T14:05:00Z"
+    },
+    {
+      "schema_version": "1.0.0",
+      "resource_id": "res_referral_language_swipes",
+      "title": "Referral Partner Language Swipes",
+      "description": "Safe intro language for CPAs, consultants, and business advisors who want to refer clients without sounding like pushy loan spam.",
+      "url": "https://YOUR_DOMAIN/resources/referral-language-swipes",
+      "resource_type": "script",
+      "recommended_for": [
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "referral_partner"
+      ],
+      "audience": "trusted advisors serving SMB owners",
+      "priority": "high",
+      "cta": "Introduce a funding-readiness conversation",
+      "usage_notes": "Use after approval and before first outbound client referral campaign.",
+      "compliance_notes": "Avoid guaranteed approvals, fixed funding amounts, credit repair claims, or fake urgency.",
+      "created_at": "2026-07-06T14:06:00Z"
+    },
+    {
+      "schema_version": "1.0.0",
+      "resource_id": "res_partner_process_map",
+      "title": "Partner Referral Process Map",
+      "description": "Simple process map showing what happens after a partner refers a business owner for readiness review.",
+      "url": "https://YOUR_DOMAIN/resources/referral-process-map",
+      "resource_type": "guide",
+      "recommended_for": [
+        "cpa_bookkeeper",
+        "referral_partner",
+        "business_broker",
+        "veteran_community_connector"
+      ],
+      "audience": "SMB advisors and community connectors",
+      "priority": "medium",
+      "cta": "Understand the referral handoff",
+      "usage_notes": "Use during partner onboarding call or welcome packet delivery.",
+      "compliance_notes": "Keep the process educational and operational. No lender certainty.",
+      "created_at": "2026-07-06T14:06:30Z"
+    }
+  ],
+  "partner_campaign_cards": [
+    {
+      "schema_version": "1.0.0",
+      "campaign_id": "cmp_cpa_cash_flow_checkup",
+      "partner_id": "ptr_harbor_cpa_001",
+      "title": "Client Cash-Flow Checkup Intro",
+      "campaign_type": "email_intro",
+      "audience": "bookkeeping clients with seasonal cash-flow swings",
+      "offer": "A funding-readiness review that helps identify documentation gaps and likely next steps.",
+      "cta": "Request a funding-readiness review",
+      "channels": [
+        "email",
+        "crm_task"
+      ],
+      "tracking_notes": "Use partner_id=ptr_harbor_cpa_001 and campaign=client_cash_flow_checkup in UTM fields when tracking links exist.",
+      "copy_angle": "Operational readiness, not emergency funding hype.",
+      "status": "recommended",
+      "risk_level": "low",
+      "created_at": "2026-07-06T14:07:00Z",
+      "updated_at": "2026-07-06T14:07:00Z"
+    },
+    {
+      "schema_version": "1.0.0",
+      "campaign_id": "cmp_quarterly_tax_cash_gap",
+      "partner_id": "ptr_harbor_cpa_001",
+      "title": "Quarterly Tax Season Cash-Flow Prep",
+      "campaign_type": "partner_newsletter",
+      "audience": "CPA clients preparing for quarterly tax deadlines or seasonal revenue swings",
+      "offer": "A readiness checklist to help clients organize documents before exploring working-capital options.",
+      "cta": "Get the cash-flow readiness checklist",
+      "channels": [
+        "email",
+        "newsletter",
+        "partner_site"
+      ],
+      "tracking_notes": "Suggested UTM: partner=harbor_ledger_cpa, campaign=quarterly_tax_cash_gap, source=partner_newsletter.",
+      "copy_angle": "Preparation beats panic. Help clients understand documents, timing, and realistic next steps.",
+      "status": "draft",
+      "risk_level": "low",
+      "created_at": "2026-07-06T14:08:00Z",
+      "updated_at": "2026-07-06T14:08:00Z"
+    }
+  ],
+  "admin_partner_review_card": {
+    "schema_version": "1.0.0",
+    "review_id": "rev_harbor_cpa_001",
+    "partner_id": "ptr_harbor_cpa_001",
+    "summary": "CPA/bookkeeper with relevant SMB audience, moderate referral potential, and low compliance risk. Best suited for referral-only onboarding before any deeper strategic track.",
+    "score": 78,
+    "risk_level": "low",
+    "risk_flags": [],
+    "manual_review_required": false,
+    "recommended_decision": "approve",
+    "next_action": "send_resources",
+    "reviewer_notes": "Send cash-flow gap checklist and schedule quick partner process walkthrough.",
+    "review_owner": "Jason Feimster",
+    "created_at": "2026-07-06T14:10:00Z",
+    "updated_at": "2026-07-06T14:10:00Z"
+  },
+  "dashboard_flags": {
+    "manual_review_required": false,
+    "show_risk_banner": false,
+    "show_next_action": true,
+    "show_resource_recommendations": true,
+    "show_campaign_recommendations": true,
+    "safe_to_show_partner": false,
+    "notes": "Internal sample payload. Before partner-facing display, remove admin notes, review metadata, and any private score reasoning."
+  }
+}

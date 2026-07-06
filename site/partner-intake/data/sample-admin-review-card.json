@@ -1,0 +1,14 @@
+{
+  "partner_id": "prt_20260706_001",
+  "summary": "Referral partner candidate with strong contractor audience access, realistic volume expectations, and low compliance risk. Good Tier 2 candidate after activation call confirms referral workflow and audience quality.",
+  "score": 78,
+  "risk_flags": [
+    "Manual review required before active partner status",
+    "Referral volume estimate needs confirmation",
+    "Tracking link and lead handoff process not configured yet"
+  ],
+  "manual_review_required": true,
+  "recommended_decision": "approve_pending_activation_call",
+  "next_action": "Send onboarding packet and schedule activation call before assigning active campaign assets.",
+  "reviewer_notes": "Do not grant fast-track status until the partner confirms how referrals are sourced and whether they understand compliance-safe positioning. Good candidate, but do not let enthusiasm outrun process. That is how the circus gets a CRM login."
+}

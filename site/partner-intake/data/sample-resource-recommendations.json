@@ -1,0 +1,45 @@
+{
+  "partner_id": "prt_20260706_001",
+  "resources": [
+    {
+      "resource_id": "res_contractors_cash_flow_checklist",
+      "title": "Contractor Cash Flow Gap Checklist",
+      "description": "A practical checklist for spotting payroll, materials, receivables, and job-timing cash flow gaps before the business owner panics.",
+      "url": "#",
+      "resource_type": "lead_magnet",
+      "recommended_for": ["contractors", "trades", "local_service_businesses"],
+      "priority": "high",
+      "cta": "Send checklist"
+    },
+    {
+      "resource_id": "res_funding_readiness_scorecard",
+      "title": "Funding Readiness Scorecard",
+      "description": "Educational scorecard that helps business owners understand common readiness gaps before a funding conversation.",
+      "url": "#",
+      "resource_type": "assessment",
+      "recommended_for": ["general_smb", "contractors", "referral_partners"],
+      "priority": "high",
+      "cta": "Check readiness"
+    },
+    {
+      "resource_id": "res_referral_partner_quickstart",
+      "title": "Referral Partner Quickstart",
+      "description": "Short operational guide covering who to refer, how to position the offer safely, and what information to collect.",
+      "url": "#",
+      "resource_type": "partner_training",
+      "recommended_for": ["referral_partner", "coi", "creator_affiliate"],
+      "priority": "medium",
+      "cta": "Start onboarding"
+    },
+    {
+      "resource_id": "res_safe_language_swipe_file",
+      "title": "Compliance-Safe Referral Language",
+      "description": "Swipe copy that avoids guaranteed approvals, fake lender certainty, credit repair positioning, and pressure tactics.",
+      "url": "#",
+      "resource_type": "copy_asset",
+      "recommended_for": ["all_partners"],
+      "priority": "medium",
+      "cta": "Use safe copy"
+    }
+  ]
+}

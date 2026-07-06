@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partner Intake OS | Partner Command Center</title>
+  <meta name="description" content="Static MVP dashboard for reviewing Partner Intake OS partner profiles, onboarding paths, resource recommendations, campaign kits, and admin review notes.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to dashboard</a>
+
+  <div class="shell-grid" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand-lockup">
+      <div class="brand-mark" aria-hidden="true">MC</div>
+      <div>
+        <p class="eyebrow">Moonshine Capital / Partner Command Center</p>
+        <h1>Partner Intake OS</h1>
+      </div>
+    </div>
+
+    <div class="topbar-actions" aria-label="Dashboard status">
+      <span class="status-pill" id="apiStatus">API-ready mock mode</span>
+      <span class="status-pill muted" id="dataStatus">Loading sample data</span>
+    </div>
+  </header>
+
+  <main id="main" class="dashboard-shell">
+    <section class="hero-panel panel-glow" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Static MVP / dashboard-ready preview</p>
+        <h2 id="hero-title">Turn partner signups into operating intelligence.</h2>
+        <p>
+          This dashboard visualizes the Partner Intake OS output: profile, tier, scorecard,
+          onboarding path, recommended resources, campaign kit, and admin review notes.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#lead-submit">Lead submission CTA placeholder</a>
+          <a class="button ghost" href="#admin-review">Review admin card</a>
+        </div>
+      </div>
+
+      <aside class="hero-metrics" aria-label="Partner snapshot metrics">
+        <div class="metric-card hot">
+          <span class="metric-label">Partner Tier</span>
+          <strong id="heroTier">—</strong>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Risk Level</span>
+          <strong id="heroRisk">—</strong>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Overall Score</span>
+          <strong id="heroScore">—</strong>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid two-column">
+      <article class="card partner-card" aria-labelledby="partner-title">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Partner snapshot</p>
+            <h3 id="partner-title">Loading partner…</h3>
+          </div>
+          <span class="badge" id="partnerStatus">—</span>
+        </div>
+        <dl class="detail-grid" id="partnerDetails"></dl>
+      </article>
+
+      <article class="card action-card" aria-labelledby="next-action-title">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Next move</p>
+            <h3 id="next-action-title">Recommended next action</h3>
+          </div>
+          <span class="badge accent" id="onboardingPath">—</span>
+        </div>
+        <p class="next-action" id="nextAction">Loading next action…</p>
+        <div class="mini-timeline" id="timelinePreview" aria-label="Onboarding timeline preview"></div>
+      </article>
+    </section>
+
+    <section class="grid three-column" aria-label="Partner scorecard">
+      <article class="card score-card">
+        <p class="eyebrow">Scorecard</p>
+        <h3>Partner fit</h3>
+        <div id="scorecardList" class="score-list"></div>
+      </article>
+
+      <article class="card risk-card">
+        <p class="eyebrow">Risk flags</p>
+        <h3>Manual review signals</h3>
+        <ul id="riskFlags" class="tag-list"></ul>
+      </article>
+
+      <article class="card api-card">
+        <p class="eyebrow">GPT Action/API status</p>
+        <h3>Future connection points</h3>
+        <ul class="system-list">
+          <li><span>Vercel API</span><strong>placeholder</strong></li>
+          <li><span>GPT Actions</span><strong>ready later</strong></li>
+          <li><span>Tally webhook</span><strong>source</strong></li>
+          <li><span>Storage router</span><strong>mock/json</strong></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid two-column">
+      <article class="card wide-card" aria-labelledby="resources-title">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Recommended resources</p>
+            <h3 id="resources-title">Resource pack</h3>
+          </div>
+          <span class="badge" id="resourceCount">0 assets</span>
+        </div>
+        <div class="resource-grid" id="resourceGrid"></div>
+      </article>
+
+      <article class="card wide-card" aria-labelledby="campaign-title">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Recommended campaign kit</p>
+            <h3 id="campaign-title">Campaign assignments</h3>
+          </div>
+          <span class="badge accent" id="campaignCount">0 kits</span>
+        </div>
+        <div class="campaign-list" id="campaignList"></div>
+      </article>
+    </section>
+
+    <section class="grid two-column bottom-grid">
+      <article class="card admin-card" id="admin-review" aria-labelledby="admin-title">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Admin review notes</p>
+            <h3 id="admin-title">Decision card</h3>
+          </div>
+          <span class="badge warning" id="manualReview">—</span>
+        </div>
+        <p id="adminSummary" class="admin-summary">Loading review notes…</p>
+        <dl class="detail-grid compact" id="adminDetails"></dl>
+      </article>
+
+      <article class="card lead-card" id="lead-submit" aria-labelledby="lead-title">
+        <p class="eyebrow">Lead submission CTA placeholder</p>
+        <h3 id="lead-title">Partner activation hook</h3>
+        <p>
+          Future authenticated dashboard version can expose partner lead submission, tracking links,
+          campaign kits, onboarding tasks, and partner resource access.
+        </p>
+        <div class="cta-box">
+          <strong>Placeholder CTA</strong>
+          <span>Submit a funding referral through the future partner portal.</span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer-note">
+    <p>Partner Intake OS static MVP. Sample data only. No approvals, funding amounts, lender certainty, credit repair promises, or fake urgency.</p>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "partner_id": "prt_20260706_001",
+  "onboarding_path": "standard_affiliate_partner",
+  "path_label": "Standard Affiliate Partner",
+  "owner": "Partner Ops",
+  "first_24_hours": [
+    "Confirm partner contact details and preferred follow-up channel.",
+    "Send referral partner quickstart packet and compliance-safe talking points.",
+    "Create CRM record with partner tier, audience, source, and risk level."
+  ],
+  "first_7_days": [
+    "Schedule activation call focused on referral flow, fit criteria, and handoff expectations.",
+    "Assign contractor-focused resource pack and first campaign angle.",
+    "Confirm whether the partner needs a tracking link, landing page, or simple referral form."
+  ],
+  "first_30_days": [
+    "Review first referrals or pipeline activity.",
+    "Move partner to active status if qualified activity appears.",
+    "Recommend next campaign kit based on actual lead quality and audience response."
+  ],
+  "required_assets": [
+    "Referral partner quickstart guide",
+    "Funding readiness scorecard",
+    "Contractor cash flow checklist",
+    "Compliance-safe referral language"
+  ],
+  "recommended_training": [
+    "How to identify funding-ready contractors",
+    "What not to promise in funding conversations",
+    "How to submit a clean referral"
+  ],
+  "recommended_campaign": "contractor_cash_flow_readiness_campaign",
+  "next_action": "Send welcome resources and book activation call."
+}

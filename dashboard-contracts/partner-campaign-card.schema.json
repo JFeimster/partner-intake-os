@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/dashboard-contracts/partner-campaign-card.schema.json",
+  "title": "Partner Campaign Card",
+  "description": "Display-ready campaign recommendation object for partner-specific activation, referral generation, or affiliate launch.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "campaign_id": {
+      "type": "string",
+      "pattern": "^cmp_[a-z0-9_\\-]{6,80}$"
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[a-z0-9_\\-]{6,64}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "campaign_type": {
+      "type": "string",
+      "enum": [
+        "email_intro",
+        "social_post",
+        "webinar",
+        "partner_newsletter",
+        "referral_script",
+        "lead_magnet",
+        "direct_outreach",
+        "co_branded_page",
+        "event_followup"
+      ]
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "offer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 260
+    },
+    "cta": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "email",
+          "sms",
+          "phone",
+          "linkedin",
+          "facebook",
+          "instagram",
+          "youtube",
+          "newsletter",
+          "webinar",
+          "event",
+          "partner_site",
+          "crm_task"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "tracking_notes": {
+      "type": "string",
+      "maxLength": 700
+    },
+    "copy_angle": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "recommended",
+        "approved",
+        "active",
+        "paused",
+        "completed",
+        "rejected"
+      ]
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "title",
+    "audience",
+    "offer",
+    "cta",
+    "channels",
+    "tracking_notes",
+    "status"
+  ],
+  "examples": [
+    {
+      "schema_version": "1.0.0",
+      "campaign_id": "cmp_cpa_cash_flow_checkup",
+      "partner_id": "ptr_harbor_cpa_001",
+      "title": "Client Cash-Flow Checkup Intro",
+      "campaign_type": "email_intro",
+      "audience": "bookkeeping clients with seasonal cash-flow swings",
+      "offer": "A funding-readiness review that helps identify documentation gaps and likely next steps.",
+      "cta": "Request a funding-readiness review",
+      "channels": [
+        "email",
+        "crm_task"
+      ],
+      "tracking_notes": "Use partner_id=ptr_harbor_cpa_001 and campaign=client_cash_flow_checkup in UTM fields when tracking links exist.",
+      "copy_angle": "Operational readiness, not emergency funding hype.",
+      "status": "recommended",
+      "risk_level": "low",
+      "created_at": "2026-07-06T14:07:00Z",
+      "updated_at": "2026-07-06T14:07:00Z"
+    }
+  ]
+}

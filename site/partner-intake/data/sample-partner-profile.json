@@ -1,0 +1,51 @@
+{
+  "partner": {
+    "partner_id": "prt_20260706_001",
+    "display_name": "Marcus Reed",
+    "company": "Reed Contractor Advisory",
+    "email": "marcus@example.com",
+    "partner_type": "referral_partner",
+    "partner_tier": "tier_2",
+    "onboarding_path": "standard_affiliate_partner",
+    "primary_audience": "contractors",
+    "secondary_audiences": [
+      "trades",
+      "local_service_businesses",
+      "veteran_owned_businesses"
+    ],
+    "risk_level": "low",
+    "status": "pending_admin_review",
+    "lead_source": "tally_partner_signup",
+    "tags": [
+      "partner_type:referral_partner",
+      "partner_tier:tier_2",
+      "audience:contractors",
+      "source:tally",
+      "status:pending_admin_review"
+    ],
+    "recommended_resources": [
+      "contractor_cash_flow_gap_checklist",
+      "funding_readiness_scorecard",
+      "referral_partner_quickstart"
+    ],
+    "recommended_campaigns": [
+      "contractor_cash_flow_readiness_campaign"
+    ],
+    "next_action": "Send standard affiliate onboarding packet, confirm referral process, and invite to a 20-minute activation call.",
+    "created_at": "2026-07-06T09:00:00-04:00",
+    "updated_at": "2026-07-06T09:10:00-04:00"
+  },
+  "scorecard": {
+    "urgency_score": 72,
+    "audience_fit_score": 86,
+    "trust_score": 78,
+    "revenue_potential_score": 74,
+    "activation_speed_score": 68,
+    "strategic_value_score": 70,
+    "compliance_safety_score": 88,
+    "overall_score": 78,
+    "tier_recommendation": "tier_2",
+    "reasoning_summary": "Strong audience fit with contractors and local service businesses. Existing trust appears credible, referral volume is realistic, and risk is low. Needs process confirmation before fast-track treatment.",
+    "manual_review_required": true
+  }
+}

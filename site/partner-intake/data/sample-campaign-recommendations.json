@@ -1,0 +1,29 @@
+{
+  "partner_id": "prt_20260706_001",
+  "campaigns": [
+    {
+      "campaign_id": "cmp_contractor_cash_flow_readiness",
+      "title": "Contractor Cash Flow Readiness Campaign",
+      "campaign_type": "referral_partner_activation",
+      "audience": "contractors and trades businesses",
+      "offer": "Help contractors identify cash flow gaps before payroll, materials, or receivables create pressure.",
+      "cta": "Check funding readiness",
+      "channels": ["email", "LinkedIn DM", "local contractor groups", "partner newsletter"],
+      "copy_angle": "Stop waiting until the job is on fire. Find the cash flow gap while it is still small enough to fix.",
+      "tracking_notes": "Use partner_id prt_20260706_001 and campaign_id cmp_contractor_cash_flow_readiness when tracking links are available.",
+      "status": "ready_for_partner_review"
+    },
+    {
+      "campaign_id": "cmp_veteran_owned_business_readiness",
+      "title": "Veteran-Owned Business Readiness Check",
+      "campaign_type": "community_connector_campaign",
+      "audience": "veteran-owned service businesses",
+      "offer": "Educational readiness review for business owners who want cleaner funding conversations and better prepared documents.",
+      "cta": "Start readiness check",
+      "channels": ["community events", "email", "Facebook groups"],
+      "copy_angle": "Bring the paperwork squared away before you go looking for capital. Chaos is not a business plan.",
+      "tracking_notes": "Use only after partner confirms veteran/community audience access.",
+      "status": "optional_followup"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/dashboard-contracts/partner-resource-card.schema.json",
+  "title": "Partner Resource Card",
+  "description": "Display-ready recommended resource object for partner onboarding, referral education, broker enablement, and campaign activation.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "resource_id": {
+      "type": "string",
+      "pattern": "^res_[a-z0-9_\\-]{6,80}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "guide",
+        "checklist",
+        "playbook",
+        "script",
+        "template",
+        "scorecard",
+        "video",
+        "landing_page",
+        "gpt",
+        "internal_note"
+      ]
+    },
+    "recommended_for": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "funding_broker",
+          "iso",
+          "referral_partner",
+          "cpa_bookkeeper",
+          "small_business_attorney",
+          "business_broker",
+          "real_estate_investor_connector",
+          "contractor_trades_connector",
+          "franchise_consultant",
+          "veteran_community_connector",
+          "creator_affiliate",
+          "fintech_vendor_partner",
+          "strategic_partner",
+          "unqualified_not_fit"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "audience": {
+      "type": "string",
+      "maxLength": 140
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "cta": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "usage_notes": {
+      "type": "string",
+      "maxLength": 600
+    },
+    "compliance_notes": {
+      "type": "string",
+      "maxLength": 600
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "resource_id",
+    "title",
+    "description",
+    "url",
+    "resource_type",
+    "recommended_for",
+    "priority",
+    "cta"
+  ],
+  "examples": [
+    {
+      "schema_version": "1.0.0",
+      "resource_id": "res_cash_flow_gap_checklist",
+      "title": "Cash-Flow Gap Referral Checklist",
+      "description": "A short checklist CPAs and bookkeepers can use to identify clients who may need funding-readiness guidance.",
+      "url": "https://YOUR_DOMAIN/resources/cash-flow-gap-checklist",
+      "resource_type": "checklist",
+      "recommended_for": [
+        "cpa_bookkeeper",
+        "referral_partner"
+      ],
+      "audience": "service businesses and local SMBs",
+      "priority": "high",
+      "cta": "Review client funding readiness",
+      "usage_notes": "Send after initial approval or during referral partner onboarding.",
+      "compliance_notes": "Use readiness language only. Do not imply approval certainty or guaranteed funding.",
+      "created_at": "2026-07-06T14:05:00Z"
+    }
+  ]
+}

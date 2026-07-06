@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/dashboard-contracts/partner-dashboard-card.schema.json",
+  "title": "Partner Dashboard Card",
+  "description": "Compact partner profile object for the Partner Command Center dashboard list/detail header. This object is display-ready and safe for admin review views.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "partner_id": {
+      "type": "string",
+      "description": "Stable internal partner identifier.",
+      "pattern": "^ptr_[a-z0-9_\\-]{6,64}$"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "company": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "partner_type": {
+      "type": "string",
+      "enum": [
+        "funding_broker",
+        "iso",
+        "referral_partner",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "fintech_vendor_partner",
+        "strategic_partner",
+        "unqualified_not_fit"
+      ]
+    },
+    "partner_tier": {
+      "type": "string",
+      "enum": [
+        "tier_1",
+        "tier_2",
+        "tier_3",
+        "tier_4",
+        "reject"
+      ]
+    },
+    "onboarding_path": {
+      "type": "string",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "pending_review",
+        "needs_info",
+        "approved",
+        "active",
+        "watchlist",
+        "rejected",
+        "paused"
+      ]
+    },
+    "next_action": {
+      "type": "string",
+      "enum": [
+        "send_welcome",
+        "send_resources",
+        "schedule_call",
+        "request_more_info",
+        "manual_review",
+        "assign_campaign",
+        "create_hubspot_task",
+        "create_notion_record",
+        "activate_dashboard_access",
+        "reject",
+        "watchlist_nurture"
+      ]
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "primary_audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 140
+    },
+    "lead_source": {
+      "type": "string",
+      "enum": [
+        "tally",
+        "manual",
+        "gpt_action",
+        "hubspot",
+        "notion",
+        "google_sheets",
+        "api",
+        "unknown"
+      ]
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "uniqueItems": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "partner_id",
+    "display_name",
+    "company",
+    "partner_type",
+    "partner_tier",
+    "onboarding_path",
+    "status",
+    "next_action",
+    "risk_level",
+    "created_at"
+  ],
+  "examples": [
+    {
+      "schema_version": "1.0.0",
+      "partner_id": "ptr_harbor_cpa_001",
+      "display_name": "Maya Chen",
+      "company": "Harbor Ledger CPA",
+      "email": "maya@example.com",
+      "partner_type": "cpa_bookkeeper",
+      "partner_tier": "tier_2",
+      "onboarding_path": "referral_only_partner",
+      "status": "pending_review",
+      "next_action": "send_resources",
+      "risk_level": "low",
+      "primary_audience": "service businesses with cash-flow gaps",
+      "lead_source": "tally",
+      "score": 78,
+      "tags": [
+        "coi",
+        "cpa",
+        "cash_flow_gap",
+        "referral_ready"
+      ],
+      "created_at": "2026-07-06T13:45:00Z",
+      "updated_at": "2026-07-06T13:45:00Z"
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/dashboard-contracts/partner-onboarding-checklist.schema.json",
+  "title": "Partner Onboarding Checklist",
+  "description": "Dashboard-ready checklist for partner activation milestones, owner assignment, due dates, and completion tracking.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "checklist_id": {
+      "type": "string",
+      "pattern": "^chk_[a-z0-9_\\-]{6,64}$"
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[a-z0-9_\\-]{6,64}$"
+    },
+    "onboarding_path": {
+      "type": "string",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "blocked",
+        "completed",
+        "paused",
+        "cancelled"
+      ]
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": [
+        "name",
+        "role"
+      ]
+    },
+    "completion_percentage": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "pattern": "^item_[a-z0-9_\\-]{4,64}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "blocked",
+              "completed",
+              "skipped"
+            ]
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "urgent"
+            ]
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "owner": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "blocking_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 300
+          },
+          "completed_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "item_id",
+          "label",
+          "status",
+          "priority"
+        ]
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "checklist_id",
+    "partner_id",
+    "onboarding_path",
+    "items",
+    "status",
+    "due_date",
+    "owner",
+    "completion_percentage"
+  ],
+  "examples": [
+    {
+      "schema_version": "1.0.0",
+      "checklist_id": "chk_harbor_cpa_001",
+      "partner_id": "ptr_harbor_cpa_001",
+      "onboarding_path": "referral_only_partner",
+      "status": "in_progress",
+      "due_date": "2026-07-13",
+      "owner": {
+        "name": "Jason Feimster",
+        "role": "Partner Ops Lead"
+      },
+      "completion_percentage": 40,
+      "items": [
+        {
+          "item_id": "item_review_intake",
+          "label": "Review submitted partner profile",
+          "description": "Confirm partner type, audience, and compliance risk.",
+          "status": "completed",
+          "priority": "high",
+          "completed_at": "2026-07-06T14:00:00Z"
+        },
+        {
+          "item_id": "item_send_resource_pack",
+          "label": "Send referral partner resource pack",
+          "description": "Include readiness scorecard and referral language.",
+          "status": "in_progress",
+          "priority": "high"
+        },
+        {
+          "item_id": "item_schedule_partner_call",
+          "label": "Schedule 20-minute fit call",
+          "description": "Clarify referral process and audience fit.",
+          "status": "not_started",
+          "priority": "medium"
+        }
+      ],
+      "created_at": "2026-07-06T13:45:00Z",
+      "updated_at": "2026-07-06T14:00:00Z"
+    }
+  ]
+}
