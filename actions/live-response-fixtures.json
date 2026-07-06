@@ -1,0 +1,173 @@
+{
+  "health_check": {
+    "status": "ok",
+    "service": "partner-intake-os",
+    "environment": "production",
+    "timestamp": "2026-07-06T12:00:00.000Z",
+    "version": "0.1.0"
+  },
+  "classify_tier_1_strategic_partner": {
+    "ok": true,
+    "request_id": "req_demo_strategic",
+    "profile": {
+      "partner_id": "ptr_demo_strategic",
+      "display_name": "Morgan Reed",
+      "company": "Main Street Acquisition Network",
+      "partner_type": "strategic_partner",
+      "partner_tier": "tier_1",
+      "onboarding_path": "strategic_partner_review",
+      "primary_audience": "acquisition_entrepreneurs",
+      "risk_level": "low",
+      "status": "manual_review"
+    },
+    "scorecard": {
+      "overall_score": 92,
+      "audience_fit_score": 95,
+      "trust_score": 88,
+      "revenue_potential_score": 93,
+      "activation_speed_score": 82,
+      "compliance_risk_score": 12,
+      "strategic_value_score": 96,
+      "tier_recommendation": "tier_1",
+      "reasoning_summary": "Strong audience access, relevant partner channel, and high strategic leverage. Keep manual review before activation.",
+      "manual_review_required": true
+    },
+    "risk_flags": [],
+    "manual_review_required": true,
+    "next_action": "schedule_strategic_partner_review",
+    "compliance_note": "Educational partner guidance only. No approval, funding, revenue, or commission outcome is guaranteed."
+  },
+  "classify_low_info_signup": {
+    "ok": true,
+    "request_id": "req_demo_lowinfo",
+    "profile": {
+      "partner_id": "ptr_demo_lowinfo",
+      "display_name": "Taylor",
+      "company": "",
+      "partner_type": "unknown",
+      "partner_tier": "tier_4",
+      "onboarding_path": "nurture_watchlist",
+      "risk_level": "medium",
+      "status": "needs_more_info"
+    },
+    "scorecard": {
+      "overall_score": 24,
+      "tier_recommendation": "tier_4",
+      "reasoning_summary": "Insufficient audience, role, company, and referral context.",
+      "manual_review_required": true
+    },
+    "risk_flags": [
+      "low_information",
+      "missing_partner_role",
+      "missing_audience"
+    ],
+    "manual_review_required": true,
+    "next_action": "request_more_information"
+  },
+  "classify_high_risk_lead_seller": {
+    "ok": true,
+    "request_id": "req_demo_highrisk",
+    "profile": {
+      "partner_id": "ptr_demo_highrisk",
+      "display_name": "Blake Stone",
+      "company": "Lead Rocket Pros",
+      "partner_type": "lead_seller",
+      "partner_tier": "reject",
+      "onboarding_path": "reject_manual_risk_review",
+      "risk_level": "high",
+      "status": "manual_review"
+    },
+    "scorecard": {
+      "overall_score": 18,
+      "compliance_risk_score": 95,
+      "tier_recommendation": "reject",
+      "reasoning_summary": "Unsafe lead sourcing and prohibited marketing claims require rejection or senior manual review.",
+      "manual_review_required": true
+    },
+    "risk_flags": [
+      "purchased_leads",
+      "guaranteed_approval_claims",
+      "everyone_qualifies_claim",
+      "payout_before_verification"
+    ],
+    "manual_review_required": true,
+    "next_action": "reject_or_escalate_for_compliance_review"
+  },
+  "recommend_resources_cpa": {
+    "ok": true,
+    "request_id": "req_demo_resources",
+    "recommended_resources": [
+      {
+        "title": "Client Funding Readiness Checklist",
+        "resource_type": "lead_magnet",
+        "priority": "high",
+        "reason": "Lets CPAs/bookkeepers help clients prepare without promising funding outcomes.",
+        "cta": "Review funding readiness"
+      },
+      {
+        "title": "Referral Partner Script",
+        "resource_type": "script",
+        "priority": "medium",
+        "reason": "Keeps referral language consistent and compliance-safe.",
+        "cta": "Use the referral script"
+      }
+    ],
+    "next_action": "send_partner_resource_pack"
+  },
+  "generate_onboarding_broker": {
+    "ok": true,
+    "request_id": "req_demo_onboarding",
+    "partner_id": "ptr_demo_broker",
+    "first_24_hours": [
+      "Confirm broker profile",
+      "Send partner rules and compliance copy guide",
+      "Create review queue card"
+    ],
+    "first_7_days": [
+      "Run onboarding call",
+      "Assign first campaign kit",
+      "Generate tracking link"
+    ],
+    "first_30_days": [
+      "Review first submitted leads",
+      "Audit claims/copy",
+      "Adjust partner tier based on clean activity"
+    ],
+    "required_assets": [
+      "Broker referral playbook",
+      "Funding readiness checklist",
+      "Tracking link"
+    ],
+    "owner": "partner_ops",
+    "next_action": "schedule_partner_onboarding_call"
+  },
+  "generate_campaign_creator": {
+    "ok": true,
+    "request_id": "req_demo_campaign",
+    "campaign_concept": "Cash Flow Gap Checkup",
+    "cta": "Check funding readiness",
+    "suggested_channels": [
+      "YouTube",
+      "email",
+      "short-form social"
+    ],
+    "tracking_notes": "Use partner_id and campaign_id in UTMs. Do not place sensitive lead data in URLs.",
+    "copy_angle": "Help ecommerce sellers spot cash-flow pressure before inventory, ads, and payroll start wrestling in the parking lot."
+  },
+  "log_partner_event": {
+    "ok": true,
+    "request_id": "req_demo_event",
+    "event_id": "evt_demo_phase24",
+    "logged": false,
+    "storage": "mock",
+    "message": "Event accepted for mock logging. No production CRM write was performed."
+  },
+  "bad_token_rejected": {
+    "ok": false,
+    "error": {
+      "code": "UNAUTHORIZED",
+      "message": "Bearer token is missing or invalid.",
+      "request_id": "req_demo_bad_auth"
+    }
+  }
+}

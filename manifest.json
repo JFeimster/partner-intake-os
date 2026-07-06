@@ -1,28 +1,22 @@
 {
-  "batch": 23,
-  "phase": "API Endpoint Repair Against Live Vercel Routes",
-  "created_at": "2026-07-06T19:17:42.575719Z",
-  "zip_name": "batch-23.zip",
+  "batch": "24",
+  "phase": "GPT Action Import/Test/Repair",
+  "created_at": "2026-07-06T19:23:55.229307Z",
   "files": [
-    "api/README.md",
-    "api/health.ts",
-    "api/partners/classify.ts",
-    "api/partners/generate-campaign-kit.ts",
-    "api/partners/generate-onboarding-plan.ts",
-    "api/partners/log-event.ts",
-    "api/partners/recommend-resources.ts",
-    "api/tally/partner-intake-webhook.ts",
-    "lib/cors.ts",
-    "lib/errors.ts",
-    "lib/http.ts",
-    "lib/request-id.ts",
-    "lib/validation.ts",
-    "tests/api-endpoint-repair-checklist.md"
+    "actions/openapi.yaml",
+    "actions/openapi.json",
+    "actions/import-guide.md",
+    "actions/live-action-test-plan.md",
+    "actions/action-auth-setup.md",
+    "actions/action-error-repair-map.md",
+    "actions/live-test-payloads.json",
+    "actions/live-response-fixtures.json",
+    "tests/gpt-action-live-test-log.md",
+    "tests/gpt-action-release-checklist.md"
   ],
   "notes": [
-    "No secrets included.",
-    "Tally webhook is not GPT-facing.",
-    "Storage writes are stubbed.",
-    "TypeScript endpoints are Vercel-compatible and dependency-minimal."
+    "Only GPT-facing endpoints are exposed.",
+    "Tally webhook, admin endpoints, raw storage endpoints, and private sync endpoints are intentionally excluded.",
+    "Use Bearer API key auth and the live Vercel base URL placeholder."
   ]
 }

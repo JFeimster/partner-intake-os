@@ -1,0 +1,230 @@
+{
+  "base_url": "https://YOUR_VERCEL_DOMAIN.vercel.app",
+  "auth_header": "Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+  "tests": [
+    {
+      "id": "health_check",
+      "method": "GET",
+      "path": "/api/health",
+      "description": "Confirm API is reachable and returns no secrets.",
+      "expected_status": 200
+    },
+    {
+      "id": "classify_tier_1_strategic_partner",
+      "method": "POST",
+      "path": "/api/partners/classify",
+      "description": "Classify a high-fit strategic partner with clean intent.",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "context": "gpt_action_live_test",
+        "intake": {
+          "first_name": "Morgan",
+          "last_name": "Reed",
+          "email": "morgan@example.com",
+          "company": "Main Street Acquisition Network",
+          "website": "https://example.com",
+          "partner_type_claimed": "strategic partner",
+          "audience": "acquisition entrepreneurs, business brokers, and operators buying small businesses",
+          "industry": "M&A advisory",
+          "location": "Washington DC",
+          "funding_experience": "Refers clients seeking acquisition financing readiness support.",
+          "current_tools": "HubSpot, Notion, Google Workspace",
+          "traffic_or_network_size": "1,200 newsletter subscribers and 80 active operator relationships",
+          "referral_volume_estimate": "5-10 monthly",
+          "desired_partner_role": "Strategic referral/channel partner",
+          "notes": "Wants compliant funding readiness workflows and partner tracking."
+        }
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "profile.partner_type",
+        "profile.partner_tier",
+        "scorecard.overall_score",
+        "manual_review_required",
+        "next_action"
+      ]
+    },
+    {
+      "id": "classify_low_info_signup",
+      "method": "POST",
+      "path": "/api/partners/classify",
+      "description": "Classify a sparse signup and require more information.",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "context": "gpt_action_live_test",
+        "intake": {
+          "first_name": "Taylor",
+          "email": "taylor@example.com",
+          "company": "",
+          "partner_type_claimed": "",
+          "audience": "",
+          "notes": "Interested."
+        }
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "manual_review_required",
+        "risk_flags",
+        "next_action"
+      ]
+    },
+    {
+      "id": "classify_high_risk_lead_seller",
+      "method": "POST",
+      "path": "/api/partners/classify",
+      "description": "Classify a lead seller with prohibited/unsafe copy claims.",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "context": "gpt_action_live_test",
+        "intake": {
+          "first_name": "Blake",
+          "last_name": "Stone",
+          "email": "blake@example.com",
+          "company": "Lead Rocket Pros",
+          "partner_type_claimed": "lead seller",
+          "audience": "purchased SMB lead lists",
+          "funding_experience": "Claims to have exclusive funding leads.",
+          "notes": "Says everyone qualifies and wants to advertise guaranteed funding approvals."
+        }
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "risk_flags",
+        "manual_review_required",
+        "profile.risk_level"
+      ]
+    },
+    {
+      "id": "recommend_resources_cpa",
+      "method": "POST",
+      "path": "/api/partners/recommend-resources",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "partner_type": "cpa_bookkeeper",
+        "audience": "contractors and local service businesses",
+        "partner_tier": "tier_2"
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "recommended_resources",
+        "next_action"
+      ]
+    },
+    {
+      "id": "generate_onboarding_broker",
+      "method": "POST",
+      "path": "/api/partners/generate-onboarding-plan",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "partner_id": "ptr_demo_broker",
+        "partner_type": "funding_broker",
+        "partner_tier": "tier_2",
+        "onboarding_path": "standard_affiliate_partner"
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "first_24_hours",
+        "first_7_days",
+        "first_30_days",
+        "required_assets",
+        "owner",
+        "next_action"
+      ]
+    },
+    {
+      "id": "generate_campaign_creator",
+      "method": "POST",
+      "path": "/api/partners/generate-campaign-kit",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "partner_id": "ptr_demo_creator",
+        "partner_type": "creator_affiliate",
+        "audience": "ecommerce sellers",
+        "offer": "Funding readiness review",
+        "channel_preference": "YouTube, email, and short-form social"
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "campaign_concept",
+        "cta",
+        "suggested_channels",
+        "tracking_notes",
+        "copy_angle"
+      ]
+    },
+    {
+      "id": "log_partner_event",
+      "method": "POST",
+      "path": "/api/partners/log-event",
+      "headers": {
+        "Authorization": "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "partner_id": "ptr_demo_7f42",
+        "event_type": "gpt_action_live_test",
+        "summary": "GPT Action live test completed.",
+        "next_action": "record_test_result",
+        "metadata": {
+          "test_id": "phase_24_live_action_test",
+          "contains_real_pii": false
+        }
+      },
+      "expected_status": 200,
+      "expected_fields": [
+        "event_id",
+        "logged",
+        "storage",
+        "message"
+      ]
+    },
+    {
+      "id": "bad_token_rejected",
+      "method": "POST",
+      "path": "/api/partners/classify",
+      "headers": {
+        "Authorization": "Bearer BAD_TOKEN",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "context": "bad_auth_test",
+        "intake": {
+          "email": "test@example.com"
+        }
+      },
+      "expected_status": 401,
+      "expected_fields": [
+        "error.code",
+        "error.message"
+      ]
+    }
+  ],
+  "do_not_test_as_gpt_action": [
+    {
+      "path": "/api/tally/partner-intake-webhook",
+      "reason": "Webhook endpoint belongs to Tally only and must never be imported into GPT Actions."
+    },
+    {
+      "path": "/api/admin/*",
+      "reason": "Admin endpoints require separate protected dashboard auth and are not GPT-facing."
+    }
+  ]
+}
