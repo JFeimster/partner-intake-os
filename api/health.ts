@@ -1,30 +1,13 @@
-import { getRequiredEnvStatus, getRuntimeConfig } from "../lib/env";
+import { createSuccess, sendJson, withApiHandler, type ApiRequest, type ApiResponse } from "../lib/http";
 
-type ApiResponse = {
-  status: (code: number) => ApiResponse;
-  json: (body: unknown) => void;
-};
-
-export default async function handler(req: any, res: ApiResponse) {
-  if (req.method !== "GET") {
-    return res.status(405).json({
-      error: "method_not_allowed",
-      message: "Use GET /api/health.",
-      code: "bad_request",
-      timestamp: new Date().toISOString()
-    });
-  }
-
-  return res.status(200).json({
-    ok: true,
-    status: "healthy",
-    runtime: getRuntimeConfig(),
-    env: getRequiredEnvStatus(),
-    checks: {
-      api: "ok",
-      auth_token_configured: getRequiredEnvStatus().PARTNER_INTAKE_ACTION_TOKEN === "set",
-      storage: "mock_or_configured_later"
-    },
-    timestamp: new Date().toISOString()
+export default async function handler(req: ApiRequest, res: ApiResponse): Promise<void> {
+  return withApiHandler(req, res, { methods: ["GET"], auth: "none" }, async ({ requestId }) => {
+    sendJson(res, 200, createSuccess(requestId, {
+      status: "ok",
+      service: "partner-intake-os",
+      environment: process.env.PARTNER_INTAKE_ENV || process.env.VERCEL_ENV || "local",
+      timestamp: new Date().toISOString(),
+      version: process.env.PARTNER_INTAKE_VERSION || "0.1.0-placeholder"
+    }));
   });
 }

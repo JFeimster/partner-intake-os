@@ -1,23 +1,28 @@
 {
-  "phase": "Phase 22",
-  "name": "Vercel Deployment Test Window",
-  "created_at": "2026-07-06T19:04:36.629236Z",
+  "batch": 23,
+  "phase": "API Endpoint Repair Against Live Vercel Routes",
+  "created_at": "2026-07-06T19:17:42.575719Z",
+  "zip_name": "batch-23.zip",
   "files": [
-    "deployment/test-window-guide.md",
-    "deployment/vercel-deploy-runbook.md",
-    "deployment/static-route-smoke-tests.md",
-    "deployment/api-smoke-tests.md",
-    "deployment/env-var-verification.md",
-    "deployment/deploy-lockdown-plan.md",
-    "deployment/deployment-incident-log.md",
-    "scripts/vercel-smoke-test.ps1",
-    "tests/vercel-test-window-checklist.md"
+    "api/README.md",
+    "api/health.ts",
+    "api/partners/classify.ts",
+    "api/partners/generate-campaign-kit.ts",
+    "api/partners/generate-onboarding-plan.ts",
+    "api/partners/log-event.ts",
+    "api/partners/recommend-resources.ts",
+    "api/tally/partner-intake-webhook.ts",
+    "lib/cors.ts",
+    "lib/errors.ts",
+    "lib/http.ts",
+    "lib/request-id.ts",
+    "lib/validation.ts",
+    "tests/api-endpoint-repair-checklist.md"
   ],
   "notes": [
     "No secrets included.",
-    "No API code implemented.",
-    "No static dashboard files modified.",
-    "No GitHub or Vercel settings changed by this package.",
-    "Designed to be copied into repo root."
+    "Tally webhook is not GPT-facing.",
+    "Storage writes are stubbed.",
+    "TypeScript endpoints are Vercel-compatible and dependency-minimal."
   ]
 }

@@ -1,83 +1,122 @@
-import { makeApiError, verifyTallySignature } from "../../lib/auth";
-import { getStorageMode } from "../../lib/env";
-import { normalizeTallySubmission, parseBody } from "../../lib/normalizers/normalize-tally-submission";
-import { scorePartnerIntake } from "../../lib/scoring/partner-score";
-import { recommendResources } from "../../lib/recommendations/resource-router";
-import { recommendCampaign } from "../../lib/recommendations/campaign-router";
-import { generateOnboardingPlan } from "../../lib/recommendations/onboarding-router";
+import { createHmac, timingSafeEqual } from "crypto";
+import { ApiError } from "../../lib/errors";
+import { createSuccess, getHeader, readJson, readRawBody, sendJson, withApiHandler, type ApiRequest, type ApiResponse } from "../../lib/http";
+import { classifyPartner, sanitizeIntake } from "../../lib/validation";
 
-type ApiResponse = {
-  status: (code: number) => ApiResponse;
-  json: (body: unknown) => void;
-};
-
-export default async function handler(req: any, res: ApiResponse) {
-  if (req.method !== "POST") {
-    const error = makeApiError(req, 405, "bad_request", "Use POST /api/tally/partner-intake-webhook.");
-    return res.status(error.status).json(error.body);
+function normalizeTallyPayload(payload: unknown): Record<string, unknown> {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return {};
   }
 
-  const rawBody =
-    typeof req.body === "string"
-      ? req.body
-      : JSON.stringify(req.body || {});
+  const obj = payload as Record<string, unknown>;
+  const data = (obj.data && typeof obj.data === "object") ? obj.data as Record<string, unknown> : obj;
+  const fields = Array.isArray(data.fields) ? data.fields as Record<string, unknown>[] : [];
 
-  const signature = verifyTallySignature(req, rawBody);
-  if (signature.ok === false) {
-    return res.status(signature.status).json(signature.body);
+  const normalized: Record<string, unknown> = {
+    source: "tally",
+    submitted_at: new Date().toISOString()
+  };
+
+  const map: Record<string, string> = {
+    "First name": "first_name",
+    "Last name": "last_name",
+    "Email": "email",
+    "Phone": "phone",
+    "Company / brand": "company",
+    "Website": "website",
+    "Which best describes you?": "partner_type_claimed",
+    "Who do you serve?": "audience",
+    "What type of businesses do you usually work with?": "industry",
+    "Estimated monthly referral volume": "referral_volume_estimate",
+    "What tools do you use?": "current_tools",
+    "Are you interested in affiliate, referral, broker, or strategic partnership?": "desired_partner_role",
+    "Anything else we should know?": "notes"
+  };
+
+  for (const field of fields) {
+    const label = String(field.label || field.title || field.key || "").trim();
+    const value = field.value ?? field.answer ?? field.text ?? "";
+    const key = map[label] || label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+    if (key) normalized[key] = value;
   }
 
-  try {
-    const payload = parseBody(req.body);
-    const normalized_intake = normalizeTallySubmission(payload);
-    const classification = scorePartnerIntake(normalized_intake);
+  if (Object.keys(normalized).length <= 2) {
+    Object.assign(normalized, data);
+  }
 
-    const resources = recommendResources({
-      partner_type: classification.partner_type,
-      audience: normalized_intake.audience,
-      onboarding_path: classification.onboarding_path,
-      risk_level: classification.risk_level
-    });
+  return sanitizeIntake(normalized);
+}
 
-    const campaign = recommendCampaign({
-      partner_type: classification.partner_type,
-      audience: normalized_intake.audience,
-      onboarding_path: classification.onboarding_path,
-      partner_tier: classification.partner_tier
-    });
+function safeCompare(a: string, b: string): boolean {
+  const aBuffer = Buffer.from(a);
+  const bBuffer = Buffer.from(b);
 
-    const onboarding_plan = generateOnboardingPlan({
-      partner_type: classification.partner_type,
-      partner_tier: classification.partner_tier,
-      onboarding_path: classification.onboarding_path,
-      risk_level: classification.risk_level,
-      manual_review_required: classification.scorecard.manual_review_required,
-      next_action: classification.next_action
-    });
+  if (aBuffer.length !== bBuffer.length) return false;
+  return timingSafeEqual(aBuffer, bBuffer);
+}
 
-    // Batch 06 will call storage-router here to persist to Notion, HubSpot,
-    // Google Sheets, or JSON storage. For this scaffold, return a fast 2XX
-    // with the normalized/classified payload for testing.
-    return res.status(202).json({
-      ok: true,
-      received: true,
+async function verifyTallySignature(req: ApiRequest, rawBody: string): Promise<void> {
+  const secret = process.env.TALLY_SIGNING_SECRET;
+  if (!secret) return;
+
+  const received =
+    getHeader(req, "tally-signature") ||
+    getHeader(req, "x-tally-signature") ||
+    getHeader(req, "x-signature");
+
+  if (!received) {
+    throw new ApiError(401, "SIGNATURE_MISSING", "Tally signature header is required when TALLY_SIGNING_SECRET is configured.");
+  }
+
+  const digest = createHmac("sha256", secret).update(rawBody).digest("hex");
+  const expectedOptions = [`sha256=${digest}`, digest];
+
+  if (!expectedOptions.some((expected) => safeCompare(received, expected))) {
+    throw new ApiError(403, "SIGNATURE_INVALID", "Tally webhook signature did not match.");
+  }
+}
+
+export default async function handler(req: ApiRequest, res: ApiResponse): Promise<void> {
+  return withApiHandler(req, res, { methods: ["POST"], auth: "none" }, async ({ requestId }) => {
+    const rawBody = await readRawBody(req);
+    await verifyTallySignature(req, rawBody);
+
+    let payload: unknown;
+    try {
+      payload = rawBody ? JSON.parse(rawBody) : await readJson(req);
+    } catch {
+      throw new ApiError(400, "INVALID_JSON", "Tally webhook body must be valid JSON.");
+    }
+    const intake = normalizeTallyPayload(payload);
+    const classification = classifyPartner(intake);
+
+    // Future handoff:
+    // - queue lightweight write to Notion staging database
+    // - create/update HubSpot contact/company/task in sandbox
+    // - never log raw payload or sensitive PII
+
+    sendJson(res, 202, createSuccess(requestId, {
+      accepted: true,
       source: "tally",
-      storage_mode: getStorageMode(),
-      storage_status: "not_persisted_until_batch_06_storage_connectors",
-      normalized_intake,
-      classification,
-      recommendations: {
-        resources,
-        campaign,
-        onboarding_plan
+      normalized: {
+        partner_type_claimed: intake.partner_type_claimed,
+        company: intake.company,
+        audience: intake.audience,
+        source: intake.source
       },
-      warning: "Do not expose this Tally webhook endpoint through GPT Actions.",
-      processed_at: new Date().toISOString()
-    });
-  } catch (error) {
-    const apiError = makeApiError(req, 500, "internal_error", "Unable to process Tally partner intake webhook.", {
-      reason: error instanceof Error ? error.message : "unknown_error"
-    });
-    return res.status(apiError.status).json(apiError.body);
-  }
+      classification: {
+        partner_type: classification.partner_profile.partner_type,
+        tier: classification.tier,
+        onboarding_path: classification.onboarding_path,
+        manual_review_required: classification.manual_review_required,
+        risk_flags: classification.risk_flags,
+        next_action: classification.next_action
+      },
+      storage: {
+        mode: process.env.PARTNER_INTAKE_STORAGE_MODE || "mock",
+        written: false,
+        note: "Fast webhook response only. Real sync should run through queue/sandbox storage in later phase."
+      }
+    }));
+  });
 }
