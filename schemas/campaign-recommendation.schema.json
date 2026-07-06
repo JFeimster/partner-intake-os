@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/campaign-recommendation.schema.json",
+  "title": "Partner Campaign Recommendation",
+  "description": "Campaign kit recommendation used to activate a partner with a safe offer angle, CTA, channels, and first content ideas.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "campaign_id": {
+      "type": "string",
+      "pattern": "^camp_[A-Za-z0-9_-]{8,64}$"
+    },
+    "campaign_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "campaign_type": {
+      "type": "string",
+      "enum": [
+        "referral_script",
+        "email_campaign",
+        "social_campaign",
+        "webinar_or_workshop",
+        "lead_magnet",
+        "partner_page",
+        "outbound_sequence",
+        "content_collab",
+        "community_activation"
+      ]
+    },
+    "partner_type": {
+      "type": "string",
+      "enum": [
+        "funding_broker",
+        "iso",
+        "referral_partner",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "fintech_vendor_partner",
+        "strategic_partner",
+        "unqualified_not_fit"
+      ]
+    },
+    "target_audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "offer_angle": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 700,
+      "description": "Educational, readiness-based, or operational campaign angle. Must avoid guaranteed outcomes."
+    },
+    "cta": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 220
+    },
+    "suggested_channels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "email",
+          "sms",
+          "phone",
+          "linkedin",
+          "facebook_group",
+          "youtube",
+          "substack",
+          "podcast",
+          "webinar",
+          "in_person",
+          "partner_website",
+          "crm_task",
+          "other"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "maxItems": 12
+    },
+    "first_post_idea": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "first_email_idea": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "first_script_idea": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "lead_magnet": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160
+    },
+    "tracking_notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1200
+    },
+    "compliance_guardrails": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 220
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "maxItems": 20
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "ready_for_review",
+        "approved",
+        "active",
+        "paused",
+        "retired"
+      ]
+    }
+  },
+  "required": [
+    "campaign_id",
+    "campaign_name",
+    "campaign_type",
+    "partner_type",
+    "target_audience",
+    "offer_angle",
+    "cta",
+    "suggested_channels",
+    "compliance_guardrails",
+    "status"
+  ],
+  "examples": [
+    {
+      "campaign_id": "camp_cashflowgap_cpa_20260706",
+      "campaign_name": "Cash Flow Gap Readiness Check",
+      "campaign_type": "email_campaign",
+      "partner_type": "cpa_bookkeeper",
+      "target_audience": "Contractors and service businesses preparing for tax season or seasonal cash swings.",
+      "offer_angle": "Help clients spot funding readiness gaps before they need capital urgently.",
+      "cta": "Start with the business funding readiness checklist.",
+      "suggested_channels": [
+        "email",
+        "linkedin",
+        "crm_task"
+      ],
+      "first_post_idea": "A short post about why clean books and clear revenue history make funding conversations easier.",
+      "first_email_idea": "Send a plain-English checklist clients can use before asking for working capital.",
+      "first_script_idea": "Ask clients if they have upcoming cash flow pressure and want a readiness review before applying anywhere.",
+      "lead_magnet": "Business funding readiness checklist",
+      "tracking_notes": "Use partner-specific link or UTM once tracking module exists.",
+      "compliance_guardrails": [
+        "No guaranteed approval language",
+        "No exact funding amount promises",
+        "No credit repair claims",
+        "Use readiness and education framing"
+      ],
+      "status": "ready_for_review"
+    }
+  ]
+}

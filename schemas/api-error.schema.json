@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/api-error.schema.json",
+  "title": "API Error",
+  "description": "Standard API error response shape for future Vercel API endpoints and GPT Actions.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "error": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Short machine-readable or display-safe error label."
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Human-readable error message safe to return to clients or GPT Actions."
+    },
+    "code": {
+      "type": "string",
+      "enum": [
+        "bad_request",
+        "unauthorized",
+        "forbidden",
+        "not_found",
+        "validation_error",
+        "rate_limited",
+        "internal_error",
+        "upstream_error",
+        "unavailable"
+      ],
+      "description": "Stable error code for API clients, GPT Actions, and dashboard UI."
+    },
+    "details": {
+      "type": [
+        "object",
+        "array",
+        "string",
+        "null"
+      ],
+      "description": "Optional validation details, upstream error context, or field-specific notes. Do not include secrets."
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "description": "Request or trace identifier."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp."
+    }
+  },
+  "required": [
+    "error",
+    "message",
+    "code",
+    "request_id",
+    "timestamp"
+  ],
+  "examples": [
+    {
+      "error": "ValidationError",
+      "message": "The intake payload is missing required fields: first_name, last_name, and email.",
+      "code": "validation_error",
+      "details": {
+        "missing_fields": [
+          "first_name",
+          "last_name",
+          "email"
+        ]
+      },
+      "request_id": "req_01J2VALIDATION",
+      "timestamp": "2026-07-06T10:30:00-04:00"
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/scorecard.schema.json",
+  "title": "Partner Scorecard",
+  "description": "Structured scoring output used for partner tiering, risk review, explanation, and admin decisioning.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "audience_access_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for direct access to relevant business owners or operators."
+    },
+    "funding_relevance_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for how closely the audience maps to business funding or funding readiness needs."
+    },
+    "existing_trust_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for how much trust the partner already has with their audience."
+    },
+    "existing_deal_flow_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for current or likely recurring referral volume."
+    },
+    "activation_speed_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for how quickly the partner can launch safely with existing assets."
+    },
+    "compliance_risk_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 risk rating. Higher number means higher compliance, brand, or operational risk."
+    },
+    "strategic_leverage_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for ecosystem leverage, channel value, or strategic relationship value."
+    },
+    "revenue_potential_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for likely commercial upside based on audience, trust, and flow. Not a guarantee."
+    },
+    "technical_ability_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for ability to use links, forms, CRM workflows, content, tracking, or automation."
+    },
+    "relationship_quality_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5,
+      "description": "0-5 rating for professionalism, fit, clarity, and likelihood of a clean working relationship."
+    },
+    "overall_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Weighted overall score from 0-100. Must account for compliance risk as a negative factor."
+    },
+    "tier_recommendation": {
+      "type": "string",
+      "enum": [
+        "tier_1",
+        "tier_2",
+        "tier_3",
+        "tier_4",
+        "reject_risk"
+      ],
+      "description": "Recommended partner tier based on score and risk."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "description": "Overall risk level."
+    },
+    "manual_review_required": {
+      "type": "boolean",
+      "description": "True when risk, missing information, strategic complexity, or claimed volume requires admin review."
+    },
+    "reasoning_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000,
+      "description": "Plain-English summary explaining the score, tier, and review logic."
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "uniqueItems": true,
+      "maxItems": 20,
+      "description": "Specific red flags or risk notes."
+    },
+    "missing_info": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true,
+      "maxItems": 20,
+      "description": "Missing fields or unanswered questions needed for confident classification."
+    }
+  },
+  "required": [
+    "audience_access_score",
+    "funding_relevance_score",
+    "existing_trust_score",
+    "existing_deal_flow_score",
+    "activation_speed_score",
+    "compliance_risk_score",
+    "strategic_leverage_score",
+    "revenue_potential_score",
+    "technical_ability_score",
+    "relationship_quality_score",
+    "overall_score",
+    "tier_recommendation",
+    "risk_level",
+    "manual_review_required",
+    "reasoning_summary",
+    "risk_flags",
+    "missing_info"
+  ],
+  "examples": [
+    {
+      "audience_access_score": 4,
+      "funding_relevance_score": 4,
+      "existing_trust_score": 5,
+      "existing_deal_flow_score": 3,
+      "activation_speed_score": 4,
+      "compliance_risk_score": 1,
+      "strategic_leverage_score": 3,
+      "revenue_potential_score": 4,
+      "technical_ability_score": 3,
+      "relationship_quality_score": 5,
+      "overall_score": 78,
+      "tier_recommendation": "tier_2",
+      "risk_level": "low",
+      "manual_review_required": true,
+      "reasoning_summary": "Strong referral partner fit due to existing client trust and relevant SMB audience. Keep activation referral-only until referral process and safe language are confirmed.",
+      "risk_flags": [],
+      "missing_info": [
+        "Preferred handoff method",
+        "Monthly referral volume history"
+      ]
+    }
+  ]
+}

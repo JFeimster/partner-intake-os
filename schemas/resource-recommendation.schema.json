@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/resource-recommendation.schema.json",
+  "title": "Partner Resource Recommendation",
+  "description": "Recommended resource for a partner based on partner type, audience, risk, onboarding path, and activation stage.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "recommendation_id": {
+      "type": "string",
+      "pattern": "^resrec_[A-Za-z0-9_-]{8,64}$"
+    },
+    "partner_type": {
+      "type": "string",
+      "enum": [
+        "funding_broker",
+        "iso",
+        "referral_partner",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "fintech_vendor_partner",
+        "strategic_partner",
+        "unqualified_not_fit"
+      ]
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "onboarding_path": {
+      "type": "string",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review"
+      ]
+    },
+    "recommended_resource": {
+      "type": "string",
+      "enum": [
+        "Funding Product Matrix",
+        "Broker Follow-Up Machine",
+        "Funding Pathfinder",
+        "Partner Command Center",
+        "Business funding readiness checklist",
+        "Referral partner scripts",
+        "Campaign kits",
+        "Onboarding checklist",
+        "Lead submission guidance"
+      ]
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "matrix",
+        "gpt",
+        "dashboard",
+        "checklist",
+        "script_pack",
+        "campaign_kit",
+        "playbook",
+        "guide",
+        "training",
+        "other"
+      ]
+    },
+    "resource_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "maxLength": 500
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "cta": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 220
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "compliance_safe_positioning": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Safe framing that avoids guarantees, lender certainty, credit repair claims, or fabricated outcomes."
+    },
+    "internal_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "recommendation_id",
+    "partner_type",
+    "audience",
+    "onboarding_path",
+    "recommended_resource",
+    "resource_type",
+    "reason",
+    "cta",
+    "priority",
+    "compliance_safe_positioning"
+  ],
+  "examples": [
+    {
+      "recommendation_id": "resrec_fundingmatrix_20260706",
+      "partner_type": "cpa_bookkeeper",
+      "audience": "Contractors and local service businesses",
+      "onboarding_path": "referral_only_partner",
+      "recommended_resource": "Funding Product Matrix",
+      "resource_type": "matrix",
+      "resource_url": null,
+      "reason": "Helps the partner explain common funding categories at a high level without pretending to underwrite deals.",
+      "cta": "Use this matrix to identify which clients may need a funding readiness conversation.",
+      "priority": "high",
+      "compliance_safe_positioning": "Educational overview only. Do not promise approval, exact terms, or funding amounts.",
+      "internal_note": "Pair with referral scripts before partner sends clients over."
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/profile.schema.json",
+  "title": "Partner Profile",
+  "description": "Normalized partner profile after classification, tiering, onboarding path selection, resource routing, and admin review.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[A-Za-z0-9_-]{8,64}$",
+      "description": "Stable internal partner identifier."
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "description": "Human-readable partner/contact name."
+    },
+    "company": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160,
+      "description": "Company, agency, brand, or organization name."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254,
+      "description": "Primary partner email."
+    },
+    "phone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 40,
+      "pattern": "^[+()\\-\\.\\s0-9A-Za-z extEXT]{7,40}$",
+      "description": "Primary partner phone."
+    },
+    "website": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "maxLength": 300,
+      "description": "Public website, profile, or partner URL."
+    },
+    "partner_type": {
+      "type": "string",
+      "enum": [
+        "funding_broker",
+        "iso",
+        "referral_partner",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "fintech_vendor_partner",
+        "strategic_partner",
+        "unqualified_not_fit"
+      ],
+      "description": "Internal partner classification."
+    },
+    "partner_tier": {
+      "type": "string",
+      "enum": [
+        "tier_1",
+        "tier_2",
+        "tier_3",
+        "tier_4",
+        "reject_risk"
+      ],
+      "description": "Operational tier recommendation."
+    },
+    "onboarding_path": {
+      "type": "string",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review"
+      ],
+      "description": "Recommended onboarding path."
+    },
+    "primary_audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300,
+      "description": "Primary audience or market the partner can reach."
+    },
+    "secondary_audiences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "uniqueItems": true,
+      "maxItems": 12,
+      "default": [],
+      "description": "Other relevant audiences or verticals."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "description": "Overall operational, compliance, or brand risk level."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "needs_review",
+        "approved",
+        "active",
+        "nurture",
+        "watchlist",
+        "rejected",
+        "inactive"
+      ],
+      "description": "Current partner lifecycle status."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9_-]{1,60}$"
+      },
+      "uniqueItems": true,
+      "maxItems": 50,
+      "description": "CRM-ready tags."
+    },
+    "recommended_resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true,
+      "maxItems": 20,
+      "description": "Resource names recommended for this partner."
+    },
+    "recommended_campaigns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true,
+      "maxItems": 20,
+      "description": "Campaign kit names or campaign IDs recommended for activation."
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "Next concrete admin or partner action."
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 3000,
+      "description": "Admin-safe notes. Avoid funding guarantees, fake certainty, or credit repair framing."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 creation timestamp."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 update timestamp."
+    }
+  },
+  "required": [
+    "partner_id",
+    "display_name",
+    "email",
+    "partner_type",
+    "partner_tier",
+    "onboarding_path",
+    "primary_audience",
+    "risk_level",
+    "status",
+    "tags",
+    "recommended_resources",
+    "recommended_campaigns",
+    "next_action",
+    "created_at",
+    "updated_at"
+  ],
+  "examples": [
+    {
+      "partner_id": "ptr_danafields_20260706",
+      "display_name": "Dana Fields",
+      "company": "Field Ledger Advisory",
+      "email": "dana@fieldledger.co",
+      "phone": "+1 202-555-0183",
+      "website": "https://fieldledger.co",
+      "partner_type": "cpa_bookkeeper",
+      "partner_tier": "tier_2",
+      "onboarding_path": "referral_only_partner",
+      "primary_audience": "Contractors and service businesses with cash flow planning needs.",
+      "secondary_audiences": [
+        "local_smb",
+        "tax_planning_clients"
+      ],
+      "risk_level": "low",
+      "status": "needs_review",
+      "tags": [
+        "partner_type_cpa_bookkeeper",
+        "tier_2",
+        "referral_only",
+        "cash_flow_readiness"
+      ],
+      "recommended_resources": [
+        "Funding Product Matrix",
+        "Business funding readiness checklist",
+        "Referral partner scripts"
+      ],
+      "recommended_campaigns": [
+        "Cash Flow Gap Referral Script",
+        "Tax Season Funding Readiness Email"
+      ],
+      "next_action": "Send referral-only onboarding pack and schedule a 20-minute partner fit call.",
+      "notes": "Strong trust channel; keep copy educational and readiness-based.",
+      "created_at": "2026-07-06T10:20:00-04:00",
+      "updated_at": "2026-07-06T10:20:00-04:00"
+    }
+  ]
+}

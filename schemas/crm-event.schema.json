@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/crm-event.schema.json",
+  "title": "Partner CRM Event",
+  "description": "CRM-ready activity or event record for partner intake, classification, recommendations, onboarding, review, and follow-up.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[A-Za-z0-9_-]{8,64}$"
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[A-Za-z0-9_-]{8,64}$"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "intake_received",
+        "classification_completed",
+        "resource_recommended",
+        "campaign_recommended",
+        "onboarding_started",
+        "manual_review_required",
+        "partner_approved",
+        "partner_rejected",
+        "partner_activated",
+        "follow_up_required",
+        "note_added"
+      ]
+    },
+    "event_source": {
+      "type": "string",
+      "enum": [
+        "gpt",
+        "tally",
+        "api",
+        "hubspot",
+        "notion",
+        "google_sheets",
+        "admin",
+        "automation"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "next_action": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
+    },
+    "owner": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 120
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "complete",
+        "dismissed",
+        "failed"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "System-specific metadata such as HubSpot IDs, Notion page IDs, source URLs, scoring fragments, or request IDs."
+    }
+  },
+  "required": [
+    "event_id",
+    "partner_id",
+    "event_type",
+    "event_source",
+    "summary",
+    "status",
+    "created_at",
+    "created_by",
+    "metadata"
+  ],
+  "examples": [
+    {
+      "event_id": "evt_classification_20260706",
+      "partner_id": "ptr_danafields_20260706",
+      "event_type": "classification_completed",
+      "event_source": "gpt",
+      "summary": "Classified as tier_2 CPA/bookkeeper referral partner with low risk and referral-only onboarding path.",
+      "next_action": "Send onboarding pack and schedule partner fit call.",
+      "owner": "partner_ops",
+      "status": "open",
+      "created_at": "2026-07-06T10:25:00-04:00",
+      "created_by": "partner_intake_os",
+      "metadata": {
+        "tier_recommendation": "tier_2",
+        "risk_level": "low",
+        "manual_review_required": true
+      }
+    }
+  ]
+}

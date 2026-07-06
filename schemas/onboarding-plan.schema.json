@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/onboarding-plan.schema.json",
+  "title": "Partner Onboarding Plan",
+  "description": "Structured onboarding plan for activating, educating, reviewing, or rejecting a partner without over-automating sensitive decisions.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[A-Za-z0-9_-]{8,64}$"
+    },
+    "onboarding_path": {
+      "type": "string",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review"
+      ]
+    },
+    "first_24_hours": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "due": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Human-readable relative due date or ISO date, such as 'within_24_hours' or '2026-07-08'."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "blocked",
+              "complete",
+              "skipped"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "task",
+          "owner",
+          "due",
+          "status"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 20,
+      "description": "Immediate onboarding or review tasks."
+    },
+    "first_7_days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "due": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Human-readable relative due date or ISO date, such as 'within_24_hours' or '2026-07-08'."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "blocked",
+              "complete",
+              "skipped"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "task",
+          "owner",
+          "due",
+          "status"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 30,
+      "description": "First-week activation and resource tasks."
+    },
+    "first_30_days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "due": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Human-readable relative due date or ISO date, such as 'within_24_hours' or '2026-07-08'."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "blocked",
+              "complete",
+              "skipped"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "task",
+          "owner",
+          "due",
+          "status"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 40,
+      "description": "First-month partner development tasks."
+    },
+    "required_assets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true,
+      "maxItems": 25
+    },
+    "recommended_training": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true,
+      "maxItems": 25
+    },
+    "recommended_resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "uniqueItems": true,
+      "maxItems": 25
+    },
+    "recommended_campaign": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "what_not_to_automate_yet": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 220
+      },
+      "uniqueItems": true,
+      "maxItems": 20,
+      "description": "Sensitive decisions or actions that require human approval first."
+    },
+    "manual_review_required": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "partner_id",
+    "onboarding_path",
+    "first_24_hours",
+    "first_7_days",
+    "first_30_days",
+    "required_assets",
+    "recommended_training",
+    "recommended_resources",
+    "owner",
+    "next_action",
+    "what_not_to_automate_yet",
+    "manual_review_required"
+  ],
+  "examples": [
+    {
+      "partner_id": "ptr_danafields_20260706",
+      "onboarding_path": "referral_only_partner",
+      "first_24_hours": [
+        {
+          "task": "Review intake for referral fit and compliance-safe positioning.",
+          "owner": "admin",
+          "due": "within_24_hours",
+          "status": "not_started",
+          "notes": "Confirm she is not promising approvals or funding amounts."
+        },
+        {
+          "task": "Send referral partner resource pack.",
+          "owner": "partner_ops",
+          "due": "within_24_hours",
+          "status": "not_started",
+          "notes": "Include Funding Product Matrix and referral scripts."
+        }
+      ],
+      "first_7_days": [
+        {
+          "task": "Schedule partner fit call.",
+          "owner": "admin",
+          "due": "within_7_days",
+          "status": "not_started",
+          "notes": "Confirm audience, handoff method, and tracking preferences."
+        }
+      ],
+      "first_30_days": [
+        {
+          "task": "Launch first educational referral campaign.",
+          "owner": "partner",
+          "due": "within_30_days",
+          "status": "not_started",
+          "notes": "Use readiness checklist angle, not guaranteed funding language."
+        }
+      ],
+      "required_assets": [
+        "Referral partner scripts",
+        "Lead submission guidance"
+      ],
+      "recommended_training": [
+        "Funding product overview",
+        "Compliance-safe referral language"
+      ],
+      "recommended_resources": [
+        "Funding Product Matrix",
+        "Business funding readiness checklist"
+      ],
+      "recommended_campaign": "Tax Season Funding Readiness Email",
+      "owner": "partner_ops",
+      "next_action": "Send referral-only onboarding pack and schedule fit call.",
+      "what_not_to_automate_yet": [
+        "Automatic approval",
+        "Outbound claims about approvals",
+        "Commission or payout messaging"
+      ],
+      "manual_review_required": true
+    }
+  ]
+}

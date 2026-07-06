@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/tally-submission.schema.json",
+  "title": "Tally Partner Submission",
+  "description": "Raw Tally webhook payload wrapper plus normalized intake object. This schema is only a data contract; it is not a webhook setup file.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Tally event type such as FORM_RESPONSE."
+    },
+    "form_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "form_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 300
+    },
+    "response_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "respondent_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "description": "Tally field key, internal field ID, or normalized slug."
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "description": "Human-readable field label."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "INPUT_TEXT",
+              "INPUT_EMAIL",
+              "INPUT_PHONE",
+              "INPUT_LINK",
+              "TEXTAREA",
+              "MULTIPLE_CHOICE",
+              "DROPDOWN",
+              "CHECKBOXES",
+              "DATE",
+              "NUMBER",
+              "HIDDEN_FIELDS",
+              "OTHER"
+            ],
+            "description": "Tally-style field type or normalized equivalent."
+          },
+          "value": {
+            "description": "Submitted field value. Can be a string, number, boolean, array, object, or null.",
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "default": [],
+            "description": "Selected or available options, when provided by Tally."
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "type",
+          "value"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "raw_payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Full raw Tally payload for replay/debug. Store only where appropriate for PII policies."
+    },
+    "normalized_intake": {
+      "$ref": "intake.schema.json",
+      "description": "Normalized intake object matching schemas/intake.schema.json."
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "form_id",
+    "response_id",
+    "submitted_at",
+    "fields",
+    "raw_payload",
+    "normalized_intake"
+  ],
+  "examples": [
+    {
+      "event_id": "evt_tally_01J2PARTNER",
+      "event_type": "FORM_RESPONSE",
+      "form_id": "form_partner_signup",
+      "form_name": "Moonshine Capital Partner Signup",
+      "response_id": "resp_01J2ABCDEF",
+      "submitted_at": "2026-07-06T10:15:00-04:00",
+      "respondent_id": "resp_user_123",
+      "fields": [
+        {
+          "key": "first_name",
+          "label": "First name",
+          "type": "INPUT_TEXT",
+          "value": "Dana",
+          "options": []
+        },
+        {
+          "key": "email",
+          "label": "Email",
+          "type": "INPUT_EMAIL",
+          "value": "dana@fieldledger.co",
+          "options": []
+        },
+        {
+          "key": "partner_type_claimed",
+          "label": "Which best describes you?",
+          "type": "DROPDOWN",
+          "value": "cpa_bookkeeper",
+          "options": [
+            {
+              "text": "CPA / Bookkeeper",
+              "value": "cpa_bookkeeper"
+            }
+          ]
+        }
+      ],
+      "raw_payload": {
+        "eventType": "FORM_RESPONSE",
+        "formId": "form_partner_signup",
+        "responseId": "resp_01J2ABCDEF"
+      },
+      "normalized_intake": {
+        "first_name": "Dana",
+        "last_name": "Fields",
+        "email": "dana@fieldledger.co",
+        "phone": "+1 202-555-0183",
+        "company": "Field Ledger Advisory",
+        "website": "https://fieldledger.co",
+        "partner_type_claimed": "cpa_bookkeeper",
+        "audience": "Service businesses, contractors, and local operators that need cash flow planning before tax deadlines.",
+        "industry": "Accounting and bookkeeping",
+        "location": "Washington, DC",
+        "funding_experience": "Refers clients to banks occasionally but wants a clearer funding readiness workflow.",
+        "current_tools": [
+          "QuickBooks",
+          "HubSpot",
+          "Google Sheets"
+        ],
+        "traffic_or_network_size": "About 140 active client relationships and a 2,800-person email list.",
+        "referral_volume_estimate": "3-5 relevant conversations per month",
+        "desired_partner_role": "Referral partner with educational resources and a simple handoff process.",
+        "notes": "Wants safe language and does not want to make funding promises to clients.",
+        "source": "tally",
+        "submitted_at": "2026-07-06T10:15:00-04:00"
+      }
+    }
+  ]
+}

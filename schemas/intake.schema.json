@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/intake.schema.json",
+  "title": "Partner Intake",
+  "description": "Raw or normalized partner intake data from Tally, manual entry, GPT review, CRM import, or spreadsheet import.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "first_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Partner contact first name."
+    },
+    "last_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Partner contact last name."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254,
+      "description": "Primary contact email."
+    },
+    "phone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 40,
+      "pattern": "^[+()\\-\\.\\s0-9A-Za-z extEXT]{7,40}$",
+      "description": "Primary contact phone number when provided."
+    },
+    "company": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160,
+      "description": "Company, agency, brand, or organization name."
+    },
+    "website": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "maxLength": 300,
+      "description": "Website, landing page, LinkedIn profile, or public brand URL."
+    },
+    "partner_type_claimed": {
+      "type": "string",
+      "enum": [
+        "funding_broker",
+        "iso",
+        "referral_partner",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "fintech_vendor_partner",
+        "strategic_partner",
+        "unknown",
+        "other"
+      ],
+      "description": "The partner type claimed by the submitter before internal classification."
+    },
+    "audience": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500,
+      "description": "Who the partner reaches or serves."
+    },
+    "industry": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160,
+      "description": "Main business niche, vertical, or industry served."
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 160,
+      "description": "Primary geography, market, or region."
+    },
+    "funding_experience": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000,
+      "description": "Funding, referral, broker, finance, or business-credit related experience."
+    },
+    "current_tools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "uniqueItems": true,
+      "maxItems": 30,
+      "default": [],
+      "description": "Tools already used, such as CRM, email platform, automations, Notion, HubSpot, Sheets, or n8n."
+    },
+    "traffic_or_network_size": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 300,
+      "description": "Claimed audience size, community reach, list size, CRM size, client book, or deal flow source."
+    },
+    "referral_volume_estimate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 300,
+      "description": "Estimated number of relevant funding referrals or partner opportunities per month."
+    },
+    "desired_partner_role": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500,
+      "description": "How the submitter wants to partner: affiliate, referral, broker, COI, strategic, vendor, or other."
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 3000,
+      "description": "Free-form notes from Tally, admin, GPT, CRM, or import source."
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "tally",
+        "manual",
+        "gpt",
+        "hubspot",
+        "notion",
+        "google_sheets",
+        "import",
+        "other"
+      ],
+      "description": "Where the intake originated."
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when intake was submitted or imported."
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "email",
+    "partner_type_claimed",
+    "source",
+    "submitted_at"
+  ],
+  "examples": [
+    {
+      "first_name": "Dana",
+      "last_name": "Fields",
+      "email": "dana@fieldledger.co",
+      "phone": "+1 202-555-0183",
+      "company": "Field Ledger Advisory",
+      "website": "https://fieldledger.co",
+      "partner_type_claimed": "cpa_bookkeeper",
+      "audience": "Service businesses, contractors, and local operators that need cash flow planning before tax deadlines.",
+      "industry": "Accounting and bookkeeping",
+      "location": "Washington, DC",
+      "funding_experience": "Refers clients to banks occasionally but wants a clearer funding readiness workflow.",
+      "current_tools": [
+        "QuickBooks",
+        "HubSpot",
+        "Google Sheets"
+      ],
+      "traffic_or_network_size": "About 140 active client relationships and a 2,800-person email list.",
+      "referral_volume_estimate": "3-5 relevant conversations per month",
+      "desired_partner_role": "Referral partner with educational resources and a simple handoff process.",
+      "notes": "Wants safe language and does not want to make funding promises to clients.",
+      "source": "tally",
+      "submitted_at": "2026-07-06T10:15:00-04:00"
+    }
+  ]
+}
