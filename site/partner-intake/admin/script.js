@@ -1,184 +1,136 @@
-const state = {
-  records: [],
-  filtered: [],
-  selectedId: null,
-};
+(function () {
+  const status = document.querySelector("[data-admin-status]");
+  const queue = document.querySelector("[data-review-queue]");
+  const warning = document.querySelector("[data-admin-warning]");
+  const logoutButton = document.querySelector("[data-logout]");
 
-const els = {
-  queue: document.querySelector('#queue'),
-  detail: document.querySelector('#detail'),
-  detailEmpty: document.querySelector('#detailEmpty'),
-  cardTemplate: document.querySelector('#cardTemplate'),
-  statusFilter: document.querySelector('#statusFilter'),
-  riskFilter: document.querySelector('#riskFilter'),
-  tierFilter: document.querySelector('#tierFilter'),
-  searchBox: document.querySelector('#searchBox'),
-  resetFilters: document.querySelector('#resetFilters'),
-  metricTotal: document.querySelector('#metricTotal'),
-  metricNeedsReview: document.querySelector('#metricNeedsReview'),
-  metricHighRisk: document.querySelector('#metricHighRisk'),
-  metricTierOne: document.querySelector('#metricTierOne'),
-};
+  const fallbackRecords = [
+    {
+      partner_id: "static_demo_partner",
+      display_name: "Static Demo Partner",
+      company: "Demo Co",
+      partner_type: "referral_partner",
+      partner_tier: "tier_3",
+      onboarding_path: "education_first_partner",
+      status: "static_demo_only",
+      risk_level: "medium",
+      score: 52,
+      manual_review_required: true,
+      risk_flags: ["api_unavailable", "static_demo_mode"],
+      recommended_decision: "do_not_use_for_production",
+      next_action: "Configure /api/admin/session and /api/admin/review-queue before relying on this dashboard.",
+      reviewer_notes: "Fallback static fixture only."
+    }
+  ];
 
-async function loadQueue() {
-  try {
-    const response = await fetch('./data/sample-review-queue.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Could not load sample queue: ${response.status}`);
-    const payload = await response.json();
-    state.records = payload.records || [];
-    applyFilters();
-  } catch (error) {
-    els.queue.innerHTML = `<p class="empty-state">${error.message}</p>`;
-  }
-}
-
-function applyFilters() {
-  const status = els.statusFilter.value;
-  const risk = els.riskFilter.value;
-  const tier = els.tierFilter.value;
-  const query = els.searchBox.value.trim().toLowerCase();
-
-  state.filtered = state.records.filter((record) => {
-    const searchable = [record.display_name, record.company, record.partner_type, record.next_action, record.review_status]
-      .join(' ')
-      .toLowerCase();
-
-    return (status === 'all' || record.review_status === status)
-      && (risk === 'all' || record.risk_level === risk)
-      && (tier === 'all' || record.partner_tier === tier)
-      && (!query || searchable.includes(query));
-  });
-
-  renderMetrics();
-  renderQueue();
-}
-
-function renderMetrics() {
-  els.metricTotal.textContent = state.records.length;
-  els.metricNeedsReview.textContent = state.records.filter((r) => r.review_status === 'needs_review').length;
-  els.metricHighRisk.textContent = state.records.filter((r) => r.risk_level === 'high').length;
-  els.metricTierOne.textContent = state.records.filter((r) => r.partner_tier === 'tier_1').length;
-}
-
-function renderQueue() {
-  els.queue.innerHTML = '';
-  if (!state.filtered.length) {
-    els.queue.innerHTML = '<p class="empty-state">No records match those filters. The gremlin is quiet.</p>';
-    return;
+  function setStatus(message, type) {
+    if (!status) return;
+    status.textContent = message;
+    status.className = `status ${type || ""}`.trim();
   }
 
-  state.filtered.forEach((record) => {
-    const card = els.cardTemplate.content.firstElementChild.cloneNode(true);
-    card.dataset.reviewId = record.review_id;
-    card.classList.toggle('active', state.selectedId === record.review_id);
-    card.querySelector('.name').textContent = record.display_name;
-    card.querySelector('.score').textContent = `${record.score}/100`;
-    card.querySelector('.company').textContent = record.company || 'Company missing';
-    card.querySelector('.next').textContent = record.next_action.replaceAll('_', ' ');
-    card.querySelector('.tags').innerHTML = [
-      tag(record.partner_tier),
-      tag(record.review_status),
-      tag(record.risk_level, record.risk_level),
-      tag(record.partner_type),
-    ].join('');
-    card.addEventListener('click', () => selectRecord(record.review_id));
-    els.queue.append(card);
-  });
-}
+  function renderWarning(message) {
+    if (!warning) return;
+    warning.hidden = false;
+    warning.textContent = message;
+  }
 
-function selectRecord(reviewId) {
-  state.selectedId = reviewId;
-  const record = state.records.find((item) => item.review_id === reviewId);
-  renderQueue();
-  renderDetail(record);
-}
+  function tagList(items) {
+    return (items || []).map((item) => `<span class="queue-tag">${escapeHtml(item)}</span>`).join("");
+  }
 
-function renderDetail(record) {
-  if (!record) return;
-  els.detailEmpty.classList.add('hidden');
-  els.detail.classList.remove('hidden');
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-  const flags = record.risk_flags.length
-    ? record.risk_flags.map((flag) => tag(flag, 'flag')).join('')
-    : '<span class="tag low">no active risk flags</span>';
+  function render(records) {
+    if (!queue) return;
+    queue.innerHTML = records.map((record) => `
+      <article class="queue-item">
+        <div class="queue-topline">
+          <h2>${escapeHtml(record.display_name || record.company || record.partner_id)}</h2>
+          <span class="score">Score ${escapeHtml(record.score || "n/a")}</span>
+        </div>
+        <p class="muted">${escapeHtml(record.company || "No company")} · ${escapeHtml(record.partner_type)} · ${escapeHtml(record.partner_tier)}</p>
+        <dl>
+          <div><dt>Status</dt><dd>${escapeHtml(record.status)}</dd></div>
+          <div><dt>Risk</dt><dd>${escapeHtml(record.risk_level)}</dd></div>
+          <div><dt>Path</dt><dd>${escapeHtml(record.onboarding_path)}</dd></div>
+          <div><dt>Decision</dt><dd>${escapeHtml(record.recommended_decision)}</dd></div>
+        </dl>
+        <p><strong>Next action:</strong> ${escapeHtml(record.next_action)}</p>
+        <div class="tag-row">${tagList(record.risk_flags)}</div>
+        <p class="muted">${escapeHtml(record.reviewer_notes || "")}</p>
+      </article>
+    `).join("");
+  }
 
-  els.detail.innerHTML = `
-    <h2>${escapeHtml(record.display_name)}</h2>
-    <p class="company">${escapeHtml(record.company || 'Company missing')} · ${escapeHtml(record.partner_id)}</p>
-    <div class="detail-grid">
-      ${kv('Review ID', record.review_id)}
-      ${kv('Score', `${record.score}/100`)}
-      ${kv('Tier', record.partner_tier)}
-      ${kv('Risk', record.risk_level)}
-      ${kv('Status', record.review_status)}
-      ${kv('Partner Type', record.partner_type)}
-      ${kv('Onboarding Path', record.onboarding_path)}
-      ${kv('Owner', record.assigned_owner)}
-    </div>
-    <div class="flags-box">
-      <span class="k">Risk flags</span>
-      <div class="flags">${flags}</div>
-    </div>
-    <div class="note-box">
-      <span class="k">Recommended decision</span>
-      <span class="v">${escapeHtml(record.recommended_decision.replaceAll('_', ' '))}</span>
-    </div>
-    <div class="note-box">
-      <span class="k">Next action</span>
-      <span class="v">${escapeHtml(record.next_action.replaceAll('_', ' '))}</span>
-    </div>
-    <div class="note-box">
-      <span class="k">Reviewer notes</span>
-      <span class="v">${escapeHtml(record.reviewer_notes)}</span>
-    </div>
-    <div class="actions">
-      <button class="action-btn primary" data-action="approve">Approve</button>
-      <button class="action-btn" data-action="request_more_info">Request info</button>
-      <button class="action-btn" data-action="watchlist">Watchlist</button>
-      <button class="action-btn danger" data-action="reject">Reject</button>
-      <button class="action-btn" data-action="sync_demo">Sync demo</button>
-    </div>
-    <p id="activity" class="activity"></p>
+  async function loadQueue() {
+    setStatus("Loading protected review queue…", "");
+    try {
+      const response = await fetch("/api/admin/review-queue", {
+        method: "GET",
+        credentials: "include",
+        headers: { "Accept": "application/json" }
+      });
+
+      if (response.status === 401) {
+        setStatus("Admin session required. Redirecting to login…", "error");
+        window.setTimeout(() => {
+          window.location.href = "./login.html";
+        }, 650);
+        return;
+      }
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload?.error?.message || "Review queue API failed.");
+      }
+
+      setStatus(`Loaded ${payload.total || 0} protected review records.`, "ok");
+      renderWarning(payload.warning || "Protected admin route loaded. Use sample/internal data only.");
+      render(payload.records || []);
+    } catch (error) {
+      setStatus("Protected API unavailable. Showing static fallback fixture.", "error");
+      renderWarning("Fallback static demo mode. Do not treat this data as authenticated or production-backed.");
+      render(fallbackRecords);
+    }
+  }
+
+  async function logout() {
+    try {
+      await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
+    } finally {
+      window.location.href = "./login.html";
+    }
+  }
+
+  if (logoutButton) logoutButton.addEventListener("click", logout);
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .review-card { width: min(1020px, 100%); }
+    .review-header { display:flex; gap:18px; justify-content:space-between; align-items:flex-start; }
+    .review-header button { width:auto; min-width:110px; }
+    .queue { display:grid; gap:16px; margin-top:22px; }
+    .queue-item { border:1px solid var(--line); background:rgba(255,255,255,0.045); border-radius:22px; padding:20px; }
+    .queue-topline { display:flex; justify-content:space-between; gap:16px; align-items:start; }
+    .queue-topline h2 { margin:0; font-size:1.25rem; }
+    .score { border:1px solid var(--line); border-radius:999px; padding:6px 10px; color:var(--accent); white-space:nowrap; }
+    .muted { color:var(--muted); }
+    dl { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:16px 0; }
+    dt { color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.1em; }
+    dd { margin:4px 0 0; font-weight:800; }
+    .tag-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .queue-tag { border:1px solid var(--line); border-radius:999px; padding:6px 9px; color:var(--muted); font-size:.86rem; }
+    @media (max-width: 720px) { .review-header,.queue-topline { flex-direction:column; } dl { grid-template-columns:1fr; } }
   `;
+  document.head.appendChild(style);
 
-  els.detail.querySelectorAll('[data-action]').forEach((button) => {
-    button.addEventListener('click', () => demoAction(record, button.dataset.action));
-  });
-}
-
-function demoAction(record, action) {
-  const activity = document.querySelector('#activity');
-  const display = action.replaceAll('_', ' ');
-  activity.textContent = `Demo only: ${display} queued for ${record.display_name}. No CRM or database was updated.`;
-}
-
-function kv(label, value) {
-  return `<div><span class="k">${escapeHtml(label)}</span><span class="v">${escapeHtml(String(value).replaceAll('_', ' '))}</span></div>`;
-}
-
-function tag(text, extra = '') {
-  return `<span class="tag ${extra}">${escapeHtml(String(text).replaceAll('_', ' '))}</span>`;
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-[els.statusFilter, els.riskFilter, els.tierFilter, els.searchBox].forEach((input) => {
-  input.addEventListener('input', applyFilters);
-});
-
-els.resetFilters.addEventListener('click', () => {
-  els.statusFilter.value = 'all';
-  els.riskFilter.value = 'all';
-  els.tierFilter.value = 'all';
-  els.searchBox.value = '';
-  applyFilters();
-});
-
-loadQueue();
+  loadQueue();
+})();

@@ -1,104 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Partner Intake OS Admin Review</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partner Intake Admin Review Queue | Moonshine Partner Command Center</title>
+  <meta name="description" content="Protected Partner Intake OS admin review queue MVP.">
+  <link rel="stylesheet" href="./login.css">
 </head>
 <body>
-  <header class="shell hero">
-    <div>
-      <p class="eyebrow">Moonshine Capital / Partner Command Center</p>
-      <h1>Admin Review Dashboard</h1>
-      <p class="lede">Internal control room for partner intake review, risk triage, tier confirmation, onboarding paths, and next actions.</p>
-      <p class="demo-note">Static MVP: sample data only. Demo controls do not sync to CRM, Notion, HubSpot, or any live system.</p>
-    </div>
-    <div class="status-card">
-      <span class="pulse"></span>
-      <strong>Review Mode</strong>
-      <small>Local JSON queue loaded client-side</small>
-    </div>
-  </header>
-
-  <main class="shell layout">
-    <section class="panel controls" aria-label="Queue filters">
-      <div>
-        <label for="statusFilter">Status</label>
-        <select id="statusFilter">
-          <option value="all">All statuses</option>
-          <option value="new">New</option>
-          <option value="needs_review">Needs review</option>
-          <option value="missing_info">Missing info</option>
-          <option value="approved">Approved</option>
-          <option value="watchlist">Watchlist</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div>
-      <div>
-        <label for="riskFilter">Risk</label>
-        <select id="riskFilter">
-          <option value="all">All risk levels</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-      </div>
-      <div>
-        <label for="tierFilter">Tier</label>
-        <select id="tierFilter">
-          <option value="all">All tiers</option>
-          <option value="tier_1">Tier 1</option>
-          <option value="tier_2">Tier 2</option>
-          <option value="tier_3">Tier 3</option>
-          <option value="tier_4">Tier 4</option>
-          <option value="reject">Reject</option>
-        </select>
-      </div>
-      <div>
-        <label for="searchBox">Search</label>
-        <input id="searchBox" type="search" placeholder="Name, company, partner type..." />
-      </div>
-    </section>
-
-    <section class="metrics" aria-label="Queue metrics">
-      <article><span id="metricTotal">0</span><small>Total</small></article>
-      <article><span id="metricNeedsReview">0</span><small>Needs review</small></article>
-      <article><span id="metricHighRisk">0</span><small>High risk</small></article>
-      <article><span id="metricTierOne">0</span><small>Tier 1</small></article>
-    </section>
-
-    <section class="workspace">
-      <div class="panel queue-panel">
-        <div class="panel-head">
-          <h2>Review Queue</h2>
-          <button id="resetFilters" type="button">Reset</button>
+  <main class="login-shell admin-review-shell" aria-labelledby="pageTitle">
+    <section class="login-card review-card">
+      <div class="review-header">
+        <div>
+          <p class="eyebrow">Protected Admin Route</p>
+          <h1 id="pageTitle">Partner review queue</h1>
+          <p class="subhead">Sample/internal review data only. Real partner PII should stay in approved storage systems, not static files.</p>
         </div>
-        <div id="queue" class="queue" aria-live="polite"></div>
+        <button type="button" data-logout>Logout</button>
       </div>
 
-      <aside class="panel detail-panel" aria-label="Partner review details">
-        <div id="detailEmpty" class="empty-state">
-          <h2>Select a record</h2>
-          <p>Click a review card to inspect score, tier, risk flags, onboarding path, and demo admin actions.</p>
-        </div>
-        <div id="detail" class="detail hidden"></div>
-      </aside>
+      <div class="status" data-admin-status role="status" aria-live="polite">Checking admin session…</div>
+      <div class="notice" data-admin-warning hidden></div>
+      <section class="queue" data-review-queue aria-label="Partner review queue"></section>
+
+      <nav class="links" aria-label="Admin links">
+        <a href="./login.html">Login</a>
+        <a href="../../../index.html">Command Center home</a>
+      </nav>
     </section>
   </main>
-
-  <template id="cardTemplate">
-    <button class="review-card" type="button">
-      <div class="card-top">
-        <strong class="name"></strong>
-        <span class="score"></span>
-      </div>
-      <span class="company"></span>
-      <div class="tags"></div>
-      <p class="next"></p>
-    </button>
-  </template>
-
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>

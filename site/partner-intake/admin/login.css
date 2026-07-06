@@ -1,0 +1,126 @@
+:root {
+  color-scheme: dark;
+  --bg: #07070b;
+  --panel: #11121a;
+  --panel-2: #181a25;
+  --text: #f5f6fb;
+  --muted: #a8adbd;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: #d7ff49;
+  --danger: #ff6b6b;
+  --ok: #61f2a4;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, rgba(215, 255, 73, 0.14), transparent 34%), var(--bg);
+  color: var(--text);
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+}
+
+.login-card {
+  width: min(560px, 100%);
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, rgba(17, 18, 26, 0.94), rgba(24, 26, 37, 0.9));
+  border-radius: 28px;
+  padding: 34px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.38);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  line-height: 0.95;
+}
+
+.subhead {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 18px 0 28px;
+}
+
+form {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  font-weight: 800;
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font: inherit;
+}
+
+input:focus {
+  outline: 3px solid rgba(215, 255, 73, 0.25);
+  border-color: var(--accent);
+}
+
+button {
+  border: 0;
+  border-radius: 16px;
+  padding: 16px 18px;
+  background: var(--accent);
+  color: #111;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+button:hover { filter: brightness(1.04); }
+button:disabled { opacity: 0.65; cursor: not-allowed; }
+
+.status {
+  min-height: 24px;
+  margin-top: 16px;
+  color: var(--muted);
+}
+.status.ok { color: var(--ok); }
+.status.error { color: var(--danger); }
+
+.notice {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.links a {
+  color: var(--text);
+  text-decoration-color: var(--accent);
+}
