@@ -1,0 +1,1401 @@
+openapi: 3.1.0
+info:
+  title: Partner Intake OS Action API
+  version: 1.0.0
+  description: Safe GPT-facing Action Pack for Partner Intake OS. Exposes partner classification, recommendations, onboarding,
+    campaign, and event logging endpoints. The Tally webhook endpoint is intentionally not exposed.
+servers:
+- url: https://YOUR_VERCEL_DOMAIN.vercel.app
+  description: Replace with the deployed Vercel project domain.
+security:
+- bearerAuth: []
+tags:
+- name: System
+  description: Health and availability checks.
+- name: Partners
+  description: Partner classification and activation actions.
+- name: Events
+  description: CRM-ready partner activity logging.
+paths:
+  /api/health:
+    get:
+      tags:
+      - System
+      operationId: checkHealth
+      summary: Check Partner Intake OS API health.
+      description: Returns API status, runtime hints, environment configuration presence, and timestamp.
+      responses:
+        '200':
+          description: API health status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '500': &id001
+          description: Internal API error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/partners/classify:
+    post:
+      tags:
+      - Partners
+      operationId: classifyPartnerIntake
+      summary: Classify a partner intake.
+      description: Accepts a normalized/manual partner intake and returns classification, scorecard, tier, onboarding path,
+        risk level, and profile preview.
+      requestBody:
+        required: true
+        description: Partner intake to classify.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassifyPartnerIntakeRequest'
+      responses:
+        '200':
+          description: Classification result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassifyPartnerIntakeResponse'
+        '400': &id002
+          description: Bad request or validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401': &id003
+          description: Missing or invalid Bearer token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500': *id001
+  /api/partners/recommend-resources:
+    post:
+      tags:
+      - Partners
+      operationId: recommendPartnerResources
+      summary: Recommend partner resources.
+      description: Returns resource recommendations based on partner type, audience, onboarding path, and risk level.
+      requestBody:
+        required: true
+        description: Partner profile or partner context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendResourcesRequest'
+      responses:
+        '200':
+          description: Resource recommendations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendResourcesResponse'
+        '400': *id002
+        '401': *id003
+        '500': *id001
+  /api/partners/generate-onboarding-plan:
+    post:
+      tags:
+      - Partners
+      operationId: generatePartnerOnboardingPlan
+      summary: Generate a partner onboarding plan.
+      description: Returns a structured onboarding plan for the first 24 hours, first 7 days, and first 30 days.
+      requestBody:
+        required: true
+        description: Partner profile or onboarding context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateOnboardingPlanRequest'
+      responses:
+        '200':
+          description: Onboarding plan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateOnboardingPlanResponse'
+        '400': *id002
+        '401': *id003
+        '500': *id001
+  /api/partners/generate-campaign-kit:
+    post:
+      tags:
+      - Partners
+      operationId: generatePartnerCampaignKit
+      summary: Generate a partner campaign kit.
+      description: Returns a campaign recommendation with CTA, suggested channels, first post/email/script ideas, tracking
+        notes, and compliance guardrails.
+      requestBody:
+        required: true
+        description: Partner profile or campaign context.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateCampaignKitRequest'
+      responses:
+        '200':
+          description: Campaign kit recommendation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateCampaignKitResponse'
+        '400': *id002
+        '401': *id003
+        '500': *id001
+  /api/partners/log-event:
+    post:
+      tags:
+      - Events
+      operationId: logPartnerEvent
+      summary: Log a partner CRM event.
+      description: Accepts a CRM-ready partner event and returns a logged confirmation. Batch 06 storage mode determines where
+        this is written; mock mode returns a safe simulated log.
+      requestBody:
+        required: true
+        description: Partner event to log.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogPartnerEventRequest'
+      responses:
+        '200':
+          description: Logged event confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogPartnerEventResponse'
+        '400': *id002
+        '401': *id003
+        '500': *id001
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API key
+      description: 'Use Authorization: Bearer YOUR_PARTNER_INTAKE_OS_ACTION_TOKEN. The value should match PARTNER_INTAKE_ACTION_TOKEN
+        in Vercel.'
+  schemas:
+    PartnerIntake:
+      type: object
+      description: Raw or normalized partner intake from manual entry, GPT review, import, or Tally normalization.
+      required:
+      - email
+      - source
+      additionalProperties: false
+      properties:
+        first_name:
+          type: string
+          description: Partner first name.
+          example: Dana
+          maxLength: 80
+        last_name:
+          type: string
+          description: Partner last name.
+          example: Brooks
+          maxLength: 80
+        email:
+          type: string
+          description: Partner email address.
+          example: dana@example.com
+          format: email
+          maxLength: 160
+        phone:
+          type: string
+          description: Partner phone number.
+          example: +1 202-555-0144
+          maxLength: 40
+        company:
+          type: string
+          description: Company, brand, agency, or organization.
+          example: Books & Backoffice Co.
+          maxLength: 160
+        website:
+          type: string
+          description: Website or relevant profile URL.
+          example: https://example.com
+          format: uri
+          maxLength: 260
+        partner_type_claimed:
+          type: string
+          enum:
+          - funding_broker
+          - iso
+          - referral_partner
+          - cpa_bookkeeper
+          - small_business_attorney
+          - business_broker
+          - real_estate_investor_connector
+          - contractor_trades_connector
+          - franchise_consultant
+          - veteran_community_connector
+          - creator_affiliate
+          - fintech_vendor_partner
+          - strategic_partner
+          - unqualified_not_fit
+          - unknown
+          - other
+          description: Self-selected or inferred partner type before classification.
+          example: cpa_bookkeeper
+        audience:
+          type: string
+          description: Who the partner serves or can influence.
+          example: service businesses, contractors, and local operators
+          maxLength: 500
+        industry:
+          type: string
+          description: Primary industry or niche.
+          example: accounting and bookkeeping
+          maxLength: 160
+        location:
+          type: string
+          description: Primary location or market.
+          example: Washington, DC metro
+          maxLength: 160
+        funding_experience:
+          type: string
+          description: Experience referring, advising, or brokering funding opportunities.
+          example: Refers clients who ask about working capital options.
+          maxLength: 1000
+        current_tools:
+          type: array
+          description: Current tools used by partner.
+          items:
+            type: string
+            maxLength: 120
+          example:
+          - HubSpot
+          - Google Sheets
+          - Tally
+        traffic_or_network_size:
+          type: string
+          description: Audience, client base, list size, deal flow, or community reach.
+          example: 250 active SMB clients
+          maxLength: 220
+        referral_volume_estimate:
+          type: string
+          description: Estimated referral volume.
+          example: 2-5 per month
+          maxLength: 120
+        desired_partner_role:
+          type: string
+          description: What role the partner wants to play.
+          example: referral partner
+          maxLength: 220
+        notes:
+          type: string
+          description: Extra notes or intake context.
+          example: Interested in a clean referral process with educational resources.
+          maxLength: 3000
+        source:
+          type: string
+          enum:
+          - tally
+          - manual
+          - gpt
+          - hubspot
+          - notion
+          - google_sheets
+          - import
+          - other
+          description: Where this intake originated.
+          example: manual
+        submitted_at:
+          type: string
+          description: Submission timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+      example: &id008
+        first_name: Dana
+        last_name: Brooks
+        email: dana@example.com
+        phone: +1 202-555-0144
+        company: Books & Backoffice Co.
+        website: https://example.com
+        partner_type_claimed: cpa_bookkeeper
+        audience: service businesses, contractors, and local operators
+        industry: accounting and bookkeeping
+        location: Washington, DC metro
+        funding_experience: Refers clients who ask about working capital options.
+        current_tools:
+        - HubSpot
+        - Google Sheets
+        traffic_or_network_size: 250 active SMB clients
+        referral_volume_estimate: 2-5 per month
+        desired_partner_role: referral partner
+        notes: Wants educational referral assets and a clean handoff.
+        source: manual
+        submitted_at: '2026-07-06T12:00:00.000Z'
+    PartnerProfile:
+      type: object
+      description: Normalized partner profile after classification.
+      required:
+      - partner_id
+      - display_name
+      - email
+      - partner_type
+      - partner_tier
+      - onboarding_path
+      - risk_level
+      - status
+      - created_at
+      - updated_at
+      additionalProperties: false
+      properties:
+        partner_id:
+          type: string
+          description: Stable internal partner identifier.
+          example: ptr_20260706_dana_brooks
+          minLength: 4
+          maxLength: 80
+        display_name:
+          type: string
+          description: Human-readable name.
+          example: Dana Brooks
+          maxLength: 160
+        company:
+          type: string
+          description: Company, brand, agency, or organization.
+          example: Books & Backoffice Co.
+          maxLength: 160
+        email:
+          type: string
+          description: Partner email.
+          example: dana@example.com
+          format: email
+          maxLength: 160
+        phone:
+          type: string
+          description: Phone number.
+          example: +1 202-555-0144
+          maxLength: 40
+        website:
+          type: string
+          description: Website or relevant profile URL.
+          example: https://example.com
+          format: uri
+          maxLength: 260
+        partner_type:
+          type: string
+          enum: &id006
+          - funding_broker
+          - iso
+          - referral_partner
+          - cpa_bookkeeper
+          - small_business_attorney
+          - business_broker
+          - real_estate_investor_connector
+          - contractor_trades_connector
+          - franchise_consultant
+          - veteran_community_connector
+          - creator_affiliate
+          - fintech_vendor_partner
+          - strategic_partner
+          - unqualified_not_fit
+          example: cpa_bookkeeper
+        partner_tier:
+          type: string
+          enum: &id004
+          - tier_1
+          - tier_2
+          - tier_3
+          - tier_4
+          - reject_risk
+          example: tier_2
+        onboarding_path:
+          type: string
+          enum: &id007
+          - fast_track_revenue_partner
+          - standard_affiliate_partner
+          - referral_only_partner
+          - education_first_partner
+          - strategic_partner_review
+          - nurture_watchlist
+          - reject_manual_risk_review
+          example: standard_affiliate_partner
+        primary_audience:
+          type: string
+          description: Primary audience served or influenced.
+          example: service businesses and contractors
+          maxLength: 500
+        secondary_audiences:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example:
+          - local retailers
+          - professional services
+        risk_level:
+          type: string
+          enum: &id005
+          - low
+          - medium
+          - high
+          - critical
+          example: low
+        status:
+          type: string
+          enum:
+          - new
+          - needs_review
+          - approved
+          - active
+          - nurture
+          - watchlist
+          - rejected
+          - inactive
+          example: new
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 80
+          example:
+          - cpa_bookkeeper
+          - tier_2
+          - risk_low
+        recommended_resources:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example:
+          - Funding Product Matrix
+          - Referral partner scripts
+        recommended_campaigns:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example:
+          - Warm Referral Readiness Intro
+        next_action:
+          type: string
+          description: Recommended next operational action.
+          example: send_resource_pack_and_confirm_partner_context
+          maxLength: 240
+        notes:
+          type: string
+          description: Internal profile notes.
+          example: Likely good referral partner; keep messaging readiness-based.
+          maxLength: 3000
+        created_at:
+          type: string
+          description: Creation timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+        updated_at:
+          type: string
+          description: Last update timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+    Scorecard:
+      type: object
+      description: Structured scoring output for partner tiering and review. Individual criteria use 0-5; overall_score uses
+        0-100. Higher compliance_risk_score means higher risk.
+      required:
+      - audience_access_score
+      - funding_relevance_score
+      - existing_trust_score
+      - existing_deal_flow_score
+      - activation_speed_score
+      - compliance_risk_score
+      - strategic_leverage_score
+      - revenue_potential_score
+      - technical_ability_score
+      - relationship_quality_score
+      - overall_score
+      - tier_recommendation
+      - risk_level
+      - manual_review_required
+      - reasoning_summary
+      - risk_flags
+      - missing_info
+      additionalProperties: false
+      properties:
+        audience_access_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for audience access.
+          example: 4
+        funding_relevance_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for funding relevance.
+          example: 4
+        existing_trust_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for existing trust.
+          example: 4
+        existing_deal_flow_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for existing deal flow.
+          example: 3
+        activation_speed_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for activation speed.
+          example: 3
+        compliance_risk_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score where higher means higher compliance risk.
+          example: 1
+        strategic_leverage_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for strategic leverage.
+          example: 3
+        revenue_potential_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for potential revenue impact.
+          example: 4
+        technical_ability_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for technical/system readiness.
+          example: 3
+        relationship_quality_score:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 0-5 score for relationship quality.
+          example: 4
+        overall_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+          example: 72
+        tier_recommendation:
+          type: string
+          enum: *id004
+          example: tier_2
+        risk_level:
+          type: string
+          enum: *id005
+          example: low
+        manual_review_required:
+          type: boolean
+          example: false
+        reasoning_summary:
+          type: string
+          description: Plain-English reason the tier and risk were chosen.
+          example: Classified as cpa_bookkeeper with strong trust and low compliance risk.
+          maxLength: 1200
+        risk_flags:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example: []
+        missing_info:
+          type: array
+          items:
+            type: string
+            maxLength: 80
+          example:
+          - website
+    Classification:
+      type: object
+      description: Classification object returned by the Batch 05 classify endpoint.
+      required:
+      - partner_type
+      - partner_tier
+      - onboarding_path
+      - risk_level
+      - scorecard
+      - next_action
+      additionalProperties: false
+      properties:
+        partner_type:
+          type: string
+          enum: *id006
+          example: cpa_bookkeeper
+        partner_tier:
+          type: string
+          enum: *id004
+          example: tier_2
+        onboarding_path:
+          type: string
+          enum: *id007
+          example: standard_affiliate_partner
+        risk_level:
+          type: string
+          enum: *id005
+          example: low
+        scorecard:
+          $ref: '#/components/schemas/Scorecard'
+        next_action:
+          type: string
+          description: Recommended next action.
+          example: send_resource_pack_and_confirm_partner_context
+          maxLength: 240
+    ResourceRecommendation:
+      type: object
+      required:
+      - recommendation_id
+      - partner_type
+      - recommended_resource
+      - resource_type
+      - reason
+      - cta
+      - priority
+      - compliance_safe_positioning
+      additionalProperties: false
+      properties:
+        recommendation_id:
+          type: string
+          description: Recommendation identifier.
+          example: res_cpa_bookkeeper_1
+          maxLength: 100
+        partner_type:
+          type: string
+          enum: *id006
+          example: cpa_bookkeeper
+        audience:
+          type: string
+          description: Audience context.
+          example: service businesses and contractors
+          maxLength: 500
+        onboarding_path:
+          type: string
+          enum: *id007
+          example: standard_affiliate_partner
+        recommended_resource:
+          type: string
+          enum:
+          - Funding Product Matrix
+          - Broker Follow-Up Machine
+          - Funding Pathfinder
+          - Partner Command Center
+          - Business funding readiness checklist
+          - Referral partner scripts
+          - Campaign kits
+          - Onboarding checklist
+          - Lead submission guidance
+          example: Funding Product Matrix
+        resource_type:
+          type: string
+          enum:
+          - matrix
+          - gpt
+          - dashboard
+          - checklist
+          - script
+          - campaign_kit
+          - guide
+          - training
+          - lead_submission
+          example: matrix
+        resource_url:
+          type: string
+          description: Optional resource URL.
+          example: https://example.com/resources/funding-product-matrix
+          format: uri
+          maxLength: 260
+        reason:
+          type: string
+          description: Why this resource fits the partner.
+          example: Helps the partner understand what funding conversations should be routed and how to frame readiness.
+          maxLength: 1000
+        cta:
+          type: string
+          description: Recommended call to action.
+          example: Review the funding product matrix
+          maxLength: 180
+        priority:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          - urgent
+          example: high
+        compliance_safe_positioning:
+          type: string
+          description: Safe positioning note.
+          example: Position as educational readiness guidance; do not promise approvals, amounts, or outcomes.
+          maxLength: 1000
+        internal_note:
+          type: string
+          description: Internal-only recommendation note.
+          example: Send before any campaign assets.
+          maxLength: 1000
+    OnboardingTask:
+      type: object
+      required:
+      - task
+      - owner
+      - due
+      - status
+      additionalProperties: false
+      properties:
+        task:
+          type: string
+          description: Task description.
+          example: Confirm partner profile, audience, and desired role
+          maxLength: 240
+        owner:
+          type: string
+          description: Task owner.
+          example: partner_ops
+          maxLength: 120
+        due:
+          type: string
+          description: Due timing.
+          example: same_day
+          maxLength: 80
+        status:
+          type: string
+          enum:
+          - not_started
+          - in_progress
+          - blocked
+          - complete
+          - skipped
+          example: not_started
+        notes:
+          type: string
+          description: Task notes.
+          example: Keep messaging educational and readiness-based.
+          maxLength: 1000
+    OnboardingPlan:
+      type: object
+      required:
+      - onboarding_path
+      - first_24_hours
+      - first_7_days
+      - first_30_days
+      - required_assets
+      - recommended_training
+      - recommended_resources
+      - recommended_campaign
+      - owner
+      - next_action
+      - what_not_to_automate_yet
+      - manual_review_required
+      additionalProperties: false
+      properties:
+        partner_id:
+          type: string
+          description: Partner identifier.
+          example: ptr_20260706_dana_brooks
+          maxLength: 80
+        onboarding_path:
+          type: string
+          enum: *id007
+          example: standard_affiliate_partner
+        first_24_hours:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingTask'
+        first_7_days:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingTask'
+        first_30_days:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingTask'
+        required_assets:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example:
+          - Funding Product Matrix
+          - Referral partner scripts
+        recommended_training:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example:
+          - Funding product overview
+          - Compliance-safe partner language
+        recommended_resources:
+          type: array
+          items:
+            type: string
+            maxLength: 160
+          example:
+          - Funding Product Matrix
+          - Business funding readiness checklist
+        recommended_campaign:
+          type: string
+          description: Recommended campaign name or none_until_reviewed.
+          example: Warm Referral Readiness Intro
+          maxLength: 180
+        owner:
+          type: string
+          description: Operational owner.
+          example: partner_ops
+          maxLength: 120
+        next_action:
+          type: string
+          description: Next operational action.
+          example: send_resource_pack_and_confirm_partner_context
+          maxLength: 240
+        what_not_to_automate_yet:
+          type: array
+          items:
+            type: string
+            maxLength: 240
+          example:
+          - Do not auto-approve high-risk partners.
+        manual_review_required:
+          type: boolean
+          example: false
+    CampaignRecommendation:
+      type: object
+      required:
+      - campaign_id
+      - campaign_name
+      - campaign_type
+      - partner_type
+      - offer_angle
+      - cta
+      - suggested_channels
+      - first_post_idea
+      - first_email_idea
+      - first_script_idea
+      - lead_magnet
+      - tracking_notes
+      - compliance_guardrails
+      - status
+      additionalProperties: false
+      properties:
+        campaign_id:
+          type: string
+          description: Campaign identifier.
+          example: cmp_cpa_bookkeeper_warm_intro
+          maxLength: 100
+        campaign_name:
+          type: string
+          description: Campaign name.
+          example: Warm Referral Readiness Intro
+          maxLength: 180
+        campaign_type:
+          type: string
+          enum:
+          - referral_script
+          - email_campaign
+          - social_campaign
+          - webinar_or_workshop
+          - lead_magnet
+          - partner_page
+          - outbound_sequence
+          - content_collab
+          - community_activation
+          example: referral_script
+        partner_type:
+          type: string
+          enum: *id006
+          example: cpa_bookkeeper
+        target_audience:
+          type: string
+          description: Target audience.
+          example: service businesses and contractors
+          maxLength: 500
+        offer_angle:
+          type: string
+          description: Campaign angle.
+          example: Help clients understand funding readiness before cash crunches become emergencies.
+          maxLength: 1000
+        cta:
+          type: string
+          description: CTA.
+          example: Request a readiness review
+          maxLength: 180
+        suggested_channels:
+          type: array
+          items:
+            type: string
+            maxLength: 80
+          example:
+          - direct_email
+          - client_call
+          - newsletter
+        first_post_idea:
+          type: string
+          description: First social/content idea.
+          example: Funding conversations go smoother when records and expectations are clean.
+          maxLength: 1000
+        first_email_idea:
+          type: string
+          description: First email idea.
+          example: Soft intro from trusted advisor for an educational readiness conversation.
+          maxLength: 1000
+        first_script_idea:
+          type: string
+          description: First call/script idea.
+          example: This is not a guarantee of funding; it is a practical review of options and readiness.
+          maxLength: 1000
+        lead_magnet:
+          type: string
+          description: Lead magnet.
+          example: Business funding readiness checklist
+          maxLength: 180
+        tracking_notes:
+          type: string
+          description: Tracking notes.
+          example: Use partner_id, campaign_id, source, and UTM parameters when tracking links exist.
+          maxLength: 1000
+        compliance_guardrails:
+          type: array
+          items:
+            type: string
+            maxLength: 240
+          example:
+          - Do not guarantee approvals.
+          - Use readiness and options language.
+        status:
+          type: string
+          enum:
+          - draft
+          - recommended
+          - active
+          - paused
+          - retired
+          example: recommended
+    CrmEvent:
+      type: object
+      required:
+      - partner_id
+      - event_type
+      - event_source
+      - summary
+      additionalProperties: false
+      properties:
+        event_id: &id009
+          type: string
+          description: Optional event ID. If omitted, API can generate one.
+          example: evt_20260706_001
+          maxLength: 100
+        partner_id: &id010
+          type: string
+          description: Partner ID.
+          example: ptr_20260706_dana_brooks
+          maxLength: 80
+        event_type: &id011
+          type: string
+          enum:
+          - intake_received
+          - classification_completed
+          - resource_recommended
+          - campaign_recommended
+          - onboarding_started
+          - manual_review_required
+          - partner_approved
+          - partner_rejected
+          - partner_activated
+          - follow_up_required
+          - note_added
+          example: classification_completed
+        event_source: &id012
+          type: string
+          enum:
+          - gpt
+          - tally
+          - api
+          - hubspot
+          - notion
+          - google_sheets
+          - admin
+          - automation
+          example: gpt
+        summary: &id013
+          type: string
+          description: Event summary.
+          example: GPT classified partner and recommended standard onboarding.
+          maxLength: 1200
+        next_action: &id014
+          type: string
+          description: Next action after event.
+          example: send_resource_pack_and_confirm_partner_context
+          maxLength: 240
+        owner: &id015
+          type: string
+          description: Event owner.
+          example: partner_ops
+          maxLength: 120
+        status: &id016
+          type: string
+          description: Event status.
+          example: logged
+          maxLength: 80
+        created_at: &id017
+          type: string
+          description: Event timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+        created_by: &id018
+          type: string
+          description: Creator.
+          example: partner_intake_gpt
+          maxLength: 120
+        metadata: &id019
+          type: object
+          additionalProperties: true
+          example:
+            source_thread: gpt_preview
+            manual_review_required: false
+    ApiError:
+      type: object
+      required:
+      - error
+      - message
+      - code
+      - request_id
+      - timestamp
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+          description: Short error label.
+          example: validation_error
+          maxLength: 120
+        message:
+          type: string
+          description: Human-readable error message.
+          example: Missing required intake.email.
+          maxLength: 1000
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - validation_error
+          - rate_limited
+          - internal_error
+          - upstream_error
+          - unavailable
+          example: validation_error
+        details:
+          type: object
+          additionalProperties: true
+          example:
+            field: intake.email
+        request_id:
+          type: string
+          description: Request identifier.
+          example: req_20260706_abc123
+          maxLength: 120
+        timestamp:
+          type: string
+          description: Error timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+    HealthResponse:
+      type: object
+      required:
+      - ok
+      - status
+      - timestamp
+      additionalProperties: true
+      properties:
+        ok:
+          type: boolean
+          example: true
+        status:
+          type: string
+          example: healthy
+        runtime:
+          type: object
+          additionalProperties: true
+        env:
+          type: object
+          additionalProperties: true
+        checks:
+          type: object
+          additionalProperties: true
+        timestamp:
+          type: string
+          description: Health timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+    ClassifyPartnerIntakeRequest:
+      type: object
+      required:
+      - intake
+      additionalProperties: true
+      properties:
+        intake:
+          $ref: '#/components/schemas/PartnerIntake'
+        context:
+          type: string
+          enum:
+          - manual_review
+          - gpt_action
+          - admin_review
+          - tally_review
+          - import_review
+          example: manual_review
+        partner_id:
+          type: string
+          description: Optional existing partner ID.
+          example: ptr_20260706_dana_brooks
+          maxLength: 80
+      example:
+        context: manual_review
+        intake: *id008
+    ClassifyPartnerIntakeResponse:
+      type: object
+      required:
+      - ok
+      - context
+      - intake
+      - profile_preview
+      - classification
+      additionalProperties: false
+      properties:
+        ok:
+          type: boolean
+          example: true
+        context:
+          type: string
+          example: manual_review
+        intake:
+          $ref: '#/components/schemas/PartnerIntake'
+        profile_preview:
+          $ref: '#/components/schemas/PartnerProfile'
+        classification:
+          $ref: '#/components/schemas/Classification'
+    RecommendResourcesRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        profile:
+          $ref: '#/components/schemas/PartnerProfile'
+        partner_type:
+          type: string
+          enum: *id006
+          example: cpa_bookkeeper
+        audience:
+          type: string
+          description: Audience context.
+          example: service businesses and contractors
+          maxLength: 500
+        onboarding_path:
+          type: string
+          enum: *id007
+          example: standard_affiliate_partner
+        risk_level:
+          type: string
+          enum: *id005
+          example: low
+      example:
+        partner_type: cpa_bookkeeper
+        audience: service businesses and contractors
+        onboarding_path: standard_affiliate_partner
+        risk_level: low
+    RecommendResourcesResponse:
+      type: object
+      required:
+      - ok
+      - recommendations
+      - count
+      - generated_at
+      additionalProperties: false
+      properties:
+        ok:
+          type: boolean
+          example: true
+        recommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceRecommendation'
+        count:
+          type: integer
+          minimum: 0
+          example: 3
+        generated_at:
+          type: string
+          description: Generation timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+    GenerateOnboardingPlanRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        profile:
+          $ref: '#/components/schemas/PartnerProfile'
+        partner_id:
+          type: string
+          description: Partner ID.
+          example: ptr_20260706_dana_brooks
+          maxLength: 80
+        partner_type:
+          type: string
+          enum: *id006
+          example: cpa_bookkeeper
+        partner_tier:
+          type: string
+          enum: *id004
+          example: tier_2
+        onboarding_path:
+          type: string
+          enum: *id007
+          example: standard_affiliate_partner
+        risk_level:
+          type: string
+          enum: *id005
+          example: low
+        manual_review_required:
+          type: boolean
+          example: false
+        next_action:
+          type: string
+          description: Next action.
+          example: send_resource_pack_and_confirm_partner_context
+          maxLength: 240
+      example:
+        partner_id: ptr_20260706_dana_brooks
+        partner_type: cpa_bookkeeper
+        partner_tier: tier_2
+        onboarding_path: standard_affiliate_partner
+        risk_level: low
+    GenerateOnboardingPlanResponse:
+      type: object
+      required:
+      - ok
+      - onboarding_plan
+      - generated_at
+      additionalProperties: false
+      properties:
+        ok:
+          type: boolean
+          example: true
+        onboarding_plan:
+          $ref: '#/components/schemas/OnboardingPlan'
+        generated_at:
+          type: string
+          description: Generation timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+    GenerateCampaignKitRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        profile:
+          $ref: '#/components/schemas/PartnerProfile'
+        partner_type:
+          type: string
+          enum: *id006
+          example: cpa_bookkeeper
+        primary_audience:
+          type: string
+          description: Primary audience.
+          example: service businesses and contractors
+          maxLength: 500
+        audience:
+          type: string
+          description: Audience alias.
+          example: service businesses and contractors
+          maxLength: 500
+        onboarding_path:
+          type: string
+          enum: *id007
+          example: standard_affiliate_partner
+        partner_tier:
+          type: string
+          enum: *id004
+          example: tier_2
+      example:
+        partner_type: cpa_bookkeeper
+        primary_audience: service businesses and contractors
+        onboarding_path: standard_affiliate_partner
+        partner_tier: tier_2
+    GenerateCampaignKitResponse:
+      type: object
+      required:
+      - ok
+      - campaign
+      - generated_at
+      additionalProperties: false
+      properties:
+        ok:
+          type: boolean
+          example: true
+        campaign:
+          $ref: '#/components/schemas/CampaignRecommendation'
+        generated_at:
+          type: string
+          description: Generation timestamp.
+          example: '2026-07-06T12:00:00.000Z'
+          format: date-time
+    LogPartnerEventRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        event:
+          $ref: '#/components/schemas/CrmEvent'
+        event_id: *id009
+        partner_id: *id010
+        event_type: *id011
+        event_source: *id012
+        summary: *id013
+        next_action: *id014
+        owner: *id015
+        status: *id016
+        created_at: *id017
+        created_by: *id018
+        metadata: *id019
+      example:
+        partner_id: ptr_20260706_dana_brooks
+        event_type: classification_completed
+        event_source: gpt
+        summary: Classified as cpa_bookkeeper and recommended standard onboarding.
+        next_action: send_resource_pack_and_confirm_partner_context
+        owner: partner_ops
+    LogPartnerEventResponse:
+      type: object
+      required:
+      - ok
+      - logged
+      - storage_mode
+      - storage_status
+      - event
+      additionalProperties: false
+      properties:
+        ok:
+          type: boolean
+          example: true
+        logged:
+          type: boolean
+          example: true
+        storage_mode:
+          type: string
+          enum:
+          - mock
+          - json
+          - notion
+          - hubspot
+          - google_sheets
+          example: mock
+        storage_status:
+          type: string
+          example: mock_logged_no_database_yet
+        event:
+          $ref: '#/components/schemas/CrmEvent'
+x-safety-notes:
+  tally_webhook_exposed: false
+  summary: Inbound form webhook route intentionally omitted from the GPT Action Pack.
