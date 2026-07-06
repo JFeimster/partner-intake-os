@@ -1,0 +1,17 @@
+{
+  "phase": "Phase 21 \u2014 Repo Integration + Merge Validation",
+  "created_at": "2026-07-06T17:34:49.348399",
+  "files": [
+    "repo-integration/README.md",
+    "repo-integration/batches-13-20-merge-plan.md",
+    "repo-integration/file-conflict-resolution.md",
+    "repo-integration/post-merge-checklist.md",
+    "repo-integration/pr-description.md",
+    "repo-integration/pre-merge-checklist.md",
+    "repo-integration/root-folder-audit.md",
+    "repo-integration/static-path-validation.md",
+    "scripts/validate-partner-intake-structure.ps1",
+    "tests/merge-validation-checklist.md"
+  ],
+  "notes": "Generated as a downloadable manual-add package. No secrets or live credentials included."
+}
