@@ -1,3 +1,5 @@
+<img width="1900" height="828" alt="Image" src="https://github.com/user-attachments/assets/763c3153-7c20-4f90-a414-a110bc1dd29e" />
+
 # Partner Intake OS
 
 ## Purpose
