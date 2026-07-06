@@ -1,0 +1,258 @@
+{
+  "health_test": {
+    "method": "GET",
+    "path": "/api/health",
+    "expected_operation_id": "checkHealth"
+  },
+  "broker_intake": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Marcus",
+        "last_name": "Reed",
+        "email": "marcus.reed@example.com",
+        "phone": "202-555-0198",
+        "company": "Reed Funding Advisors",
+        "website": "https://example.com",
+        "partner_type_claimed": "funding broker",
+        "audience": "contractors and local service businesses",
+        "industry": "business finance",
+        "location": "Washington, DC",
+        "funding_experience": "3 years",
+        "current_tools": [
+          "HubSpot",
+          "Google Sheets"
+        ],
+        "traffic_or_network_size": "small referral book",
+        "referral_volume_estimate": "5-10 per month",
+        "desired_partner_role": "send qualified funding referrals",
+        "notes": "Wants campaign assets and a cleaner referral workflow.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_broker"
+    }
+  },
+  "cpa_bookkeeper_intake": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Nina",
+        "last_name": "Patel",
+        "email": "nina.patel@example.com",
+        "phone": "301-555-0144",
+        "company": "Patel Ledger Co.",
+        "website": "https://example-cpa.com",
+        "partner_type_claimed": "CPA/bookkeeper",
+        "audience": "restaurants, trades, and local service businesses",
+        "industry": "accounting",
+        "location": "Maryland",
+        "funding_experience": "refers clients occasionally when cash flow gets tight",
+        "current_tools": [
+          "QuickBooks",
+          "Google Workspace"
+        ],
+        "traffic_or_network_size": "80 active bookkeeping clients",
+        "referral_volume_estimate": "2-4 per month",
+        "desired_partner_role": "refer clients who need funding readiness help",
+        "notes": "Prefers educational resources and no aggressive sales copy.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_cpa"
+    }
+  },
+  "business_attorney_intake": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Evan",
+        "last_name": "Cole",
+        "email": "evan.cole@example.com",
+        "phone": "703-555-0177",
+        "company": "Cole Small Business Law",
+        "website": "https://example-law.com",
+        "partner_type_claimed": "business attorney",
+        "audience": "SMB owners, acquisition entrepreneurs, and franchise buyers",
+        "industry": "legal services",
+        "location": "Virginia",
+        "funding_experience": "clients ask about funding during entity setup and acquisitions",
+        "current_tools": [
+          "Clio",
+          "Google Workspace"
+        ],
+        "traffic_or_network_size": "120 active client relationships",
+        "referral_volume_estimate": "1-3 per month",
+        "desired_partner_role": "referral-only partner",
+        "notes": "Needs compliance-safe language and clear boundaries.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_attorney"
+    }
+  },
+  "veteran_community_connector_intake": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Angela",
+        "last_name": "Brooks",
+        "email": "angela.brooks@example.com",
+        "phone": "202-555-0161",
+        "company": "Veteran Builder Network",
+        "website": "https://example-veterans.org",
+        "partner_type_claimed": "veteran community connector",
+        "audience": "veteran-owned businesses and military spouse entrepreneurs",
+        "industry": "community organization",
+        "location": "Washington, DC",
+        "funding_experience": "education and warm referrals only",
+        "current_tools": [
+          "Mailchimp",
+          "Eventbrite"
+        ],
+        "traffic_or_network_size": "1,500 newsletter subscribers",
+        "referral_volume_estimate": "varies by event",
+        "desired_partner_role": "education-first referral partner",
+        "notes": "Wants workshop materials for funding readiness.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_veteran_connector"
+    }
+  },
+  "content_creator_affiliate_intake": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Rico",
+        "last_name": "Mason",
+        "email": "rico.mason@example.com",
+        "phone": "404-555-0182",
+        "company": "Full Grind Media",
+        "website": "https://example-creator.com",
+        "partner_type_claimed": "content creator/affiliate",
+        "audience": "gig workers, ecomm sellers, and startup founders",
+        "industry": "creator/media",
+        "location": "Georgia",
+        "funding_experience": "has promoted finance tools but does not advise on approvals",
+        "current_tools": [
+          "YouTube",
+          "Substack",
+          "ConvertKit"
+        ],
+        "traffic_or_network_size": "18,000 combined followers",
+        "referral_volume_estimate": "unknown",
+        "desired_partner_role": "affiliate content partner",
+        "notes": "Needs tracking links, disclaimers, and content angles.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_creator"
+    }
+  },
+  "strategic_fintech_partner_intake": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Priya",
+        "last_name": "Shah",
+        "email": "priya.shah@example.com",
+        "phone": "646-555-0139",
+        "company": "LedgerPilot AI",
+        "website": "https://example-fintech.com",
+        "partner_type_claimed": "strategic fintech partner",
+        "audience": "SMB finance teams and embedded lending platforms",
+        "industry": "fintech",
+        "location": "New York",
+        "funding_experience": "embedded finance partnerships and data integrations",
+        "current_tools": [
+          "HubSpot",
+          "Salesforce",
+          "Zapier"
+        ],
+        "traffic_or_network_size": "enterprise partner pipeline",
+        "referral_volume_estimate": "strategic integration, not referral volume",
+        "desired_partner_role": "strategic integration and co-marketing",
+        "notes": "Wants API-first workflow and partner data contract review.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_strategic_fintech"
+    }
+  },
+  "low_info_signup": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Taylor",
+        "email": "taylor@example.com",
+        "partner_type_claimed": "affiliate",
+        "notes": "Interested."
+      },
+      "context": "gpt_action_test_low_info"
+    }
+  },
+  "high_risk_lead_seller": {
+    "operation_id": "classifyPartnerIntake",
+    "payload": {
+      "intake": {
+        "first_name": "Blake",
+        "last_name": "Stone",
+        "email": "blake@example.com",
+        "company": "Instant Approval Leads",
+        "partner_type_claimed": "lead seller",
+        "audience": "any business owner who needs cash fast",
+        "referral_volume_estimate": "hundreds per week",
+        "funding_experience": "lead generation",
+        "desired_partner_role": "sell aged leads",
+        "notes": "Claims all leads are pre-approved and wants fastest payout possible.",
+        "source": "manual_test"
+      },
+      "context": "gpt_action_test_high_risk"
+    }
+  },
+  "recommend_resources": {
+    "operation_id": "recommendPartnerResources",
+    "payload": {
+      "partner_type": "cpa_bookkeeper",
+      "audience": "restaurants and local service businesses",
+      "partner_tier": "tier_2",
+      "context": "gpt_action_test_resources"
+    }
+  },
+  "generate_onboarding_plan": {
+    "operation_id": "generatePartnerOnboardingPlan",
+    "payload": {
+      "partner_id": "ptr_demo_attorney_001",
+      "partner_type": "business_attorney",
+      "partner_tier": "tier_2",
+      "onboarding_path": "referral_only",
+      "audience": "acquisition entrepreneurs and SMB owners",
+      "context": "gpt_action_test_onboarding"
+    }
+  },
+  "generate_campaign_kit": {
+    "operation_id": "generatePartnerCampaignKit",
+    "payload": {
+      "partner_id": "ptr_demo_veteran_001",
+      "partner_type": "veteran_community_connector",
+      "partner_tier": "tier_2",
+      "audience": "veteran-owned businesses",
+      "offer": "funding readiness education",
+      "channels": [
+        "email",
+        "community event",
+        "LinkedIn"
+      ],
+      "context": "gpt_action_test_campaign"
+    }
+  },
+  "log_event": {
+    "operation_id": "logPartnerEvent",
+    "payload": {
+      "event": {
+        "partner_id": "ptr_demo_001",
+        "event_type": "gpt_review_completed",
+        "event_source": "custom_gpt",
+        "summary": "Reviewed broker intake and recommended Tier 2 standard onboarding.",
+        "next_action": "send_welcome_and_schedule_intro_call",
+        "created_by": "partner_intake_os"
+      },
+      "context": "gpt_action_test_log_event"
+    }
+  }
+}

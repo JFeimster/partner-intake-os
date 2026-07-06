@@ -1,0 +1,160 @@
+{
+  "classify": {
+    "ok": true,
+    "result": {
+      "partner_id": "ptr_demo_broker_001",
+      "display_name": "Marcus Reed",
+      "company": "Reed Funding Advisors",
+      "partner_type": "funding_broker",
+      "partner_tier": "tier_2",
+      "onboarding_path": "standard_affiliate_partner",
+      "risk_level": "low",
+      "status": "approved_pending_onboarding",
+      "scorecard": {
+        "urgency_score": 7,
+        "audience_fit_score": 8,
+        "trust_score": 7,
+        "revenue_potential_score": 8,
+        "activation_speed_score": 8,
+        "compliance_risk_score": 2,
+        "strategic_value_score": 6,
+        "overall_score": 76,
+        "tier_recommendation": "tier_2",
+        "manual_review_required": false,
+        "reasoning_summary": "Existing referral flow, relevant audience, and usable tools make this a strong operating partner without requiring strategic review."
+      },
+      "recommended_next_action": "send_welcome_packet_and_schedule_intro_call",
+      "risk_flags": [],
+      "notes": "Compliance-safe broker onboarding recommended. Do not promise approval or funding outcomes."
+    },
+    "request_id": "req_demo_classify_001"
+  },
+  "recommend_resources": {
+    "ok": true,
+    "result": {
+      "partner_type": "cpa_bookkeeper",
+      "audience": "restaurants and local service businesses",
+      "recommended_resources": [
+        {
+          "resource_id": "res_cash_flow_gap_checklist",
+          "title": "Business Cash Flow Gap Checklist",
+          "resource_type": "checklist",
+          "priority": "high",
+          "reason": "Helps the CPA identify funding-readiness conversations without making lending claims.",
+          "cta": "Use this to spot clients who may need a readiness review."
+        },
+        {
+          "resource_id": "res_referral_script",
+          "title": "CPA Referral Script",
+          "resource_type": "script",
+          "priority": "medium",
+          "reason": "Keeps referral language educational and operational.",
+          "cta": "Send clients to the readiness intake when timing makes sense."
+        }
+      ],
+      "next_action": "send_resource_pack"
+    },
+    "request_id": "req_demo_resources_001"
+  },
+  "onboarding_plan": {
+    "ok": true,
+    "result": {
+      "partner_id": "ptr_demo_attorney_001",
+      "onboarding_path": "referral_only",
+      "first_24_hours": [
+        "Confirm partner profile fields and preferred referral boundaries.",
+        "Send compliance-safe referral instructions.",
+        "Assign partner ID and source tag."
+      ],
+      "first_7_days": [
+        "Review common client funding-readiness scenarios.",
+        "Share referral-only script and intake link.",
+        "Create CRM note template for referred opportunities."
+      ],
+      "first_30_days": [
+        "Review referral quality and missing info patterns.",
+        "Refine audience-specific resource pack.",
+        "Decide whether to keep as referral-only or move to active partner."
+      ],
+      "required_assets": [
+        "referral script",
+        "readiness checklist",
+        "partner ID",
+        "resource pack"
+      ],
+      "recommended_training": [
+        "Funding readiness boundaries",
+        "Prohibited claims and consent handling"
+      ],
+      "recommended_campaign": "education_first_referral_path",
+      "next_action": "send_referral_only_onboarding_packet",
+      "owner": "partner_ops"
+    },
+    "request_id": "req_demo_onboarding_001"
+  },
+  "campaign_kit": {
+    "ok": true,
+    "result": {
+      "campaign_name": "Veteran Business Funding Readiness Workshop",
+      "campaign_type": "education_first",
+      "audience": "veteran-owned businesses",
+      "offer": "Funding readiness checklist and intake review",
+      "cta": "Check your funding readiness before you apply.",
+      "suggested_channels": [
+        "email",
+        "community event",
+        "LinkedIn"
+      ],
+      "copy_angle": "Help veteran-owned businesses understand what lenders commonly review before pursuing financing.",
+      "tracking_notes": "Use partner_id and campaign_id once Batch 19 tracking link builder exists.",
+      "compliance_notes": [
+        "Do not guarantee approval.",
+        "Do not imply everyone qualifies.",
+        "Keep language educational and readiness-based."
+      ]
+    },
+    "request_id": "req_demo_campaign_001"
+  },
+  "log_event": {
+    "ok": true,
+    "result": {
+      "logged": true,
+      "event_id": "evt_demo_001",
+      "partner_id": "ptr_demo_001",
+      "status": "mock_logged",
+      "message": "Event accepted. Storage mode may determine whether this is persisted."
+    },
+    "request_id": "req_demo_log_001"
+  },
+  "bad_auth": {
+    "ok": false,
+    "error": {
+      "code": "UNAUTHORIZED",
+      "message": "Missing or invalid bearer token."
+    },
+    "request_id": "req_demo_auth_001"
+  },
+  "validation_error": {
+    "ok": false,
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "Missing required field: email.",
+      "details": [
+        {
+          "field": "intake.email",
+          "issue": "required"
+        }
+      ]
+    },
+    "request_id": "req_demo_validation_001"
+  },
+  "server_error": {
+    "ok": false,
+    "error": {
+      "code": "SERVER_ERROR",
+      "message": "Unexpected server error. Check Vercel function logs.",
+      "details": []
+    },
+    "request_id": "req_demo_server_001"
+  }
+}
