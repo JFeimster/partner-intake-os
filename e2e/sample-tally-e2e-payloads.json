@@ -1,0 +1,576 @@
+{
+  "metadata": {
+    "packet": "batch-29",
+    "purpose": "End-to-end Tally webhook to API classification to admin review queue testing",
+    "no_real_pii": true,
+    "created_at": "2026-07-06T19:46:11Z",
+    "notes": [
+      "All emails, names, and companies are fixtures for local/sandbox testing only.",
+      "Do not paste real applicant or partner PII into this file.",
+      "Malformed case is represented as a raw string for script testing."
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "tier1-strategic-partner",
+      "description": "Strategic fintech / SMB platform with a defined partner motion and strong audience fit.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "strategic_partner",
+        "tier": "tier_1",
+        "manual_review_required": true,
+        "risk_level": "low",
+        "review_queue_status": "needs_review",
+        "recommended_decision": "fast_track_after_operator_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_tier1_strategic_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:00:00.000Z",
+        "data": {
+          "formName": "Partner Signup",
+          "responseId": "resp_e2e_tier1_strategic_001",
+          "fields": [
+            {
+              "key": "first_name",
+              "label": "First name",
+              "value": "Alex"
+            },
+            {
+              "key": "last_name",
+              "label": "Last name",
+              "value": "Morgan"
+            },
+            {
+              "key": "email",
+              "label": "Email",
+              "value": "alex.morgan@example.com"
+            },
+            {
+              "key": "phone",
+              "label": "Phone",
+              "value": "555-0101"
+            },
+            {
+              "key": "company",
+              "label": "Company / brand",
+              "value": "Atlas SMB Platform"
+            },
+            {
+              "key": "website",
+              "label": "Website",
+              "value": "https://example.com/atlas-smb"
+            },
+            {
+              "key": "partner_type",
+              "label": "Which best describes you?",
+              "value": "Strategic fintech platform"
+            },
+            {
+              "key": "audience",
+              "label": "Who do you serve?",
+              "value": "Small business owners, contractors, and franchise buyers"
+            },
+            {
+              "key": "industry",
+              "label": "What type of businesses do you usually work with?",
+              "value": "SMB software and business services"
+            },
+            {
+              "key": "referral_volume",
+              "label": "Estimated monthly referral volume",
+              "value": "25-50"
+            },
+            {
+              "key": "tools",
+              "label": "What tools do you use?",
+              "value": "HubSpot, Notion, PartnerStack"
+            },
+            {
+              "key": "role",
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Strategic partnership"
+            },
+            {
+              "key": "notes",
+              "label": "Anything else we should know?",
+              "value": "We want a structured funding readiness path for partners. Permission-based referrals only."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "tier2-broker",
+      "description": "Funding broker with deal volume and required compliance review.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "funding_broker",
+        "tier": "tier_2",
+        "manual_review_required": true,
+        "risk_level": "medium",
+        "review_queue_status": "needs_review",
+        "recommended_decision": "conditional_approval_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_broker_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:01:00.000Z",
+        "data": {
+          "formName": "Partner Signup",
+          "responseId": "resp_e2e_broker_001",
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Morgan"
+            },
+            {
+              "label": "Last name",
+              "value": "Atlas"
+            },
+            {
+              "label": "Email",
+              "value": "morgan.atlas@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Atlas Funding Desk"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Funding broker"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "Main Street businesses and contractors"
+            },
+            {
+              "label": "What type of businesses do you usually work with?",
+              "value": "Construction, home services, trucking"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "10-20"
+            },
+            {
+              "label": "What tools do you use?",
+              "value": "GoHighLevel, Google Sheets"
+            },
+            {
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Broker"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "We collect permission before submitting leads and need campaign kits."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "cpa-bookkeeper",
+      "description": "CPA/bookkeeper center of influence with lower direct volume but strong trust fit.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "cpa_bookkeeper",
+        "tier": "tier_2",
+        "manual_review_required": true,
+        "risk_level": "low",
+        "review_queue_status": "needs_review",
+        "recommended_decision": "approve_after_manual_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_cpa_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:02:00.000Z",
+        "data": {
+          "formName": "Partner Signup",
+          "responseId": "resp_e2e_cpa_001",
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Dana"
+            },
+            {
+              "label": "Last name",
+              "value": "Cole"
+            },
+            {
+              "label": "Email",
+              "value": "dana.cole@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Cole Advisory Group"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "CPA / bookkeeper"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "Contractors and local service businesses"
+            },
+            {
+              "label": "What type of businesses do you usually work with?",
+              "value": "Tax planning, bookkeeping, cash flow advisory"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "3-8"
+            },
+            {
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Referral partner"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "Clients ask about working capital after tax planning meetings."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "business-attorney",
+      "description": "Business attorney / advisor who can refer acquisition and operating-capital conversations.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "business_attorney",
+        "tier": "tier_2",
+        "manual_review_required": true,
+        "risk_level": "low",
+        "review_queue_status": "needs_review",
+        "recommended_decision": "approve_after_manual_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_attorney_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:03:00.000Z",
+        "data": {
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Riley"
+            },
+            {
+              "label": "Last name",
+              "value": "Grant"
+            },
+            {
+              "label": "Email",
+              "value": "riley.grant@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Grant Business Law"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Small business attorney"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "Acquisition entrepreneurs and SMB owners"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "2-5"
+            },
+            {
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Referral partner"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "We need educational resources for clients considering business acquisition financing readiness."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "veteran-community-connector",
+      "description": "Veteran/community connector with warm-intro potential and readiness education fit.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "community_connector",
+        "tier": "tier_3",
+        "manual_review_required": true,
+        "risk_level": "low",
+        "review_queue_status": "needs_review",
+        "recommended_decision": "nurture_and_resource_path"
+      },
+      "payload": {
+        "eventId": "evt_e2e_veteran_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:04:00.000Z",
+        "data": {
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Jordan"
+            },
+            {
+              "label": "Last name",
+              "value": "Reed"
+            },
+            {
+              "label": "Email",
+              "value": "jordan.reed@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Veteran Founder Network"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Veteran community connector"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "Veteran entrepreneurs and local business owners"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "1-5"
+            },
+            {
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Community referral partner"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "We want readiness guides and intro scripts. No cold lead selling."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "content-creator-affiliate",
+      "description": "Creator/affiliate who needs disclosure review and campaign-safe copy.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "affiliate_partner",
+        "tier": "tier_3",
+        "manual_review_required": true,
+        "risk_level": "medium",
+        "review_queue_status": "needs_review",
+        "recommended_decision": "approve_after_disclosure_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_affiliate_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:05:00.000Z",
+        "data": {
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Casey"
+            },
+            {
+              "label": "Last name",
+              "value": "Lane"
+            },
+            {
+              "label": "Email",
+              "value": "casey.lane@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Cash Flow Creator Lab"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Content creator / affiliate"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "E-commerce sellers and freelancers"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "5-15"
+            },
+            {
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Affiliate"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "We can promote educational funding readiness content with clear affiliate disclosure."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "low-info-signup",
+      "description": "Sparse signup that should be accepted but pushed to needs-info/manual review.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "unknown_or_low_info",
+        "tier": "needs_info",
+        "manual_review_required": true,
+        "risk_level": "medium",
+        "review_queue_status": "needs_info",
+        "recommended_decision": "request_more_information"
+      },
+      "payload": {
+        "eventId": "evt_e2e_lowinfo_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:06:00.000Z",
+        "data": {
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Taylor"
+            },
+            {
+              "label": "Email",
+              "value": "taylor.lowinfo@example.com"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Not sure yet"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "Interested"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "high-risk-lead-seller",
+      "description": "High-risk seller language requiring rejection/watchlist/manual risk review.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "lead_seller",
+        "tier": "reject_or_watchlist",
+        "manual_review_required": true,
+        "risk_level": "high",
+        "review_queue_status": "blocked_pending_review",
+        "recommended_decision": "do_not_activate_without_operator_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_highrisk_001",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:07:00.000Z",
+        "data": {
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Blake"
+            },
+            {
+              "label": "Last name",
+              "value": "Stone"
+            },
+            {
+              "label": "Email",
+              "value": "blake.stone@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Velocity Lead Network"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Lead seller"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "Large list of business owners"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "500+"
+            },
+            {
+              "label": "Are you interested in affiliate, referral, broker, or strategic partnership?",
+              "value": "Sell leads"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "We can deliver high volume leads fast. Consent process unclear. We want guaranteed commissions."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "duplicate-submission",
+      "description": "Duplicate response ID and email to verify idempotency/retry behavior.",
+      "expected": {
+        "http_status": 202,
+        "partner_type": "funding_broker",
+        "tier": "tier_2",
+        "manual_review_required": true,
+        "risk_level": "medium",
+        "review_queue_status": "duplicate_review",
+        "recommended_decision": "do_not_create_duplicate_without_operator_review"
+      },
+      "payload": {
+        "eventId": "evt_e2e_broker_001_retry",
+        "eventType": "FORM_RESPONSE",
+        "createdAt": "2026-07-06T15:08:00.000Z",
+        "data": {
+          "formName": "Partner Signup",
+          "responseId": "resp_e2e_broker_001",
+          "fields": [
+            {
+              "label": "First name",
+              "value": "Morgan"
+            },
+            {
+              "label": "Last name",
+              "value": "Atlas"
+            },
+            {
+              "label": "Email",
+              "value": "morgan.atlas@example.com"
+            },
+            {
+              "label": "Company / brand",
+              "value": "Atlas Funding Desk"
+            },
+            {
+              "label": "Which best describes you?",
+              "value": "Funding broker"
+            },
+            {
+              "label": "Who do you serve?",
+              "value": "Main Street businesses and contractors"
+            },
+            {
+              "label": "Estimated monthly referral volume",
+              "value": "10-20"
+            },
+            {
+              "label": "Anything else we should know?",
+              "value": "Duplicate retry of same response ID. Should not create a second live record."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "malformed-payload",
+      "description": "Malformed payload used by the PowerShell script as invalid JSON; included here as metadata only.",
+      "expected": {
+        "http_status": 400,
+        "partner_type": null,
+        "tier": null,
+        "manual_review_required": true,
+        "risk_level": "n/a",
+        "review_queue_status": "not_created",
+        "recommended_decision": "reject_request_and_log_safe_error"
+      },
+      "malformed_body": "{\"data\": {\"fields\": [ {\"label\": \"Email\", \"value\": \"bad@example.com\" }"
+    }
+  ]
+}
