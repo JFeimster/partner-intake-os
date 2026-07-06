@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/tracking-link.schema.json",
+  "title": "Tracking Link",
+  "description": "Partner campaign tracking link record used for affiliate/referral routing, UTM attribution, and dashboard reporting.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "tracking_link_id": {
+      "$ref": "common.schema.json#/$defs/tracking_link_id"
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "campaign_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/campaign_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "destination_url": {
+      "$ref": "common.schema.json#/$defs/url"
+    },
+    "tracking_url": {
+      "$ref": "common.schema.json#/$defs/url"
+    },
+    "slug": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Human-readable tracking path slug."
+    },
+    "utm_source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "utm_medium": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "utm_campaign": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 140
+    },
+    "utm_content": {
+      "type": "string",
+      "maxLength": 140
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "paused",
+        "expired",
+        "archived"
+      ],
+      "description": "Operational status for the tracking link."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "tracking_link_id",
+    "partner_id",
+    "destination_url",
+    "tracking_url",
+    "slug",
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "status",
+    "created_at"
+  ],
+  "examples": [
+    {
+      "tracking_link_id": "trk_01HZ4Y5N9A7V6C5X4Z3B2N1M0Q",
+      "partner_id": "ptr_01HZ4XQ8Z7W6V5T4S3R2Q1P0N9",
+      "campaign_id": "cmp_01HZ4Z0A1B2C3D4E5F6G7H8J9",
+      "destination_url": "https://distilledfunding.com/partner-intake",
+      "tracking_url": "https://distilledfunding.com/r/cpa-harbor-ridge",
+      "slug": "cpa-harbor-ridge",
+      "utm_source": "partner_cpa_network",
+      "utm_medium": "referral",
+      "utm_campaign": "cash_flow_readiness",
+      "utm_content": "q3_email_intro",
+      "status": "active",
+      "created_at": "2026-07-06T19:20:00Z",
+      "expires_at": null,
+      "metadata": {
+        "created_by": "partner_intake_os"
+      }
+    }
+  ]
+}

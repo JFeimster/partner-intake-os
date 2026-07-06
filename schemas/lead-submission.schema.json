@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/lead-submission.schema.json",
+  "title": "Lead Submission",
+  "description": "Partner-submitted business funding lead intake record. This schema captures intake data only and does not imply eligibility, approval, funding availability, or lender certainty.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "lead_id": {
+      "$ref": "common.schema.json#/$defs/lead_id"
+    },
+    "submitted_by_partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "tracking_link_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/tracking_link_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "attribution_event_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/attribution_event_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "business_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180,
+      "description": "Legal or commonly used business name for the submitted lead."
+    },
+    "contact_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 140,
+      "description": "Primary contact name for the business lead."
+    },
+    "contact_email": {
+      "$ref": "common.schema.json#/$defs/email"
+    },
+    "contact_phone": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/phone"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "industry": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Business industry or vertical, using plain English when no controlled taxonomy exists yet."
+    },
+    "monthly_revenue_range": {
+      "type": "string",
+      "description": "Self-reported approximate monthly revenue range for intake routing. Not a qualification guarantee.",
+      "enum": [
+        "pre_revenue",
+        "under_10k",
+        "10k_25k",
+        "25k_50k",
+        "50k_100k",
+        "100k_250k",
+        "250k_500k",
+        "500k_plus",
+        "unknown"
+      ]
+    },
+    "time_in_business_range": {
+      "type": "string",
+      "description": "Self-reported operating history range for readiness routing.",
+      "enum": [
+        "not_started",
+        "under_3_months",
+        "3_6_months",
+        "6_12_months",
+        "1_2_years",
+        "2_5_years",
+        "5_plus_years",
+        "unknown"
+      ]
+    },
+    "funding_need": {
+      "type": "string",
+      "description": "Primary stated funding need or business use case.",
+      "enum": [
+        "working_capital",
+        "equipment",
+        "inventory",
+        "payroll",
+        "marketing",
+        "expansion",
+        "refinance",
+        "emergency_cash_flow",
+        "acquisition",
+        "franchise",
+        "real_estate",
+        "business_credit_readiness",
+        "other",
+        "unknown"
+      ]
+    },
+    "funding_amount_requested": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/money_amount"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "use_of_funds": {
+      "type": "string",
+      "maxLength": 1200,
+      "description": "Plain-English description of how the business expects to use funds."
+    },
+    "urgency": {
+      "type": "string",
+      "description": "Lead's self-reported timing pressure. Use for routing only, not for deceptive urgency.",
+      "enum": [
+        "immediate",
+        "7_days",
+        "30_days",
+        "60_90_days",
+        "planning_ahead",
+        "unknown"
+      ]
+    },
+    "consent": {
+      "type": "object",
+      "description": "Consent snapshot captured at submission time.",
+      "additionalProperties": false,
+      "required": [
+        "consent_status",
+        "consent_text",
+        "accepted_at"
+      ],
+      "properties": {
+        "consent_status": {
+          "$ref": "enums.schema.json#/$defs/consent_status"
+        },
+        "consent_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "accepted_at": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        "source": {
+          "$ref": "enums.schema.json#/$defs/lead_source"
+        },
+        "ip_hash": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Optional privacy-preserving hash. Do not store raw IP by default."
+        },
+        "user_agent": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
+    "notes": {
+      "$ref": "common.schema.json#/$defs/notes"
+    },
+    "source": {
+      "$ref": "enums.schema.json#/$defs/lead_source"
+    },
+    "submitted_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "lead_id",
+    "submitted_by_partner_id",
+    "business_name",
+    "contact_name",
+    "contact_email",
+    "funding_need",
+    "consent",
+    "source",
+    "submitted_at"
+  ],
+  "examples": [
+    {
+      "lead_id": "lead_01HZ4Y9J0K7A8B9C2D3E4F5G6H",
+      "submitted_by_partner_id": "ptr_01HZ4XQ8Z7W6V5T4S3R2Q1P0N9",
+      "tracking_link_id": "trk_01HZ4Y5N9A7V6C5X4Z3B2N1M0Q",
+      "attribution_event_id": "att_01HZ4Y78N9M8L7K6J5H4G3F2E1",
+      "business_name": "Harbor Ridge Contracting LLC",
+      "contact_name": "Marcus Grant",
+      "contact_email": "marcus@example.com",
+      "contact_phone": "+12025550128",
+      "industry": "Commercial contracting",
+      "monthly_revenue_range": "100k_250k",
+      "time_in_business_range": "2_5_years",
+      "funding_need": "equipment",
+      "funding_amount_requested": {
+        "amount": 75000,
+        "currency": "USD"
+      },
+      "use_of_funds": "Replace two aging work trucks and add a skid steer for larger jobs.",
+      "urgency": "30_days",
+      "consent": {
+        "consent_status": "accepted",
+        "consent_text": "I agree to be contacted about business funding readiness and referral follow-up.",
+        "accepted_at": "2026-07-06T19:30:00Z",
+        "source": "partner_referral",
+        "ip_hash": "sha256:examplehash",
+        "user_agent": "Mozilla/5.0"
+      },
+      "notes": "Referred by CPA partner. Business wants options, not a guaranteed approval pitch.",
+      "source": "partner_referral",
+      "submitted_at": "2026-07-06T19:31:00Z",
+      "metadata": {
+        "form": "partner_dashboard_lead_submit"
+      }
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:partner-intake-os:schema:manual-review:1.0.0",
+  "title": "Manual Partner Review",
+  "description": "Admin review queue object for partner intakes that need human judgment due to risk, missing information, strategic value, ambiguous fit, or compliance-sensitive claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "review_id": {
+      "$ref": "common.schema.json#/$defs/review_id"
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "classification_id": {
+      "type": "string",
+      "pattern": "^classification_[a-z0-9][a-z0-9_-]{5,63}$",
+      "description": "Classification result that triggered or supports this review."
+    },
+    "review_status": {
+      "$ref": "enums.schema.json#/$defs/review_status"
+    },
+    "review_reason": {
+      "type": "string",
+      "description": "Plain-English reason this partner needs human review.",
+      "minLength": 1,
+      "maxLength": 1500
+    },
+    "severity": {
+      "$ref": "enums.schema.json#/$defs/risk_level"
+    },
+    "recommended_decision": {
+      "$ref": "enums.schema.json#/$defs/decision"
+    },
+    "assigned_to": {
+      "$ref": "common.schema.json#/$defs/owner"
+    },
+    "reviewer_notes": {
+      "$ref": "common.schema.json#/$defs/notes"
+    },
+    "required_follow_up_questions": {
+      "type": "array",
+      "description": "Specific questions needed to unblock a decision.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "default": []
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "resolved_at": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "When review was resolved. Null while open."
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "review_id",
+    "partner_id",
+    "classification_id",
+    "review_status",
+    "review_reason",
+    "severity",
+    "recommended_decision",
+    "assigned_to",
+    "required_follow_up_questions",
+    "created_at",
+    "updated_at"
+  ],
+  "examples": [
+    {
+      "review_id": "review_01hv9x2j3k8m4n5p6q7r8s9t",
+      "partner_id": "partner_01hv9x2j3k8m4n5p6q7r8s9t",
+      "classification_id": "classification_01hv9x2j3k8m4n5p6q7r8s9t",
+      "review_status": "open",
+      "review_reason": "Partner claims high lead volume but provided unclear source, no website, and language that may imply guaranteed approvals.",
+      "severity": "high",
+      "recommended_decision": "request_more_info",
+      "assigned_to": {
+        "owner_id": "user_jason",
+        "name": "Jason",
+        "email": "jason@example.com"
+      },
+      "reviewer_notes": "Ask for source details, compliance process, and sample partner copy before activation.",
+      "required_follow_up_questions": [
+        "Where are your leads generated from?",
+        "Do prospects explicitly consent to be contacted about funding readiness?",
+        "Can you remove any guaranteed approval language from your copy?"
+      ],
+      "created_at": "2026-07-06T19:47:00Z",
+      "updated_at": "2026-07-06T19:47:00Z",
+      "resolved_at": null,
+      "metadata": {
+        "queue": "partner_review"
+      }
+    }
+  ]
+}

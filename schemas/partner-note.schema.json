@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/partner-note.schema.json",
+  "title": "Partner Note",
+  "description": "A CRM-ready note attached to a partner record. Used for intake notes, admin notes, GPT-generated summaries, review notes, and operational history.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "note_id": {
+      "$ref": "./common.schema.json#/$defs/event_id"
+    },
+    "partner_id": {
+      "$ref": "./common.schema.json#/$defs/partner_id"
+    },
+    "note_type": {
+      "type": "string",
+      "description": "The operational category of the note.",
+      "enum": [
+        "intake_note",
+        "classification_note",
+        "admin_note",
+        "call_note",
+        "email_note",
+        "risk_note",
+        "onboarding_note",
+        "campaign_note",
+        "system_note",
+        "other"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 140
+    },
+    "body": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8000
+    },
+    "visibility": {
+      "type": "string",
+      "description": "Controls whether the note is internal-only or may be shown to a partner later.",
+      "enum": [
+        "internal",
+        "admin_only",
+        "partner_visible",
+        "system"
+      ]
+    },
+    "created_by": {
+      "$ref": "./common.schema.json#/$defs/owner"
+    },
+    "created_at": {
+      "$ref": "./common.schema.json#/$defs/timestamp"
+    },
+    "related_event_id": {
+      "$ref": "./common.schema.json#/$defs/event_id"
+    },
+    "tags": {
+      "$ref": "./common.schema.json#/$defs/tags"
+    },
+    "metadata": {
+      "$ref": "./common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "note_id",
+    "partner_id",
+    "note_type",
+    "title",
+    "body",
+    "visibility",
+    "created_by",
+    "created_at"
+  ],
+  "examples": [
+    {
+      "note_id": "evt_01jz9n8qa1note7h6a0p2tx9a3",
+      "partner_id": "ptnr_01jz9n8pwr9v2w6r6m8x1k9x2b",
+      "note_type": "classification_note",
+      "title": "Strong referral partner fit",
+      "body": "CPA/bookkeeper serving SMB clients. Good referral fit. Needs education-first onboarding and compliant referral language before active campaigns.",
+      "visibility": "internal",
+      "created_by": {
+        "id": "user_jason",
+        "name": "Jason",
+        "type": "admin"
+      },
+      "created_at": "2026-07-06T19:45:00Z",
+      "related_event_id": "evt_01jz9n8qa1classify7h6a0p2tx9",
+      "tags": [
+        "cpa_bookkeeper",
+        "education_first",
+        "low_risk"
+      ],
+      "metadata": {
+        "source": "gpt_manual_review"
+      }
+    }
+  ]
+}

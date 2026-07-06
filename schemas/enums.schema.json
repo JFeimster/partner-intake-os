@@ -1,0 +1,568 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:partner-intake-os:schema:enums:1.0.0",
+  "title": "Shared Enum Definitions",
+  "description": "Reusable enum values for Partner Intake OS schemas. Values are lowercase snake_case so API logic, GPT outputs, CRM fields, dashboards, and automation workflows speak the same language.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "partner_type": {
+      "$ref": "#/$defs/partner_type"
+    },
+    "partner_tier": {
+      "$ref": "#/$defs/partner_tier"
+    },
+    "onboarding_path": {
+      "$ref": "#/$defs/onboarding_path"
+    },
+    "risk_level": {
+      "$ref": "#/$defs/risk_level"
+    },
+    "partner_status": {
+      "$ref": "#/$defs/partner_status"
+    },
+    "next_action": {
+      "$ref": "#/$defs/next_action"
+    },
+    "decision": {
+      "$ref": "#/$defs/decision"
+    },
+    "review_status": {
+      "$ref": "#/$defs/review_status"
+    },
+    "task_status": {
+      "$ref": "#/$defs/task_status"
+    },
+    "activity_type": {
+      "$ref": "#/$defs/activity_type"
+    },
+    "event_source": {
+      "$ref": "#/$defs/event_source"
+    },
+    "campaign_type": {
+      "$ref": "#/$defs/campaign_type"
+    },
+    "campaign_channel": {
+      "$ref": "#/$defs/campaign_channel"
+    },
+    "resource_type": {
+      "$ref": "#/$defs/resource_type"
+    },
+    "lead_status": {
+      "$ref": "#/$defs/lead_status"
+    },
+    "lead_source": {
+      "$ref": "#/$defs/lead_source"
+    },
+    "attribution_event_type": {
+      "$ref": "#/$defs/attribution_event_type"
+    },
+    "integration_system": {
+      "$ref": "#/$defs/integration_system"
+    },
+    "sync_status": {
+      "$ref": "#/$defs/sync_status"
+    },
+    "consent_status": {
+      "$ref": "#/$defs/consent_status"
+    },
+    "webhook_status": {
+      "$ref": "#/$defs/webhook_status"
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    }
+  },
+  "required": [],
+  "$defs": {
+    "partner_type": {
+      "type": "string",
+      "description": "Canonical partner classification. Includes compatibility aliases for existing MVP outputs where useful.",
+      "enum": [
+        "funding_broker",
+        "broker",
+        "iso",
+        "referral_partner",
+        "center_of_influence",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "affiliate_partner",
+        "fintech_vendor_partner",
+        "vendor_partner",
+        "strategic_partner",
+        "unqualified_not_fit",
+        "unknown"
+      ],
+      "examples": [
+        "funding_broker",
+        "cpa_bookkeeper",
+        "strategic_partner"
+      ]
+    },
+    "partner_tier": {
+      "type": "string",
+      "description": "Partner value/activation tier.",
+      "enum": [
+        "tier_1",
+        "tier_2",
+        "tier_3",
+        "tier_4",
+        "watchlist",
+        "manual_review",
+        "reject",
+        "unknown"
+      ],
+      "examples": [
+        "tier_1",
+        "tier_2",
+        "watchlist"
+      ]
+    },
+    "onboarding_path": {
+      "type": "string",
+      "description": "Recommended onboarding path for the partner.",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review",
+        "manual_review",
+        "unknown"
+      ],
+      "examples": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner"
+      ]
+    },
+    "risk_level": {
+      "type": "string",
+      "description": "Risk level for compliance, data quality, claims, fit, or operational risk.",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical",
+        "unknown"
+      ],
+      "examples": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "partner_status": {
+      "type": "string",
+      "description": "Partner lifecycle status.",
+      "enum": [
+        "new",
+        "pending_review",
+        "needs_more_info",
+        "approved",
+        "active",
+        "onboarded",
+        "nurture",
+        "watchlist",
+        "rejected",
+        "inactive",
+        "suspended",
+        "archived"
+      ],
+      "examples": [
+        "pending_review",
+        "approved",
+        "watchlist"
+      ]
+    },
+    "next_action": {
+      "type": "string",
+      "description": "Recommended next operational action.",
+      "enum": [
+        "send_welcome",
+        "schedule_call",
+        "request_more_info",
+        "send_resources",
+        "assign_campaign",
+        "create_tracking_link",
+        "approve_partner",
+        "reject_partner",
+        "manual_review",
+        "add_to_watchlist",
+        "create_task",
+        "log_event",
+        "sync_crm",
+        "submit_lead",
+        "no_action"
+      ],
+      "examples": [
+        "send_welcome",
+        "schedule_call",
+        "manual_review"
+      ]
+    },
+    "decision": {
+      "type": "string",
+      "description": "Admin or system decision outcome.",
+      "enum": [
+        "approve",
+        "approve_with_conditions",
+        "reject",
+        "request_more_info",
+        "watchlist",
+        "escalate",
+        "defer"
+      ],
+      "examples": [
+        "approve",
+        "request_more_info",
+        "watchlist"
+      ]
+    },
+    "review_status": {
+      "type": "string",
+      "description": "Manual/admin review status.",
+      "enum": [
+        "not_required",
+        "queued",
+        "in_review",
+        "approved",
+        "rejected",
+        "needs_more_info",
+        "escalated",
+        "resolved",
+        "closed"
+      ],
+      "examples": [
+        "queued",
+        "in_review",
+        "resolved"
+      ]
+    },
+    "task_status": {
+      "type": "string",
+      "description": "Task lifecycle status.",
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "waiting_on_partner",
+        "completed",
+        "canceled",
+        "overdue"
+      ],
+      "examples": [
+        "open",
+        "waiting_on_partner",
+        "completed"
+      ]
+    },
+    "activity_type": {
+      "type": "string",
+      "description": "Partner activity type for CRM, dashboard, and audit timelines.",
+      "enum": [
+        "intake_received",
+        "classification_completed",
+        "risk_flag_added",
+        "note_added",
+        "task_created",
+        "resource_sent",
+        "campaign_assigned",
+        "tracking_link_created",
+        "lead_submitted",
+        "lead_status_changed",
+        "partner_status_changed",
+        "crm_sync_completed",
+        "webhook_received",
+        "admin_review_completed",
+        "email_sent",
+        "call_scheduled",
+        "manual_update"
+      ],
+      "examples": [
+        "intake_received",
+        "classification_completed",
+        "tracking_link_created"
+      ]
+    },
+    "event_source": {
+      "type": "string",
+      "description": "Source system that generated an event.",
+      "enum": [
+        "manual",
+        "tally",
+        "gpt_action",
+        "api",
+        "dashboard",
+        "webhook",
+        "notion",
+        "hubspot",
+        "google_sheets",
+        "n8n",
+        "activepieces",
+        "system"
+      ],
+      "examples": [
+        "tally",
+        "gpt_action",
+        "dashboard"
+      ]
+    },
+    "campaign_type": {
+      "type": "string",
+      "description": "Campaign or activation kit type.",
+      "enum": [
+        "referral",
+        "affiliate",
+        "content",
+        "email",
+        "social",
+        "webinar",
+        "event",
+        "partner_launch",
+        "nurture",
+        "reactivation",
+        "lead_magnet",
+        "direct_outreach"
+      ],
+      "examples": [
+        "referral",
+        "partner_launch",
+        "lead_magnet"
+      ]
+    },
+    "campaign_channel": {
+      "type": "string",
+      "description": "Primary distribution channel.",
+      "enum": [
+        "email",
+        "sms",
+        "phone",
+        "linkedin",
+        "facebook",
+        "instagram",
+        "youtube",
+        "tiktok",
+        "x_twitter",
+        "website",
+        "landing_page",
+        "podcast",
+        "community",
+        "event",
+        "referral_network",
+        "paid_ads",
+        "newsletter",
+        "other"
+      ],
+      "examples": [
+        "email",
+        "linkedin",
+        "landing_page"
+      ]
+    },
+    "resource_type": {
+      "type": "string",
+      "description": "Partner resource or training asset type.",
+      "enum": [
+        "guide",
+        "checklist",
+        "script",
+        "template",
+        "landing_page",
+        "video",
+        "training",
+        "calculator",
+        "scorecard",
+        "matrix",
+        "playbook",
+        "dashboard",
+        "api_doc",
+        "campaign_kit",
+        "welcome_packet"
+      ],
+      "examples": [
+        "checklist",
+        "playbook",
+        "campaign_kit"
+      ]
+    },
+    "lead_status": {
+      "type": "string",
+      "description": "Lead lifecycle status. This is workflow status only and does not imply approval, underwriting outcome, or funding availability.",
+      "enum": [
+        "received",
+        "accepted",
+        "needs_more_info",
+        "in_review",
+        "qualified_for_review",
+        "not_fit",
+        "submitted_to_partner",
+        "working",
+        "closed",
+        "archived"
+      ],
+      "examples": [
+        "received",
+        "needs_more_info",
+        "in_review"
+      ]
+    },
+    "lead_source": {
+      "type": "string",
+      "description": "Origin channel for a submitted lead.",
+      "enum": [
+        "tally",
+        "partner_dashboard",
+        "gpt_action",
+        "api",
+        "tracking_link",
+        "manual",
+        "csv_import",
+        "crm",
+        "referral",
+        "website",
+        "phone_call",
+        "email",
+        "other"
+      ],
+      "examples": [
+        "partner_dashboard",
+        "tracking_link",
+        "manual"
+      ]
+    },
+    "attribution_event_type": {
+      "type": "string",
+      "description": "Attribution event type for tracking links, campaign touchpoints, and lead-submission journeys.",
+      "enum": [
+        "link_created",
+        "link_clicked",
+        "page_view",
+        "form_started",
+        "form_submitted",
+        "lead_submitted",
+        "conversion_recorded",
+        "campaign_assigned",
+        "source_matched"
+      ],
+      "examples": [
+        "link_clicked",
+        "lead_submitted"
+      ]
+    },
+    "integration_system": {
+      "type": "string",
+      "description": "External or internal integration target/source.",
+      "enum": [
+        "notion",
+        "hubspot",
+        "google_sheets",
+        "supabase",
+        "json",
+        "mock",
+        "activepieces",
+        "n8n",
+        "vercel",
+        "github",
+        "tally",
+        "openai",
+        "dashboard"
+      ],
+      "examples": [
+        "notion",
+        "hubspot",
+        "google_sheets"
+      ]
+    },
+    "sync_status": {
+      "type": "string",
+      "description": "Integration sync result status.",
+      "enum": [
+        "not_started",
+        "pending",
+        "success",
+        "partial_success",
+        "failed",
+        "retrying",
+        "skipped"
+      ],
+      "examples": [
+        "pending",
+        "success",
+        "failed"
+      ]
+    },
+    "consent_status": {
+      "type": "string",
+      "description": "Consent capture status.",
+      "enum": [
+        "unknown",
+        "not_requested",
+        "requested",
+        "granted",
+        "denied",
+        "revoked",
+        "expired"
+      ],
+      "examples": [
+        "granted",
+        "revoked"
+      ]
+    },
+    "webhook_status": {
+      "type": "string",
+      "description": "Webhook receipt/processing status.",
+      "enum": [
+        "received",
+        "accepted",
+        "ignored",
+        "duplicate",
+        "processing",
+        "processed",
+        "failed",
+        "retrying"
+      ],
+      "examples": [
+        "received",
+        "processed",
+        "failed"
+      ]
+    },
+    "environment": {
+      "type": "string",
+      "description": "Runtime or deployment environment.",
+      "enum": [
+        "local",
+        "development",
+        "preview",
+        "staging",
+        "production",
+        "test"
+      ],
+      "examples": [
+        "development",
+        "preview",
+        "production"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "partner_type": "funding_broker",
+      "partner_tier": "tier_2",
+      "onboarding_path": "standard_affiliate_partner",
+      "risk_level": "low",
+      "partner_status": "pending_review",
+      "next_action": "send_welcome",
+      "event_source": "tally",
+      "environment": "development"
+    }
+  ]
+}

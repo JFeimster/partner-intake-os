@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/referral-source.schema.json",
+  "title": "Referral Source",
+  "description": "Structured description of a partner's referral source, audience, channel, expected volume, quality notes, and risk notes.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "referral_source_id": {
+      "type": "string",
+      "pattern": "^src_[A-Za-z0-9_-]{8,64}$",
+      "description": "Unique referral source identifier."
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "source_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "personal_network",
+        "professional_network",
+        "client_base",
+        "audience",
+        "community_group",
+        "email_list",
+        "social_media",
+        "paid_campaign",
+        "event",
+        "crm",
+        "vendor_network",
+        "other"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "channel": {
+      "$ref": "enums.schema.json#/$defs/campaign_channel"
+    },
+    "expected_volume": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Expected referral volume estimate. Treat as self-reported until verified.",
+      "required": [
+        "monthly_estimate",
+        "confidence"
+      ],
+      "properties": {
+        "monthly_estimate": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "confidence": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "unknown"
+          ]
+        },
+        "basis": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
+    "quality_notes": {
+      "type": "string",
+      "maxLength": 1500
+    },
+    "risk_notes": {
+      "type": "string",
+      "maxLength": 1500
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "inactive",
+        "watchlist",
+        "needs_review",
+        "unknown"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "referral_source_id",
+    "partner_id",
+    "source_name",
+    "source_type",
+    "audience",
+    "channel",
+    "expected_volume",
+    "status",
+    "created_at"
+  ],
+  "examples": [
+    {
+      "referral_source_id": "src_01HZ4ZA8B7C6D5E4F3G2H1J0K9",
+      "partner_id": "ptr_01HZ4XQ8Z7W6V5T4S3R2Q1P0N9",
+      "source_name": "CPA client advisory list",
+      "source_type": "client_base",
+      "audience": [
+        "contractors",
+        "local service businesses",
+        "cash-flow-sensitive SMBs"
+      ],
+      "channel": "email",
+      "expected_volume": {
+        "monthly_estimate": 5,
+        "confidence": "medium",
+        "basis": "Partner self-reported 80 active advisory clients."
+      },
+      "quality_notes": "Warm existing client relationships; funding need likely seasonal and operational.",
+      "risk_notes": "Volume estimate is unverified. Avoid any approval claims in partner-facing copy.",
+      "status": "active",
+      "created_at": "2026-07-06T19:25:00Z",
+      "metadata": {
+        "reviewed_by": "admin"
+      }
+    }
+  ]
+}

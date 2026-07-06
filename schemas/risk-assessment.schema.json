@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:partner-intake-os:schema:risk-assessment:1.0.0",
+  "title": "Partner Risk Assessment",
+  "description": "Risk review object for partner intake, classification, compliance review, data quality, suspicious claims, and manual review routing. This schema is intentionally operational: it detects issues, it does not make legal, credit repair, lending, or approval promises.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "risk_assessment_id": {
+      "type": "string",
+      "description": "Stable risk assessment identifier.",
+      "pattern": "^risk_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "risk_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "risk_level": {
+      "$ref": "enums.schema.json#/$defs/risk_level"
+    },
+    "risk_flags": {
+      "type": "array",
+      "description": "Canonical risk flags used for routing and admin review.",
+      "items": {
+        "$ref": "#/$defs/risk_flag"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "compliance_flags": {
+      "type": "array",
+      "description": "Specific compliance-sensitive flags related to copy, claims, consent, or marketing conduct.",
+      "items": {
+        "$ref": "#/$defs/compliance_flag"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "incomplete_data_flags": {
+      "type": "array",
+      "description": "Missing or low-confidence data points that limit classification certainty.",
+      "items": {
+        "$ref": "#/$defs/incomplete_data_flag"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "suspicious_claims": {
+      "type": "array",
+      "description": "Claims from the intake or notes that require validation before approval or activation.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "default": []
+    },
+    "prohibited_language_detected": {
+      "type": "boolean",
+      "description": "True when the intake, partner notes, or proposed copy include disallowed claims such as guaranteed approvals, guaranteed funding amounts, or credit repair positioning."
+    },
+    "manual_review_required": {
+      "type": "boolean",
+      "description": "True when risk, data quality, or compliance flags require human review before progression."
+    },
+    "recommended_mitigation": {
+      "type": "string",
+      "description": "Practical mitigation steps before partner approval, activation, or campaign assignment.",
+      "minLength": 1,
+      "maxLength": 2500
+    },
+    "reviewer_notes": {
+      "$ref": "common.schema.json#/$defs/notes"
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "risk_assessment_id",
+    "partner_id",
+    "risk_level",
+    "risk_flags",
+    "compliance_flags",
+    "incomplete_data_flags",
+    "prohibited_language_detected",
+    "manual_review_required",
+    "recommended_mitigation",
+    "created_at"
+  ],
+  "$defs": {
+    "risk_flag": {
+      "type": "string",
+      "enum": [
+        "guaranteed_approval_claim",
+        "guaranteed_funding_amount_claim",
+        "credit_repair_claim",
+        "deceptive_urgency",
+        "lead_quality_unclear",
+        "unverified_volume_claim",
+        "possible_spam",
+        "missing_contact_info",
+        "general_consumer_not_partner",
+        "high_compliance_risk",
+        "incomplete_profile",
+        "unknown_business_model",
+        "duplicate_submission",
+        "unverified_partner_identity",
+        "unclear_partner_role",
+        "potential_channel_conflict"
+      ]
+    },
+    "compliance_flag": {
+      "type": "string",
+      "enum": [
+        "guaranteed_approval_claim",
+        "guaranteed_funding_amount_claim",
+        "fake_lender_certainty",
+        "credit_repair_positioning",
+        "deceptive_urgency",
+        "invented_testimonial",
+        "everyone_qualifies_claim",
+        "missing_consent",
+        "unapproved_marketing_copy",
+        "privacy_sensitive_data_exposure",
+        "misleading_affiliate_disclosure"
+      ]
+    },
+    "incomplete_data_flag": {
+      "type": "string",
+      "enum": [
+        "missing_email",
+        "missing_phone",
+        "missing_company",
+        "missing_website",
+        "missing_primary_audience",
+        "missing_partner_role",
+        "missing_referral_volume",
+        "unclear_industry",
+        "unclear_tools",
+        "unclear_source",
+        "low_information_signup"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "risk_assessment_id": "risk_01hv9x2j3k8m4n5p6q7r8s9t",
+      "partner_id": "partner_01hv9x2j3k8m4n5p6q7r8s9t",
+      "risk_level": "high",
+      "risk_flags": [
+        "guaranteed_approval_claim",
+        "unverified_volume_claim",
+        "lead_quality_unclear"
+      ],
+      "compliance_flags": [
+        "guaranteed_approval_claim",
+        "everyone_qualifies_claim"
+      ],
+      "incomplete_data_flags": [
+        "missing_website",
+        "unclear_partner_role"
+      ],
+      "suspicious_claims": [
+        "Claims to have 500 fundable leads per month but provided no source or qualification details."
+      ],
+      "prohibited_language_detected": true,
+      "manual_review_required": true,
+      "recommended_mitigation": "Route to manual review. Ask for traffic/source proof, sample lead quality, consent process, and require copy cleanup before any partner activation.",
+      "reviewer_notes": "Do not approve until claims and lead source are verified.",
+      "created_at": "2026-07-06T19:46:00Z",
+      "metadata": {
+        "source": "manual_review"
+      }
+    }
+  ]
+}

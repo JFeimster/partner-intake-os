@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/partner-event-log.schema.json",
+  "title": "Partner Event Log",
+  "description": "A structured event log entry for API calls, GPT reviews, CRM sync events, automation events, and partner lifecycle changes.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_log_id": {
+      "$ref": "./common.schema.json#/$defs/event_id"
+    },
+    "partner_id": {
+      "$ref": "./common.schema.json#/$defs/partner_id"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Specific event name. Use lowercase snake_case.",
+      "pattern": "^[a-z][a-z0-9_]{1,79}$",
+      "examples": [
+        "partner_classified",
+        "manual_review_created",
+        "partner_approved",
+        "campaign_assigned",
+        "crm_sync_completed"
+      ]
+    },
+    "event_source": {
+      "$ref": "./enums.schema.json#/$defs/event_source"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event payload. Keep PII minimized; store references or summaries where possible.",
+      "additionalProperties": true,
+      "default": {}
+    },
+    "created_at": {
+      "$ref": "./common.schema.json#/$defs/timestamp"
+    },
+    "created_by": {
+      "$ref": "./common.schema.json#/$defs/owner"
+    },
+    "request_id": {
+      "$ref": "./common.schema.json#/$defs/request_id"
+    },
+    "metadata": {
+      "$ref": "./common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "event_log_id",
+    "partner_id",
+    "event_type",
+    "event_source",
+    "summary",
+    "created_at",
+    "created_by"
+  ],
+  "examples": [
+    {
+      "event_log_id": "evt_01jz9nd2v21tfbkrn9p0h0vfdx",
+      "partner_id": "ptnr_01jz9n8pwr9v2w6r6m8x1k9x2b",
+      "event_type": "partner_classified",
+      "event_source": "gpt_action",
+      "summary": "Partner classified as referral_partner, tier_3, education_first, low risk.",
+      "payload": {
+        "partner_type": "referral_partner",
+        "partner_tier": "tier_3",
+        "risk_level": "low"
+      },
+      "created_at": "2026-07-06T19:49:00Z",
+      "created_by": {
+        "id": "gpt_partner_intake_os",
+        "name": "Partner Intake OS",
+        "type": "system"
+      },
+      "request_id": "req_01jz9nd0pt9d82b4z8m0wxavk1",
+      "metadata": {
+        "api_operation": "classifyPartnerIntake"
+      }
+    }
+  ]
+}

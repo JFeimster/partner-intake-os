@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/partner-task.schema.json",
+  "title": "Partner Task",
+  "description": "A task created for partner onboarding, review, follow-up, campaign launch, or CRM operations.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "$ref": "./common.schema.json#/$defs/task_id"
+    },
+    "partner_id": {
+      "$ref": "./common.schema.json#/$defs/partner_id"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "task_type": {
+      "type": "string",
+      "description": "The workstream this task belongs to.",
+      "enum": [
+        "review_partner",
+        "request_more_info",
+        "schedule_call",
+        "send_welcome",
+        "send_resources",
+        "create_campaign_kit",
+        "create_tracking_link",
+        "crm_update",
+        "compliance_review",
+        "follow_up",
+        "other"
+      ]
+    },
+    "status": {
+      "$ref": "./enums.schema.json#/$defs/task_status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ]
+    },
+    "due_date": {
+      "$ref": "./common.schema.json#/$defs/date"
+    },
+    "owner": {
+      "$ref": "./common.schema.json#/$defs/owner"
+    },
+    "related_review_id": {
+      "$ref": "./common.schema.json#/$defs/review_id"
+    },
+    "related_campaign_id": {
+      "$ref": "./common.schema.json#/$defs/campaign_id"
+    },
+    "created_at": {
+      "$ref": "./common.schema.json#/$defs/timestamp"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "$ref": "./common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "metadata": {
+      "$ref": "./common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "task_id",
+    "partner_id",
+    "title",
+    "task_type",
+    "status",
+    "priority",
+    "owner",
+    "created_at"
+  ],
+  "examples": [
+    {
+      "task_id": "task_01jz9na6y83r47hw7zs1r8c9ew",
+      "partner_id": "ptnr_01jz9n8pwr9v2w6r6m8x1k9x2b",
+      "title": "Send education-first partner welcome pack",
+      "description": "Send approved resource pack and ask for first referral workflow details before campaign assignment.",
+      "task_type": "send_welcome",
+      "status": "todo",
+      "priority": "medium",
+      "due_date": "2026-07-08",
+      "owner": {
+        "id": "user_jason",
+        "name": "Jason",
+        "type": "admin"
+      },
+      "related_review_id": "rev_01jz9n92bp2qkhtc1m4w7r6s8q",
+      "related_campaign_id": "camp_01jz9na4mr7aa7p0dq8b1r4w4s",
+      "created_at": "2026-07-06T19:46:00Z",
+      "completed_at": null,
+      "metadata": {
+        "created_by": "classification_result"
+      }
+    }
+  ]
+}

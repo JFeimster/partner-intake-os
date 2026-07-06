@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/attribution-event.schema.json",
+  "title": "Attribution Event",
+  "description": "Privacy-conscious attribution event for partner tracking links, campaign activity, and downstream lead submission events. Do not store raw IP addresses by default.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "attribution_event_id": {
+      "$ref": "common.schema.json#/$defs/attribution_event_id"
+    },
+    "partner_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/partner_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tracking_link_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/tracking_link_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "campaign_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/campaign_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "event_type": {
+      "$ref": "enums.schema.json#/$defs/attribution_event_type"
+    },
+    "event_source": {
+      "$ref": "enums.schema.json#/$defs/event_source"
+    },
+    "landing_url": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "referrer": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "user_agent": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "ip_hash": {
+      "type": "string",
+      "maxLength": 128,
+      "description": "Privacy-preserving hash of an IP address, if collected. Do not store raw IP by default."
+    },
+    "occurred_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "lead_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/lead_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "attribution_event_id",
+    "event_type",
+    "event_source",
+    "occurred_at"
+  ],
+  "examples": [
+    {
+      "attribution_event_id": "att_01HZ4Y78N9M8L7K6J5H4G3F2E1",
+      "partner_id": "ptr_01HZ4XQ8Z7W6V5T4S3R2Q1P0N9",
+      "tracking_link_id": "trk_01HZ4Y5N9A7V6C5X4Z3B2N1M0Q",
+      "campaign_id": "cmp_01HZ4Z0A1B2C3D4E5F6G7H8J9",
+      "event_type": "lead_submitted",
+      "event_source": "dashboard",
+      "landing_url": "https://distilledfunding.com/partner-intake?utm_source=partner_cpa_network&utm_medium=referral",
+      "referrer": "https://example-cpa.com/resources",
+      "user_agent": "Mozilla/5.0",
+      "ip_hash": "sha256:examplehash",
+      "occurred_at": "2026-07-06T19:30:45Z",
+      "lead_id": "lead_01HZ4Y9J0K7A8B9C2D3E4F5G6H",
+      "metadata": {
+        "privacy_mode": "hashed_ip_only"
+      }
+    }
+  ]
+}

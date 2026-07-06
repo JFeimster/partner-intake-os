@@ -1,0 +1,575 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:partner-intake-os:schema:common:1.0.0",
+  "title": "Shared Common Field Definitions",
+  "description": "Reusable primitive fields and lightweight objects shared across Partner Intake OS JSON Schemas. This file is intentionally foundational: other schemas can reference these definitions for IDs, timestamps, contact fields, scores, owners, metadata, and privacy-conscious contact records.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "partner_id": {
+      "$ref": "#/$defs/partner_id"
+    },
+    "lead_id": {
+      "$ref": "#/$defs/lead_id"
+    },
+    "campaign_id": {
+      "$ref": "#/$defs/campaign_id"
+    },
+    "event_id": {
+      "$ref": "#/$defs/event_id"
+    },
+    "review_id": {
+      "$ref": "#/$defs/review_id"
+    },
+    "task_id": {
+      "$ref": "#/$defs/task_id"
+    },
+    "tracking_link_id": {
+      "$ref": "#/$defs/tracking_link_id"
+    },
+    "attribution_event_id": {
+      "$ref": "#/$defs/attribution_event_id"
+    },
+    "integration_sync_id": {
+      "$ref": "#/$defs/integration_sync_id"
+    },
+    "request_id": {
+      "$ref": "#/$defs/request_id"
+    },
+    "email": {
+      "$ref": "#/$defs/email"
+    },
+    "phone": {
+      "$ref": "#/$defs/phone"
+    },
+    "url": {
+      "$ref": "#/$defs/url"
+    },
+    "timestamp": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "date": {
+      "$ref": "#/$defs/date"
+    },
+    "score_0_100": {
+      "$ref": "#/$defs/score_0_100"
+    },
+    "score_1_5": {
+      "$ref": "#/$defs/score_1_5"
+    },
+    "money_amount": {
+      "$ref": "#/$defs/money_amount"
+    },
+    "currency_code": {
+      "$ref": "#/$defs/currency_code"
+    },
+    "source_system": {
+      "$ref": "#/$defs/source_system"
+    },
+    "owner": {
+      "$ref": "#/$defs/owner"
+    },
+    "tags": {
+      "$ref": "#/$defs/tags"
+    },
+    "notes": {
+      "$ref": "#/$defs/notes"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "pii_minimized_contact": {
+      "$ref": "#/$defs/pii_minimized_contact"
+    },
+    "address_optional": {
+      "$ref": "#/$defs/address_optional"
+    }
+  },
+  "required": [],
+  "$defs": {
+    "id_suffix": {
+      "type": "string",
+      "description": "Lowercase, URL-safe identifier suffix. Used internally by prefixed IDs.",
+      "pattern": "^[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "partner_id": {
+      "type": "string",
+      "description": "Stable internal partner identifier.",
+      "pattern": "^partner_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "partner_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Stable internal lead submission identifier.",
+      "pattern": "^lead_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "lead_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Stable campaign or campaign-kit identifier.",
+      "pattern": "^campaign_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "campaign_broker_revival_001"
+      ]
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Stable event identifier used for CRM, audit, workflow, or system events.",
+      "pattern": "^event_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "event_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "review_id": {
+      "type": "string",
+      "description": "Stable manual/admin review identifier.",
+      "pattern": "^review_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "review_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Stable internal task identifier.",
+      "pattern": "^task_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "task_followup_001"
+      ]
+    },
+    "tracking_link_id": {
+      "type": "string",
+      "description": "Stable partner tracking link identifier.",
+      "pattern": "^trk_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "trk_partner_launch_001"
+      ]
+    },
+    "attribution_event_id": {
+      "type": "string",
+      "description": "Stable attribution event identifier.",
+      "pattern": "^attr_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "attr_click_001"
+      ]
+    },
+    "integration_sync_id": {
+      "type": "string",
+      "description": "Stable sync-attempt identifier for Notion, HubSpot, Google Sheets, n8n, Activepieces, or other integrations.",
+      "pattern": "^sync_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "sync_hubspot_001"
+      ]
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Request correlation identifier for API responses, logs, webhook receipts, and support debugging.",
+      "pattern": "^req_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "req_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address. Treat as PII and avoid exposing outside approved internal systems.",
+      "format": "email",
+      "maxLength": 254,
+      "examples": [
+        "partner@example.com"
+      ]
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number. E.164 format is preferred, but this pattern allows common US formatting during intake normalization.",
+      "minLength": 7,
+      "maxLength": 32,
+      "pattern": "^[+]?[(]?[0-9][0-9 .()\\-]{6,30}$",
+      "examples": [
+        "+12025550142",
+        "(202) 555-0142"
+      ]
+    },
+    "url": {
+      "type": "string",
+      "description": "Fully qualified URL.",
+      "format": "uri",
+      "maxLength": 2048,
+      "examples": [
+        "https://example.com/partner-page"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "RFC 3339 date-time string in UTC when possible.",
+      "format": "date-time",
+      "examples": [
+        "2026-07-06T19:30:00Z"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "description": "Calendar date in YYYY-MM-DD format.",
+      "format": "date",
+      "examples": [
+        "2026-07-06"
+      ]
+    },
+    "score_0_100": {
+      "type": "number",
+      "description": "Normalized score from 0 to 100.",
+      "minimum": 0,
+      "maximum": 100,
+      "multipleOf": 0.01,
+      "examples": [
+        0,
+        72.5,
+        100
+      ]
+    },
+    "score_1_5": {
+      "type": "integer",
+      "description": "Small rubric score from 1 to 5.",
+      "minimum": 1,
+      "maximum": 5,
+      "examples": [
+        1,
+        3,
+        5
+      ]
+    },
+    "currency_code": {
+      "type": "string",
+      "description": "ISO 4217 currency code.",
+      "pattern": "^[A-Z]{3}$",
+      "examples": [
+        "USD"
+      ]
+    },
+    "money_amount": {
+      "type": "object",
+      "description": "Currency amount. Use for requested funding amount, contract value, estimated opportunity value, or similar money fields. Values are informational and do not imply approval, availability, or offer terms.",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "multipleOf": 0.01,
+          "description": "Numeric amount."
+        },
+        "currency": {
+          "$ref": "#/$defs/currency_code"
+        },
+        "display": {
+          "type": "string",
+          "description": "Optional human-readable display value.",
+          "maxLength": 64,
+          "examples": [
+            "$25,000"
+          ]
+        }
+      },
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "examples": [
+        {
+          "amount": 25000,
+          "currency": "USD",
+          "display": "$25,000"
+        }
+      ]
+    },
+    "source_system": {
+      "type": "string",
+      "description": "System or channel where the record, request, or event originated.",
+      "enum": [
+        "manual",
+        "tally",
+        "gpt_action",
+        "api",
+        "dashboard",
+        "webhook",
+        "notion",
+        "hubspot",
+        "google_sheets",
+        "n8n",
+        "activepieces",
+        "vercel",
+        "github",
+        "openai",
+        "system",
+        "other"
+      ],
+      "examples": [
+        "tally",
+        "gpt_action",
+        "dashboard"
+      ]
+    },
+    "owner": {
+      "type": "object",
+      "description": "Internal owner or assignee. Use generic team names if no individual owner is assigned.",
+      "additionalProperties": false,
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "description": "Internal owner identifier, CRM owner ID, or team slug.",
+          "minLength": 2,
+          "maxLength": 128,
+          "examples": [
+            "jason",
+            "partner_ops"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "examples": [
+            "Jason",
+            "Partner Ops"
+          ]
+        },
+        "email": {
+          "$ref": "#/$defs/email"
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 80,
+          "examples": [
+            "admin",
+            "partner_success",
+            "reviewer"
+          ]
+        }
+      },
+      "required": [
+        "owner_id",
+        "name"
+      ],
+      "examples": [
+        {
+          "owner_id": "partner_ops",
+          "name": "Partner Ops",
+          "role": "reviewer"
+        }
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "description": "Machine-readable tags. Prefer lowercase snake_case values.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+      },
+      "uniqueItems": true,
+      "maxItems": 50,
+      "examples": [
+        [
+          "funding_broker",
+          "tier_2",
+          "needs_follow_up"
+        ]
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Freeform internal note. Do not store secrets. Avoid storing unnecessary sensitive personal data.",
+      "maxLength": 5000,
+      "examples": [
+        "Referral partner works with contractors and wants a simple lead submission path."
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Non-critical extension data. Keep values lightweight and avoid secrets.",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "examples": [
+        {
+          "utm_source": "partner_launch",
+          "import_batch": "2026_07_schema_batch_01"
+        }
+      ]
+    },
+    "pii_minimized_contact": {
+      "type": "object",
+      "description": "Privacy-conscious contact summary. Use this when a dashboard, log, or admin card should not expose full raw PII.",
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "examples": [
+            "Jordan Lee"
+          ]
+        },
+        "company": {
+          "type": "string",
+          "maxLength": 160,
+          "examples": [
+            "Blue Collar Books"
+          ]
+        },
+        "email": {
+          "$ref": "#/$defs/email"
+        },
+        "email_hash": {
+          "type": "string",
+          "description": "Optional hashed email value for privacy-preserving attribution or dedupe.",
+          "minLength": 16,
+          "maxLength": 128,
+          "examples": [
+            "sha256:9b74c9897bac770ffc029102a200c5de"
+          ]
+        },
+        "phone_last_four": {
+          "type": "string",
+          "pattern": "^[0-9]{4}$",
+          "examples": [
+            "0142"
+          ]
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 80,
+          "examples": [
+            "Washington"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 64,
+          "examples": [
+            "DC"
+          ]
+        }
+      },
+      "required": [
+        "display_name"
+      ],
+      "examples": [
+        {
+          "display_name": "Jordan Lee",
+          "company": "Blue Collar Books",
+          "email_hash": "sha256:9b74c9897bac770ffc029102a200c5de",
+          "phone_last_four": "0142",
+          "city": "Washington",
+          "state": "DC"
+        }
+      ]
+    },
+    "address_optional": {
+      "type": "object",
+      "description": "Optional address object. Use only when operationally necessary.",
+      "additionalProperties": false,
+      "properties": {
+        "line1": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "line2": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "state": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "postal_code": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "country": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "ISO 3166-1 alpha-2 country code."
+        }
+      },
+      "required": [],
+      "examples": [
+        {
+          "city": "Washington",
+          "state": "DC",
+          "country": "US"
+        }
+      ]
+    }
+  },
+  "examples": [
+    {
+      "partner_id": "partner_01hv9x2j3k8m4n5p6q7r8s9t",
+      "email": "partner@example.com",
+      "timestamp": "2026-07-06T19:30:00Z",
+      "score_0_100": 84.25,
+      "source_system": "tally",
+      "tags": [
+        "funding_broker",
+        "tier_2"
+      ],
+      "owner": {
+        "owner_id": "partner_ops",
+        "name": "Partner Ops",
+        "role": "reviewer"
+      },
+      "metadata": {
+        "environment": "development"
+      }
+    }
+  ]
+}

@@ -1,0 +1,467 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:partner-intake-os:schema:classification-result:1.0.0",
+  "title": "Partner Classification Result",
+  "description": "Full decision object returned by Partner Intake OS classification logic. It combines partner classification, tier, onboarding path, score summary, risk assessment, CRM-ready fields, dashboard-ready summary, and recommended next actions.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "classification_id": {
+      "type": "string",
+      "description": "Stable classification result identifier for traceability across API responses, reviews, CRM notes, and audit logs.",
+      "pattern": "^classification_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "classification_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "intake_source": {
+      "description": "Where the intake originated before classification.",
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/source_system"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "manual_review",
+            "tally",
+            "gpt_action",
+            "dashboard",
+            "api",
+            "hubspot",
+            "notion",
+            "google_sheets",
+            "unknown"
+          ]
+        }
+      ],
+      "examples": [
+        "manual_review",
+        "tally"
+      ]
+    },
+    "partner_type": {
+      "$ref": "enums.schema.json#/$defs/partner_type"
+    },
+    "partner_tier": {
+      "$ref": "enums.schema.json#/$defs/partner_tier"
+    },
+    "onboarding_path": {
+      "$ref": "enums.schema.json#/$defs/onboarding_path"
+    },
+    "primary_audience": {
+      "type": "string",
+      "description": "Primary audience or business segment the partner can reach.",
+      "minLength": 2,
+      "maxLength": 120,
+      "examples": [
+        "contractors",
+        "ecommerce_sellers",
+        "veteran_owned_businesses"
+      ]
+    },
+    "secondary_audiences": {
+      "type": "array",
+      "description": "Additional audiences this partner may influence or refer.",
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 120
+      },
+      "uniqueItems": true,
+      "default": [],
+      "examples": [
+        [
+          "general_smb",
+          "real_estate_investors"
+        ]
+      ]
+    },
+    "scorecard_summary": {
+      "type": "object",
+      "description": "Compact scorecard summary. Use the full scorecard schema when storing detailed scoring outputs.",
+      "additionalProperties": false,
+      "properties": {
+        "overall_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "audience_fit_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "trust_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "revenue_potential_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "activation_speed_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "compliance_risk_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "strategic_value_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "tier_recommendation": {
+          "$ref": "enums.schema.json#/$defs/partner_tier"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200
+        }
+      },
+      "required": [
+        "overall_score",
+        "tier_recommendation",
+        "summary"
+      ]
+    },
+    "risk_assessment": {
+      "type": "object",
+      "description": "Embedded risk assessment snapshot. Store the full object separately with /schemas/risk-assessment.schema.json when needed.",
+      "additionalProperties": false,
+      "properties": {
+        "risk_assessment_id": {
+          "type": "string",
+          "pattern": "^risk_[a-z0-9][a-z0-9_-]{5,63}$"
+        },
+        "risk_level": {
+          "$ref": "enums.schema.json#/$defs/risk_level"
+        },
+        "risk_flags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/risk_flag"
+          },
+          "uniqueItems": true
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        },
+        "recommended_mitigation": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "risk_level",
+        "risk_flags",
+        "manual_review_required"
+      ]
+    },
+    "manual_review_required": {
+      "type": "boolean",
+      "description": "True when the partner should be routed to an admin review queue before approval, activation, or partner-facing access."
+    },
+    "recommended_next_action": {
+      "$ref": "enums.schema.json#/$defs/next_action"
+    },
+    "recommended_resources": {
+      "type": "array",
+      "description": "Resource recommendations to show in GPT output, CRM notes, dashboard cards, or welcome packets.",
+      "items": {
+        "$ref": "#/$defs/recommended_resource"
+      },
+      "default": []
+    },
+    "recommended_campaigns": {
+      "type": "array",
+      "description": "Campaign recommendations that may be assigned now or later.",
+      "items": {
+        "$ref": "#/$defs/recommended_campaign"
+      },
+      "default": []
+    },
+    "crm_fields": {
+      "type": "object",
+      "description": "CRM-ready field map for HubSpot, Notion, Sheets, or another storage layer.",
+      "additionalProperties": true,
+      "properties": {
+        "partner_type": {
+          "$ref": "enums.schema.json#/$defs/partner_type"
+        },
+        "partner_tier": {
+          "$ref": "enums.schema.json#/$defs/partner_tier"
+        },
+        "onboarding_path": {
+          "$ref": "enums.schema.json#/$defs/onboarding_path"
+        },
+        "risk_level": {
+          "$ref": "enums.schema.json#/$defs/risk_level"
+        },
+        "status": {
+          "$ref": "enums.schema.json#/$defs/partner_status"
+        },
+        "next_action": {
+          "$ref": "enums.schema.json#/$defs/next_action"
+        },
+        "lead_source": {
+          "$ref": "enums.schema.json#/$defs/lead_source"
+        },
+        "tags": {
+          "$ref": "common.schema.json#/$defs/tags"
+        },
+        "notes": {
+          "$ref": "common.schema.json#/$defs/notes"
+        }
+      }
+    },
+    "dashboard_summary": {
+      "type": "object",
+      "description": "Small dashboard-ready summary for cards, review queue rows, and admin views.",
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "company": {
+          "type": "string",
+          "maxLength": 180
+        },
+        "status": {
+          "$ref": "enums.schema.json#/$defs/partner_status"
+        },
+        "risk_level": {
+          "$ref": "enums.schema.json#/$defs/risk_level"
+        },
+        "overall_score": {
+          "$ref": "common.schema.json#/$defs/score_0_100"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "next_action": {
+          "$ref": "enums.schema.json#/$defs/next_action"
+        }
+      },
+      "required": [
+        "display_name",
+        "status",
+        "risk_level",
+        "overall_score",
+        "next_action"
+      ]
+    },
+    "confidence_score": {
+      "$ref": "common.schema.json#/$defs/score_0_100"
+    },
+    "reasoning_summary": {
+      "type": "string",
+      "description": "Concise explanation of why the classification and next action were selected. Do not include private chain-of-thought; summarize decision factors only.",
+      "minLength": 1,
+      "maxLength": 2500
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "model_or_engine_version": {
+      "type": "string",
+      "description": "Classifier, ruleset, model, or workflow version that produced this result.",
+      "minLength": 1,
+      "maxLength": 80,
+      "examples": [
+        "ruleset_2026_07_06",
+        "partner-intake-os-v1"
+      ]
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "classification_id",
+    "partner_id",
+    "intake_source",
+    "partner_type",
+    "partner_tier",
+    "onboarding_path",
+    "primary_audience",
+    "scorecard_summary",
+    "risk_assessment",
+    "manual_review_required",
+    "recommended_next_action",
+    "confidence_score",
+    "reasoning_summary",
+    "created_at",
+    "model_or_engine_version"
+  ],
+  "$defs": {
+    "risk_flag": {
+      "type": "string",
+      "enum": [
+        "guaranteed_approval_claim",
+        "guaranteed_funding_amount_claim",
+        "credit_repair_claim",
+        "deceptive_urgency",
+        "lead_quality_unclear",
+        "unverified_volume_claim",
+        "possible_spam",
+        "missing_contact_info",
+        "general_consumer_not_partner",
+        "high_compliance_risk",
+        "incomplete_profile",
+        "unknown_business_model",
+        "unverified_compliance_claims"
+      ]
+    },
+    "recommended_resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "resource_type": {
+          "$ref": "enums.schema.json#/$defs/resource_type"
+        },
+        "url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      },
+      "required": [
+        "title",
+        "resource_type",
+        "reason",
+        "priority"
+      ]
+    },
+    "recommended_campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "campaign_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "campaign_type": {
+          "$ref": "enums.schema.json#/$defs/campaign_type"
+        },
+        "audience": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "cta": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      },
+      "required": [
+        "campaign_name",
+        "campaign_type",
+        "audience",
+        "cta",
+        "priority"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "classification_id": "classification_01hv9x2j3k8m4n5p6q7r8s9t",
+      "partner_id": "partner_01hv9x2j3k8m4n5p6q7r8s9t",
+      "intake_source": "tally",
+      "partner_type": "cpa_bookkeeper",
+      "partner_tier": "tier_2",
+      "onboarding_path": "referral_only_partner",
+      "primary_audience": "service_businesses",
+      "secondary_audiences": [
+        "contractors",
+        "general_smb"
+      ],
+      "scorecard_summary": {
+        "overall_score": 82,
+        "audience_fit_score": 88,
+        "trust_score": 84,
+        "revenue_potential_score": 76,
+        "activation_speed_score": 80,
+        "compliance_risk_score": 18,
+        "strategic_value_score": 72,
+        "tier_recommendation": "tier_2",
+        "summary": "Strong referral fit with trusted client access and low operational complexity."
+      },
+      "risk_assessment": {
+        "risk_level": "low",
+        "risk_flags": [],
+        "manual_review_required": false,
+        "recommended_mitigation": "Send education-first referral resources and confirm preferred handoff process."
+      },
+      "manual_review_required": false,
+      "recommended_next_action": "send_welcome",
+      "recommended_resources": [
+        {
+          "title": "Referral Partner Starter Kit",
+          "resource_type": "playbook",
+          "reason": "Gives the partner a compliant referral path without promising approvals.",
+          "priority": 1
+        }
+      ],
+      "recommended_campaigns": [
+        {
+          "campaign_name": "Client Cash Flow Checkup",
+          "campaign_type": "referral",
+          "audience": "service_businesses",
+          "cta": "Start a funding readiness conversation",
+          "priority": 1
+        }
+      ],
+      "crm_fields": {
+        "partner_type": "cpa_bookkeeper",
+        "partner_tier": "tier_2",
+        "onboarding_path": "referral_only_partner",
+        "risk_level": "low",
+        "status": "approved",
+        "next_action": "send_welcome",
+        "lead_source": "tally",
+        "tags": [
+          "cpa_bookkeeper",
+          "tier_2",
+          "referral_ready"
+        ],
+        "notes": "Trusted referral source with service-business audience."
+      },
+      "dashboard_summary": {
+        "display_name": "Riley Stone",
+        "company": "Stone Ledger Co.",
+        "status": "approved",
+        "risk_level": "low",
+        "overall_score": 82,
+        "summary": "Referral-ready CPA/bookkeeper partner.",
+        "next_action": "send_welcome"
+      },
+      "confidence_score": 87,
+      "reasoning_summary": "The partner has relevant SMB access, a trusted advisor role, and no obvious prohibited claims. Best path is referral-only onboarding with a compliant resource pack.",
+      "created_at": "2026-07-06T19:45:00Z",
+      "model_or_engine_version": "partner-intake-os-ruleset-1.0.0",
+      "metadata": {
+        "batch": "schema_batch_02"
+      }
+    }
+  ]
+}

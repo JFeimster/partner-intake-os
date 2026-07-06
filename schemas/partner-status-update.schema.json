@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/partner-status-update.schema.json",
+  "title": "Partner Status Update",
+  "description": "A status transition record for a partner profile, suitable for CRM sync, dashboard timelines, and audit history.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status_update_id": {
+      "$ref": "./common.schema.json#/$defs/event_id"
+    },
+    "partner_id": {
+      "$ref": "./common.schema.json#/$defs/partner_id"
+    },
+    "previous_status": {
+      "$ref": "./enums.schema.json#/$defs/partner_status"
+    },
+    "new_status": {
+      "$ref": "./enums.schema.json#/$defs/partner_status"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "updated_by": {
+      "$ref": "./common.schema.json#/$defs/owner"
+    },
+    "created_at": {
+      "$ref": "./common.schema.json#/$defs/timestamp"
+    },
+    "notify_partner": {
+      "type": "boolean",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "./common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "status_update_id",
+    "partner_id",
+    "previous_status",
+    "new_status",
+    "reason",
+    "updated_by",
+    "created_at",
+    "notify_partner"
+  ],
+  "examples": [
+    {
+      "status_update_id": "evt_01jz9nbcve6q8h8sy1z8n7rx14",
+      "partner_id": "ptnr_01jz9n8pwr9v2w6r6m8x1k9x2b",
+      "previous_status": "manual_review",
+      "new_status": "approved",
+      "reason": "Admin approved as education-first referral partner after reviewing audience fit and risk level.",
+      "updated_by": {
+        "id": "user_jason",
+        "name": "Jason",
+        "type": "admin"
+      },
+      "created_at": "2026-07-06T19:47:00Z",
+      "notify_partner": true,
+      "metadata": {
+        "decision_id": "dec_01jz9nb2am22zra6wpkv9s1y4b"
+      }
+    }
+  ]
+}

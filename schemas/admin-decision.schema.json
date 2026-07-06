@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:partner-intake-os:schema:admin-decision:1.0.0",
+  "title": "Admin Partner Decision",
+  "description": "Admin decision record after classification and optional manual review. This object captures the decision, reason, next partner status, tasks, resources, and campaign assignment without implying approval for financing or business credit outcomes.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "description": "Stable admin decision identifier.",
+      "pattern": "^decision_[a-z0-9][a-z0-9_-]{5,63}$",
+      "examples": [
+        "decision_01hv9x2j3k8m4n5p6q7r8s9t"
+      ]
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "review_id": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/review_id"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Manual review that led to this decision, or null when no manual review was required."
+    },
+    "decision": {
+      "$ref": "enums.schema.json#/$defs/decision"
+    },
+    "decided_by": {
+      "$ref": "common.schema.json#/$defs/owner"
+    },
+    "decision_reason": {
+      "type": "string",
+      "description": "Concise operational rationale for the admin decision.",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "status_after_decision": {
+      "$ref": "enums.schema.json#/$defs/partner_status"
+    },
+    "next_action": {
+      "$ref": "enums.schema.json#/$defs/next_action"
+    },
+    "tasks_to_create": {
+      "type": "array",
+      "description": "Task stubs to create after the decision.",
+      "items": {
+        "$ref": "#/$defs/task_stub"
+      },
+      "default": []
+    },
+    "resources_to_send": {
+      "type": "array",
+      "description": "Resources to send after decision. Do not include claims of guaranteed approval or guaranteed funding.",
+      "items": {
+        "$ref": "#/$defs/resource_stub"
+      },
+      "default": []
+    },
+    "campaign_to_assign": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/campaign_assignment"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Optional campaign assignment after approval or conditional approval."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "decision_id",
+    "partner_id",
+    "decision",
+    "decided_by",
+    "decision_reason",
+    "status_after_decision",
+    "next_action",
+    "tasks_to_create",
+    "resources_to_send",
+    "campaign_to_assign",
+    "created_at"
+  ],
+  "$defs": {
+    "task_stub": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "owner": {
+          "$ref": "common.schema.json#/$defs/owner"
+        },
+        "due_date": {
+          "$ref": "common.schema.json#/$defs/date"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "urgent"
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "owner",
+        "priority"
+      ]
+    },
+    "resource_stub": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "resource_type": {
+          "$ref": "enums.schema.json#/$defs/resource_type"
+        },
+        "url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "title",
+        "resource_type",
+        "reason"
+      ]
+    },
+    "campaign_assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "campaign_id": {
+          "$ref": "common.schema.json#/$defs/campaign_id"
+        },
+        "campaign_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "campaign_type": {
+          "$ref": "enums.schema.json#/$defs/campaign_type"
+        },
+        "tracking_required": {
+          "type": "boolean"
+        },
+        "assignment_notes": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "campaign_name",
+        "campaign_type",
+        "tracking_required"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "decision_id": "decision_01hv9x2j3k8m4n5p6q7r8s9t",
+      "partner_id": "partner_01hv9x2j3k8m4n5p6q7r8s9t",
+      "review_id": "review_01hv9x2j3k8m4n5p6q7r8s9t",
+      "decision": "approve_with_conditions",
+      "decided_by": {
+        "owner_id": "user_jason",
+        "name": "Jason",
+        "email": "jason@example.com"
+      },
+      "decision_reason": "Partner has valuable audience access but must clean up copy and confirm consent process before campaign activation.",
+      "status_after_decision": "approved",
+      "next_action": "request_more_info",
+      "tasks_to_create": [
+        {
+          "title": "Confirm compliant partner copy",
+          "description": "Review partner landing page and remove any guaranteed approval wording.",
+          "owner": {
+            "owner_id": "user_jason",
+            "name": "Jason",
+            "email": "jason@example.com"
+          },
+          "due_date": "2026-07-09",
+          "priority": "high"
+        }
+      ],
+      "resources_to_send": [
+        {
+          "title": "Compliance-Safe Referral Language",
+          "resource_type": "guide",
+          "reason": "Helps partner explain funding readiness without fake certainty."
+        }
+      ],
+      "campaign_to_assign": {
+        "campaign_name": "Funding Readiness Checkup",
+        "campaign_type": "referral",
+        "tracking_required": true,
+        "assignment_notes": "Assign only after copy review is complete."
+      },
+      "created_at": "2026-07-06T19:48:00Z",
+      "metadata": {
+        "decision_source": "admin_review"
+      }
+    }
+  ]
+}

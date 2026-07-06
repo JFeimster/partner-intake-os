@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/lead-submission-response.schema.json",
+  "title": "Lead Submission Response",
+  "description": "API response returned after validating and accepting or rejecting a partner-submitted lead intake record.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "lead_id": {
+      "$ref": "common.schema.json#/$defs/lead_id"
+    },
+    "accepted": {
+      "type": "boolean",
+      "description": "Whether the lead submission passed validation and was accepted into the intake queue."
+    },
+    "status": {
+      "$ref": "enums.schema.json#/$defs/lead_status"
+    },
+    "next_action": {
+      "$ref": "enums.schema.json#/$defs/next_action"
+    },
+    "assigned_owner": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/owner"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "missing_fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "validation_warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300
+      },
+      "default": []
+    },
+    "partner_visible_message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Safe message that can be shown to the submitting partner."
+    },
+    "internal_message": {
+      "type": "string",
+      "maxLength": 1200,
+      "description": "Internal-only processing note for admin/API logs."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "request_id": {
+      "$ref": "common.schema.json#/$defs/request_id"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "lead_id",
+    "accepted",
+    "status",
+    "next_action",
+    "partner_visible_message",
+    "created_at",
+    "request_id"
+  ],
+  "examples": [
+    {
+      "lead_id": "lead_01HZ4Y9J0K7A8B9C2D3E4F5G6H",
+      "accepted": true,
+      "status": "new",
+      "next_action": "schedule_call",
+      "assigned_owner": {
+        "name": "Partner Ops",
+        "email": "ops@example.com"
+      },
+      "missing_fields": [],
+      "validation_warnings": [
+        "Funding amount is self-reported and should be verified during review."
+      ],
+      "partner_visible_message": "Lead received. The team will review the submitted information and follow up with the business if more details are needed.",
+      "internal_message": "Accepted into partner lead intake queue. No eligibility or approval determination made.",
+      "created_at": "2026-07-06T19:31:05Z",
+      "request_id": "req_01HZ4YA0N8M7L6K5J4H3G2F1E0",
+      "metadata": {
+        "processor": "lead_submit_v1"
+      }
+    }
+  ]
+}

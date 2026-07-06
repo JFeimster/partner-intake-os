@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/partner-activity.schema.json",
+  "title": "Partner Activity",
+  "description": "A partner timeline activity item summarizing human, GPT, API, CRM, or automation events.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "activity_id": {
+      "$ref": "./common.schema.json#/$defs/event_id"
+    },
+    "partner_id": {
+      "$ref": "./common.schema.json#/$defs/partner_id"
+    },
+    "activity_type": {
+      "$ref": "./enums.schema.json#/$defs/activity_type"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "source_system": {
+      "$ref": "./common.schema.json#/$defs/source_system"
+    },
+    "occurred_at": {
+      "$ref": "./common.schema.json#/$defs/timestamp"
+    },
+    "actor": {
+      "$ref": "./common.schema.json#/$defs/owner"
+    },
+    "related_objects": {
+      "type": "array",
+      "description": "Related IDs for reviews, notes, campaigns, leads, tasks, or sync records.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "enum": [
+              "partner",
+              "lead",
+              "campaign",
+              "review",
+              "task",
+              "note",
+              "tracking_link",
+              "attribution_event",
+              "sync_record",
+              "webhook_receipt",
+              "other"
+            ]
+          },
+          "object_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "object_type",
+          "object_id"
+        ]
+      },
+      "default": []
+    },
+    "metadata": {
+      "$ref": "./common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "activity_id",
+    "partner_id",
+    "activity_type",
+    "title",
+    "source_system",
+    "occurred_at",
+    "actor"
+  ],
+  "examples": [
+    {
+      "activity_id": "evt_01jz9nc5bwcfcg8nvq2nvntr55",
+      "partner_id": "ptnr_01jz9n8pwr9v2w6r6m8x1k9x2b",
+      "activity_type": "resource_recommended",
+      "title": "Resource pack recommended",
+      "description": "Recommended referral partner script, funding readiness checklist, and business cash flow gap checklist.",
+      "source_system": "partner_intake_os",
+      "occurred_at": "2026-07-06T19:48:00Z",
+      "actor": {
+        "id": "gpt_partner_intake_os",
+        "name": "Partner Intake OS",
+        "type": "system"
+      },
+      "related_objects": [
+        {
+          "object_type": "review",
+          "object_id": "rev_01jz9n92bp2qkhtc1m4w7r6s8q"
+        }
+      ],
+      "metadata": {
+        "resource_count": 3
+      }
+    }
+  ]
+}
