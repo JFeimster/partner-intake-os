@@ -1,0 +1,95 @@
+{
+  "description": "Fake Partner Intake OS sandbox sync events. Do not replace with real PII in GitHub.",
+  "events": [
+    {
+      "event_id": "sync_evt_tier1_strategic_001",
+      "event_type": "partner_classified",
+      "source": "test",
+      "dry_run": true,
+      "partner": {
+        "partner_id": "ptr_tier1_demo_001",
+        "display_name": "Morgan Hale",
+        "company": "Hale Contractor Advisory",
+        "email": "morgan@example.com",
+        "phone": "555-0100",
+        "partner_type": "strategic_partner",
+        "partner_tier": "tier_1",
+        "onboarding_path": "strategic_partner_review",
+        "primary_audience": "contractors and trades businesses",
+        "secondary_audiences": ["government contractors", "equipment-heavy SMBs"],
+        "risk_level": "low",
+        "status": "pending_review",
+        "source": "tally",
+        "tags": ["strategic", "contractors", "warm_network"],
+        "next_action": "Schedule operator review call",
+        "created_at": "2026-07-06T14:00:00.000Z"
+      },
+      "scorecard": {
+        "overall_score": 91,
+        "tier_recommendation": "tier_1",
+        "manual_review_required": false,
+        "reasoning_summary": "Strong trusted audience access and relevant deal flow. Needs operator review before activation."
+      },
+      "risk_flags": [],
+      "manual_review_required": false
+    },
+    {
+      "event_id": "sync_evt_broker_002",
+      "event_type": "partner_classified",
+      "source": "test",
+      "dry_run": true,
+      "partner": {
+        "partner_id": "ptr_broker_demo_002",
+        "display_name": "Jamie Carter",
+        "company": "Carter Funding Desk",
+        "email": "jamie@example.com",
+        "partner_type": "funding_broker",
+        "partner_tier": "tier_2",
+        "onboarding_path": "fast_track_revenue_partner",
+        "primary_audience": "small business owners seeking working capital",
+        "risk_level": "medium",
+        "status": "pending_review",
+        "source": "gpt_action",
+        "tags": ["broker", "deal_flow", "needs_compliance_ack"],
+        "next_action": "Send broker resource pack and request compliance acknowledgement"
+      },
+      "scorecard": {
+        "overall_score": 78,
+        "tier_recommendation": "tier_2",
+        "manual_review_required": false,
+        "reasoning_summary": "Good activation potential with compliance acknowledgement still needed."
+      },
+      "risk_flags": [],
+      "manual_review_required": false
+    },
+    {
+      "event_id": "sync_evt_high_risk_003",
+      "event_type": "partner_classified",
+      "source": "test",
+      "dry_run": true,
+      "partner": {
+        "partner_id": "ptr_risk_demo_003",
+        "display_name": "Lead Seller Demo",
+        "company": "Instant Approval Leads LLC",
+        "email": "seller@example.com",
+        "partner_type": "lead_seller",
+        "partner_tier": "reject",
+        "onboarding_path": "reject_manual_risk_review",
+        "primary_audience": "unknown",
+        "risk_level": "high",
+        "status": "needs_review",
+        "source": "tally",
+        "tags": ["high_risk", "restricted_language", "manual_review"],
+        "next_action": "Do not activate. Review language and lead sourcing claims."
+      },
+      "scorecard": {
+        "overall_score": 22,
+        "tier_recommendation": "reject",
+        "manual_review_required": true,
+        "reasoning_summary": "Uses risky lead seller positioning and implied approval claims."
+      },
+      "risk_flags": ["restricted_language", "unclear_consent", "lead_source_quality_unknown"],
+      "manual_review_required": true
+    }
+  ]
+}

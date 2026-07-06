@@ -1,154 +1,189 @@
-import { getEnv, getStorageMode } from "../env";
-import type {
-  PartnerEventRecord,
-  PartnerRecord,
-  StorageConnector,
-  StorageOperationResult
-} from "./storage-router";
+import type { PartnerProfile, PartnerSyncEvent, SyncConfig, SyncResult } from "./sync-types";
+import { buildSyncResult, hasReviewRisk, normalizePartnerId, safePartnerSummary } from "./sync-types";
 
-export type NotionConfig = {
-  api_key: string;
-  partner_database_id: string;
-  live_writes_enabled: boolean;
-};
+const NOTION_VERSION = "2022-06-28";
 
-function now(): string {
-  return new Date().toISOString();
+function text(value: unknown): string {
+  return String(value ?? "").trim();
 }
 
-function result<T>(input: Omit<StorageOperationResult<T>, "timestamp">): StorageOperationResult<T> {
+function titleProperty(value: string) {
   return {
-    ...input,
-    timestamp: now()
+    title: [
+      {
+        text: { content: value || "Unnamed Partner" }
+      }
+    ]
   };
 }
 
-export function getNotionConfig(): NotionConfig {
+function richTextProperty(value: unknown) {
+  const content = text(value).slice(0, 1900);
   return {
-    api_key: getEnv("NOTION_API_KEY"),
-    partner_database_id: getEnv("NOTION_PARTNER_DATABASE_ID"),
-    live_writes_enabled: getEnv("PARTNER_INTAKE_ENABLE_LIVE_STORAGE_WRITES", "false") === "true"
+    rich_text: content ? [{ text: { content } }] : []
   };
 }
 
-export function isNotionConfigured(): boolean {
-  const config = getNotionConfig();
-  return config.api_key.length > 0 && config.partner_database_id.length > 0;
+function selectProperty(value: unknown) {
+  const name = text(value);
+  return name ? { select: { name } } : { select: null };
 }
 
-export function mapPartnerToNotionProperties(record: PartnerRecord) {
+function multiSelectProperty(values?: string[]) {
   return {
-    Name: { title: [{ text: { content: record.display_name } }] },
-    "Partner ID": { rich_text: [{ text: { content: record.partner_id } }] },
-    Company: { rich_text: [{ text: { content: record.company || "" } }] },
-    Email: { email: record.email },
-    Phone: { phone_number: record.phone || null },
-    Website: { url: record.website || null },
-    "Partner Type": { select: { name: record.partner_type } },
-    "Partner Tier": { select: { name: record.partner_tier } },
-    "Onboarding Path": { select: { name: record.onboarding_path } },
-    "Risk Level": { select: { name: record.risk_level } },
-    Status: { select: { name: record.status } },
-    "Primary Audience": { rich_text: [{ text: { content: record.primary_audience } }] },
-    Tags: { multi_select: record.tags.map((tag) => ({ name: tag })) },
-    "Recommended Resources": { rich_text: [{ text: { content: record.recommended_resources.join(", ") } }] },
-    "Recommended Campaigns": { rich_text: [{ text: { content: record.recommended_campaigns.join(", ") } }] },
-    "Next Action": { rich_text: [{ text: { content: record.next_action } }] },
-    Notes: { rich_text: [{ text: { content: record.notes || "" } }] },
-    "Created At": { date: { start: record.created_at } },
-    "Updated At": { date: { start: record.updated_at } }
+    multi_select: (values || []).filter(Boolean).slice(0, 20).map((name) => ({ name: String(name).slice(0, 100) }))
   };
 }
 
-function notConfigured<T>(action: string): StorageOperationResult<T> {
-  return result({
-    ok: false,
-    mode: getStorageMode(),
-    provider: "notion",
-    action,
-    error: "notion_not_configured",
-    warnings: ["Set NOTION_API_KEY and NOTION_PARTNER_DATABASE_ID before using Notion storage."],
-    dry_run: true
-  });
+function emailProperty(value: unknown) {
+  const email = text(value);
+  return { email: email || null };
 }
 
-function dryRun<T>(action: string, data: T, recordId?: string): StorageOperationResult<T> {
-  return result({
-    ok: true,
-    mode: getStorageMode(),
-    provider: "notion",
-    action,
-    record_id: recordId,
-    data,
-    warnings: [
-      "Notion credentials are present, but live external writes are disabled for this scaffold.",
-      "Set PARTNER_INTAKE_ENABLE_LIVE_STORAGE_WRITES=true only after you replace this stub with tested Notion API calls."
-    ],
-    dry_run: true
-  });
+function phoneProperty(value: unknown) {
+  const phone = text(value);
+  return { phone_number: phone || null };
 }
 
-export const notionStorageConnector: StorageConnector = {
-  provider: "notion",
-  isConfigured: isNotionConfigured,
+function checkboxProperty(value: boolean) {
+  return { checkbox: Boolean(value) };
+}
 
-  async createPartnerRecord(record) {
-    if (!isNotionConfigured()) return notConfigured("create_partner_record");
+function dateProperty(value?: string) {
+  return value ? { date: { start: value } } : { date: null };
+}
 
-    return dryRun(
-      "create_partner_record",
-      {
-        database_id: getNotionConfig().partner_database_id,
-        properties: mapPartnerToNotionProperties(record)
-      } as unknown as PartnerRecord,
-      record.partner_id
-    );
-  },
+export function mapPartnerToNotionProperties(partner: PartnerProfile, event: PartnerSyncEvent): Record<string, unknown> {
+  const partnerId = normalizePartnerId(partner);
+  const displayName = partner.company || partner.display_name || partner.email || partnerId;
 
-  async updatePartnerRecord(partnerId, updates) {
-    if (!isNotionConfigured()) return notConfigured("update_partner_record");
+  return {
+    Partner: titleProperty(displayName),
+    "Partner ID": richTextProperty(partnerId),
+    Status: selectProperty(partner.status || "Pending Review"),
+    "Partner Type": selectProperty(partner.partner_type || "Needs Review"),
+    "Partner Tier": selectProperty(partner.partner_tier || "Unassigned"),
+    "Onboarding Path": selectProperty(partner.onboarding_path || "manual_review"),
+    "Contact Name": richTextProperty(partner.display_name || ""),
+    Email: emailProperty(partner.email),
+    Phone: phoneProperty(partner.phone),
+    Company: richTextProperty(partner.company || ""),
+    "Primary Audience": richTextProperty(partner.primary_audience || ""),
+    "Risk Level": selectProperty(partner.risk_level || "unknown"),
+    Source: selectProperty(partner.source || event.source || "api"),
+    Tags: multiSelectProperty(partner.tags),
+    "Manual Review": checkboxProperty(hasReviewRisk(event)),
+    "Next Action": richTextProperty(partner.next_action || "Review partner record"),
+    "Review Notes": richTextProperty(partner.reviewer_notes || event.scorecard?.reasoning_summary || ""),
+    "Created At": dateProperty(partner.created_at || event.created_at || new Date().toISOString()),
+    "Updated At": dateProperty(partner.updated_at || new Date().toISOString())
+  };
+}
 
-    return dryRun(
-      "update_partner_record",
-      {
-        partner_id: partnerId,
-        updates,
-        lookup_required: "Find Notion page by Partner ID before patching page properties."
-      } as unknown as PartnerRecord,
-      partnerId
-    );
-  },
+export async function syncPartnerToNotion(event: PartnerSyncEvent, config: SyncConfig): Promise<SyncResult> {
+  const partnerId = normalizePartnerId(event.partner);
+  const dryRun = event.dry_run ?? config.dryRun;
+  const needsReview = hasReviewRisk(event);
 
-  async logPartnerEvent(event) {
-    if (!isNotionConfigured()) return notConfigured("log_partner_event");
-
-    return dryRun(
-      "log_partner_event",
-      {
-        ...event,
-        notion_note: "For production, write events to a related Notion activity database or append to Partner Activity rollup."
-      },
-      event.event_id || event.partner_id
-    );
-  },
-
-  async healthCheck() {
-    const config = getNotionConfig();
-    return result({
-      ok: isNotionConfigured(),
-      mode: getStorageMode(),
-      provider: "notion",
-      action: "health_check",
-      data: {
-        configured: isNotionConfigured(),
-        notes: [
-          `NOTION_API_KEY: ${config.api_key ? "set" : "missing"}`,
-          `NOTION_PARTNER_DATABASE_ID: ${config.partner_database_id ? "set" : "missing"}`,
-          `PARTNER_INTAKE_ENABLE_LIVE_STORAGE_WRITES: ${config.live_writes_enabled ? "true" : "false"}`,
-          "Batch 06 Notion connector is a safe scaffold. Add tested Notion API calls before production writes."
-        ]
-      },
-      dry_run: true
+  if (needsReview) {
+    return buildSyncResult({
+      status: "needs_review",
+      target: "notion",
+      mode: config.mode,
+      dry_run: dryRun,
+      event_id: event.event_id,
+      partner_id: partnerId,
+      needs_review: true,
+      message: "Partner record requires manual review before sandbox sync.",
+      safe_log: safePartnerSummary(event.partner)
     });
   }
-};
+
+  if (!config.notionApiKey || !config.notionDatabaseId) {
+    return buildSyncResult({
+      status: "skipped",
+      target: "notion",
+      mode: config.mode,
+      dry_run: dryRun,
+      event_id: event.event_id,
+      partner_id: partnerId,
+      message: "Notion sandbox sync skipped because NOTION_API_KEY or NOTION_PARTNER_DATABASE_ID is missing.",
+      safe_log: safePartnerSummary(event.partner)
+    });
+  }
+
+  const properties = mapPartnerToNotionProperties(event.partner, event);
+
+  if (dryRun) {
+    return buildSyncResult({
+      status: "queued",
+      target: "notion",
+      mode: config.mode,
+      dry_run: true,
+      event_id: event.event_id,
+      partner_id: partnerId,
+      message: "Dry-run Notion sandbox sync queued. No Notion page was created.",
+      safe_log: {
+        ...safePartnerSummary(event.partner),
+        notion_database_id_present: true,
+        property_count: Object.keys(properties).length
+      }
+    });
+  }
+
+  try {
+    const response = await fetch("https://api.notion.com/v1/pages", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.notionApiKey}`,
+        "Content-Type": "application/json",
+        "Notion-Version": NOTION_VERSION
+      },
+      body: JSON.stringify({
+        parent: { database_id: config.notionDatabaseId },
+        properties
+      })
+    });
+
+    const responseJson = (await response.json().catch(() => ({}))) as { id?: string; url?: string; code?: string; message?: string };
+
+    if (!response.ok) {
+      return buildSyncResult({
+        status: "failed",
+        target: "notion",
+        mode: config.mode,
+        dry_run: false,
+        event_id: event.event_id,
+        partner_id: partnerId,
+        error_code: responseJson.code || `notion_http_${response.status}`,
+        message: "Notion sandbox sync failed. Check database permissions, property names, and env vars.",
+        safe_log: safePartnerSummary(event.partner)
+      });
+    }
+
+    return buildSyncResult({
+      status: "synced",
+      target: "notion",
+      mode: config.mode,
+      dry_run: false,
+      event_id: event.event_id,
+      partner_id: partnerId,
+      external_id: responseJson.id,
+      external_url: responseJson.url,
+      message: "Partner record synced to Notion sandbox review database.",
+      safe_log: safePartnerSummary(event.partner)
+    });
+  } catch (error) {
+    return buildSyncResult({
+      status: "failed",
+      target: "notion",
+      mode: config.mode,
+      dry_run: false,
+      event_id: event.event_id,
+      partner_id: partnerId,
+      error_code: "notion_request_failed",
+      message: error instanceof Error ? error.message : "Unknown Notion request failure.",
+      safe_log: safePartnerSummary(event.partner)
+    });
+  }
+}
