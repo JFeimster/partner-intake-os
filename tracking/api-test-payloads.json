@@ -1,0 +1,115 @@
+{
+  "create_link": {
+    "method": "POST",
+    "path": "/api/tracking/create-link",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "partner_id": "partner_broker_001",
+      "campaign_name": "Contractor Working Capital Readiness",
+      "audience": "contractors",
+      "offer": "Funding readiness review",
+      "destination_url": "https://distilledfunding.com/",
+      "source": "partner_broker_001",
+      "medium": "referral",
+      "content": "dashboard_button",
+      "term": "working_capital",
+      "metadata": {
+        "surface": "partner_dashboard",
+        "campaign_owner": "internal_ops"
+      }
+    }
+  },
+  "create_link_minimum_valid": {
+    "method": "POST",
+    "path": "/api/tracking/create-link",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "partner_id": "partner_affiliate_002",
+      "destination_url": "https://distilledfunding.com/"
+    }
+  },
+  "create_link_bad_destination": {
+    "method": "POST",
+    "path": "/api/tracking/create-link",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "partner_id": "partner_bad_url",
+      "destination_url": "not-a-url"
+    }
+  },
+  "create_link_sensitive_metadata": {
+    "method": "POST",
+    "path": "/api/tracking/create-link",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "partner_id": "partner_sensitive_test",
+      "destination_url": "https://distilledfunding.com/",
+      "metadata": {
+        "ssn": "do-not-submit",
+        "surface": "test"
+      }
+    }
+  },
+  "log_click_event": {
+    "method": "POST",
+    "path": "/api/tracking/log-event",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "tracking_id": "trk_partner_broker_001_camp_demo_referral_abc123",
+      "partner_id": "partner_broker_001",
+      "campaign_id": "camp_demo_contractors_001",
+      "event_type": "click",
+      "metadata": {
+        "page": "partner_dashboard",
+        "component": "campaign_cta"
+      }
+    }
+  },
+  "log_lead_started_event": {
+    "method": "POST",
+    "path": "/api/tracking/log-event",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "tracking_id": "trk_partner_broker_001_camp_demo_referral_abc123",
+      "partner_id": "partner_broker_001",
+      "campaign_id": "camp_demo_contractors_001",
+      "event_type": "lead_started",
+      "metadata": {
+        "source": "tracking_link",
+        "form": "lead_submission"
+      }
+    }
+  },
+  "get_tracking_record": {
+    "method": "GET",
+    "path": "/api/tracking/trk_partner_broker_001_camp_demo_referral_abc123",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN"
+    }
+  },
+  "get_partner_tracking_records": {
+    "method": "GET",
+    "path": "/api/tracking/partner/partner_broker_001",
+    "headers": {
+      "Authorization": "Bearer YOUR_TOKEN"
+    }
+  }
+}
