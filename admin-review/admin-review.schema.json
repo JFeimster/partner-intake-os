@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/schemas/admin-review.schema.json",
+  "title": "Partner Intake OS Admin Review Record",
+  "description": "A review-queue record for internal admin decisions on partner intakes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_id",
+    "partner_id",
+    "display_name",
+    "company",
+    "partner_type",
+    "partner_tier",
+    "onboarding_path",
+    "risk_level",
+    "score",
+    "risk_flags",
+    "manual_review_required",
+    "recommended_decision",
+    "next_action",
+    "assigned_owner",
+    "review_status",
+    "reviewer_notes",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "review_id": {
+      "type": "string",
+      "pattern": "^rev_[a-zA-Z0-9_\\-]+$",
+      "examples": [
+        "rev_2026_0001"
+      ]
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^prt_[a-zA-Z0-9_\\-]+$",
+      "examples": [
+        "prt_broker_002"
+      ]
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "company": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "partner_type": {
+      "type": "string",
+      "enum": [
+        "funding_broker",
+        "iso",
+        "referral_partner",
+        "cpa_bookkeeper",
+        "small_business_attorney",
+        "business_broker",
+        "real_estate_investor_connector",
+        "contractor_trades_connector",
+        "franchise_consultant",
+        "veteran_community_connector",
+        "creator_affiliate",
+        "fintech_vendor_partner",
+        "strategic_fintech_partner",
+        "business_consultant",
+        "lead_seller",
+        "unknown",
+        "unqualified_general_consumer"
+      ]
+    },
+    "partner_tier": {
+      "type": "string",
+      "enum": [
+        "tier_1",
+        "tier_2",
+        "tier_3",
+        "tier_4",
+        "reject"
+      ]
+    },
+    "onboarding_path": {
+      "type": "string",
+      "enum": [
+        "fast_track_revenue_partner",
+        "standard_affiliate_partner",
+        "referral_only_partner",
+        "education_first_partner",
+        "strategic_partner_review",
+        "nurture_watchlist",
+        "reject_manual_risk_review"
+      ]
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "manual_review_required": {
+      "type": "boolean"
+    },
+    "recommended_decision": {
+      "type": "string",
+      "enum": [
+        "approve",
+        "approve_with_conditions",
+        "approve_with_strategic_review",
+        "reject",
+        "watchlist",
+        "request_more_info",
+        "escalate_to_admin"
+      ]
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "assigned_owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "needs_review",
+        "missing_info",
+        "approved",
+        "onboarding",
+        "active",
+        "watchlist",
+        "rejected",
+        "archived"
+      ]
+    },
+    "reviewer_notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "tally_partner_signup",
+        "manual_import",
+        "gpt_action",
+        "hubspot",
+        "notion",
+        "lead_submission",
+        "tracking_campaign",
+        "other"
+      ]
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "examples": [
+    {
+      "review_id": "rev_2026_0001",
+      "partner_id": "prt_strat_fintech_001",
+      "display_name": "Morgan Ellis",
+      "company": "LedgerBridge Labs",
+      "partner_type": "strategic_fintech_partner",
+      "partner_tier": "tier_1",
+      "onboarding_path": "strategic_partner_review",
+      "risk_level": "medium",
+      "score": 92,
+      "risk_flags": [
+        "requires_contract_review",
+        "technical_integration_needed"
+      ],
+      "manual_review_required": true,
+      "recommended_decision": "approve_with_strategic_review",
+      "next_action": "schedule_partnership_call",
+      "assigned_owner": "Jason/Admin",
+      "review_status": "needs_review",
+      "reviewer_notes": "Strong channel potential. Needs integration/security review before activation.",
+      "source": "tally_partner_signup",
+      "submitted_at": "2026-07-05T14:10:00-04:00",
+      "created_at": "2026-07-05T14:12:00-04:00",
+      "updated_at": "2026-07-05T14:12:00-04:00"
+    }
+  ]
+}
