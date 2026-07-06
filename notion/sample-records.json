@@ -1,0 +1,213 @@
+{
+  "records": [
+    {
+      "partner_id": "ptr_20260706_broker_001",
+      "display_name": "Marcus Reed",
+      "name": "Marcus Reed",
+      "email": "marcus.reed@example.com",
+      "phone": "202-555-0142",
+      "company": "Reed Funding Group",
+      "website": "https://reedfunding.example.com",
+      "partner_type": "funding_broker",
+      "partner_tier": "tier_2",
+      "onboarding_path": "fast_track_revenue_partner",
+      "primary_audience": "contractors",
+      "secondary_audiences": [
+        "general_smb",
+        "real_estate_investors"
+      ],
+      "risk_level": "low",
+      "status": "approved",
+      "source": "tally",
+      "submitted_at": "2026-07-06T13:12:00Z",
+      "score": 84,
+      "manual_review_required": false,
+      "risk_flags": [],
+      "recommended_resources": [
+        "Broker Follow-Up Machine",
+        "Funding Product Matrix",
+        "Missing Docs Workflow"
+      ],
+      "recommended_campaign": "Contractor Cash Flow Referral Sprint",
+      "next_action": "send_welcome",
+      "owner": "Jason Feimster",
+      "notes": "Broker reports consistent contractor referrals and wants a compliant follow-up/resource workflow.",
+      "last_synced_at": "2026-07-06T13:18:00Z"
+    },
+    {
+      "partner_id": "ptr_20260706_cpa_002",
+      "display_name": "Dana Patel",
+      "name": "Dana Patel",
+      "email": "dana.patel@example.com",
+      "phone": "301-555-0188",
+      "company": "Patel Books & Advisory",
+      "website": "https://patelbooks.example.com",
+      "partner_type": "cpa_bookkeeper",
+      "partner_tier": "tier_2",
+      "onboarding_path": "referral_only_partner",
+      "primary_audience": "general_smb",
+      "secondary_audiences": [
+        "ecommerce",
+        "contractors"
+      ],
+      "risk_level": "low",
+      "status": "new",
+      "source": "tally",
+      "submitted_at": "2026-07-06T14:02:00Z",
+      "score": 78,
+      "manual_review_required": false,
+      "risk_flags": [],
+      "recommended_resources": [
+        "Client Funding Readiness Checklist",
+        "Referral Partner Script",
+        "Funding Product Matrix"
+      ],
+      "recommended_campaign": "Quarter-End Cash Flow Readiness Check",
+      "next_action": "send_resources",
+      "owner": "",
+      "notes": "Bookkeeper works with SMBs that often need working capital education before applying.",
+      "last_synced_at": "2026-07-06T14:07:00Z"
+    },
+    {
+      "partner_id": "ptr_20260706_attorney_003",
+      "display_name": "Elena Morris",
+      "name": "Elena Morris",
+      "email": "elena.morris@example.com",
+      "phone": "703-555-0161",
+      "company": "Morris Small Business Law",
+      "website": "https://morrislaw.example.com",
+      "partner_type": "small_business_attorney",
+      "partner_tier": "tier_2",
+      "onboarding_path": "education_first_partner",
+      "primary_audience": "general_smb",
+      "secondary_audiences": [
+        "franchise_buyers",
+        "business_buyers"
+      ],
+      "risk_level": "low",
+      "status": "needs_review",
+      "source": "manual",
+      "submitted_at": "2026-07-06T15:20:00Z",
+      "score": 74,
+      "manual_review_required": true,
+      "risk_flags": [
+        "manual_review_required"
+      ],
+      "recommended_resources": [
+        "Funding Product Matrix",
+        "SBA-Style Readiness Overview",
+        "Business Acquisition Funding Checklist"
+      ],
+      "recommended_campaign": "Client Expansion Readiness Referral Path",
+      "next_action": "schedule_partner_call",
+      "owner": "Jason Feimster",
+      "notes": "Attorney may be valuable COI; clarify referral volume and preferred boundaries before activation.",
+      "last_synced_at": "2026-07-06T15:25:00Z"
+    },
+    {
+      "partner_id": "ptr_20260706_vet_004",
+      "display_name": "Robert King",
+      "name": "Robert King",
+      "email": "robert.king@example.org",
+      "phone": "571-555-0133",
+      "company": "Veteran Founder Circle",
+      "website": "https://veteranfoundercircle.example.org",
+      "partner_type": "veteran_community_connector",
+      "partner_tier": "tier_1",
+      "onboarding_path": "strategic_partner_review",
+      "primary_audience": "veterans",
+      "secondary_audiences": [
+        "startup_founders",
+        "franchise_buyers"
+      ],
+      "risk_level": "medium",
+      "status": "needs_review",
+      "source": "referral",
+      "submitted_at": "2026-07-06T16:00:00Z",
+      "score": 91,
+      "manual_review_required": true,
+      "risk_flags": [
+        "manual_review_required"
+      ],
+      "recommended_resources": [
+        "Partner Command Center",
+        "Funding Pathfinder",
+        "Client Funding Readiness Checklist"
+      ],
+      "recommended_campaign": "Veteran Founder Capital Readiness Workshop",
+      "next_action": "schedule_partner_call",
+      "owner": "Jason Feimster",
+      "notes": "Strong strategic partner candidate. Needs human review for partnership terms and messaging guardrails.",
+      "last_synced_at": "2026-07-06T16:05:00Z"
+    },
+    {
+      "partner_id": "ptr_20260706_creator_005",
+      "display_name": "Nia Torres",
+      "name": "Nia Torres",
+      "email": "nia.torres@example.com",
+      "phone": "646-555-0190",
+      "company": "Hustle Ledger Media",
+      "website": "https://hustleledger.example.com",
+      "partner_type": "creator_affiliate",
+      "partner_tier": "tier_3",
+      "onboarding_path": "standard_affiliate_partner",
+      "primary_audience": "gig_workers",
+      "secondary_audiences": [
+        "ecommerce",
+        "side_hustlers"
+      ],
+      "risk_level": "medium",
+      "status": "missing_info",
+      "source": "tally",
+      "submitted_at": "2026-07-06T16:45:00Z",
+      "score": 63,
+      "manual_review_required": true,
+      "risk_flags": [
+        "unclear_audience",
+        "unverified_traffic_claims"
+      ],
+      "recommended_resources": [
+        "Affiliate Campaign Kit",
+        "Tracking Link Builder",
+        "Funding Readiness FAQ"
+      ],
+      "recommended_campaign": "No-Hype Funding Readiness Content Series",
+      "next_action": "request_more_info",
+      "owner": "",
+      "notes": "Creator has audience claim but needs traffic proof, compliance-safe copy review, and clearer business-owner audience fit.",
+      "last_synced_at": "2026-07-06T16:50:00Z"
+    },
+    {
+      "partner_id": "ptr_20260706_risk_006",
+      "display_name": "Blake Stone",
+      "name": "Blake Stone",
+      "email": "blake.stone@example.net",
+      "phone": "212-555-0109",
+      "company": "Instant Leads Network",
+      "website": "https://instantleads.example.net",
+      "partner_type": "unqualified_not_fit",
+      "partner_tier": "reject",
+      "onboarding_path": "reject_manual_risk_review",
+      "primary_audience": "general_smb",
+      "secondary_audiences": [],
+      "risk_level": "high",
+      "status": "needs_review",
+      "source": "tally",
+      "submitted_at": "2026-07-06T17:10:00Z",
+      "score": 22,
+      "manual_review_required": true,
+      "risk_flags": [
+        "lead_quality_unclear",
+        "guarantee_claims",
+        "credit_repair_language",
+        "manual_review_required"
+      ],
+      "recommended_resources": [],
+      "recommended_campaign": "",
+      "next_action": "reject",
+      "owner": "Jason Feimster",
+      "notes": "Claims instant approvals and sells aged lead lists. Do not activate without legal/compliance review; likely reject.",
+      "last_synced_at": "2026-07-06T17:15:00Z"
+    }
+  ]
+}

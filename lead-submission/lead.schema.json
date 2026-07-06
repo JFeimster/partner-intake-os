@@ -1,0 +1,453 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/lead-submission/lead.schema.json",
+  "title": "Partner Lead Submission",
+  "description": "Schema for a business funding lead submitted by an approved partner into Partner Intake OS.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "lead_id",
+    "partner_id",
+    "referral_source",
+    "business_name",
+    "owner_first_name",
+    "owner_last_name",
+    "owner_email",
+    "owner_phone",
+    "industry",
+    "location",
+    "time_in_business",
+    "monthly_revenue_range",
+    "requested_amount_range",
+    "funding_purpose",
+    "urgency",
+    "consent_confirmed",
+    "submitted_at",
+    "status",
+    "risk_flags"
+  ],
+  "properties": {
+    "lead_id": {
+      "type": "string",
+      "pattern": "^lead_[a-z0-9_\\-]{8,64}$",
+      "description": "System-generated lead ID."
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[a-z0-9_\\-]{4,64}$",
+      "description": "Approved partner ID."
+    },
+    "tracking_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^trk_[a-z0-9_\\-]{4,64}$",
+      "description": "Optional tracking link ID."
+    },
+    "campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^cmp_[a-z0-9_\\-]{4,64}$"
+    },
+    "referral_source": {
+      "type": "string",
+      "enum": [
+        "partner_dashboard",
+        "tracking_link",
+        "affiliate",
+        "broker",
+        "coi",
+        "event",
+        "direct_referral",
+        "manual_entry",
+        "other"
+      ]
+    },
+    "business_name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 160
+    },
+    "owner_first_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "owner_last_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "owner_email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 160
+    },
+    "owner_phone": {
+      "type": "string",
+      "minLength": 7,
+      "maxLength": 40
+    },
+    "website": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "maxLength": 240
+    },
+    "industry": {
+      "type": "string",
+      "enum": [
+        "construction",
+        "trucking_transportation",
+        "ecommerce",
+        "restaurant_food_service",
+        "professional_services",
+        "healthcare",
+        "real_estate",
+        "retail",
+        "manufacturing",
+        "franchise",
+        "government_contracting",
+        "home_services",
+        "other",
+        "unknown"
+      ]
+    },
+    "location": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "time_in_business": {
+      "type": "string",
+      "enum": [
+        "pre_revenue",
+        "less_than_6_months",
+        "6_to_12_months",
+        "1_to_2_years",
+        "2_to_5_years",
+        "5_plus_years",
+        "unknown"
+      ]
+    },
+    "monthly_revenue_range": {
+      "type": "string",
+      "enum": [
+        "pre_revenue",
+        "under_5k",
+        "5k_to_10k",
+        "10k_to_25k",
+        "25k_to_50k",
+        "50k_to_100k",
+        "100k_to_250k",
+        "250k_plus",
+        "unknown"
+      ]
+    },
+    "requested_amount_range": {
+      "type": "string",
+      "enum": [
+        "under_10k",
+        "10k_to_25k",
+        "25k_to_50k",
+        "50k_to_100k",
+        "100k_to_250k",
+        "250k_to_500k",
+        "500k_plus",
+        "unknown"
+      ]
+    },
+    "funding_purpose": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "working_capital",
+          "equipment",
+          "inventory",
+          "payroll",
+          "marketing",
+          "expansion",
+          "acquisition",
+          "franchise",
+          "real_estate",
+          "refinance_existing_debt",
+          "emergency_cash_flow",
+          "other"
+        ]
+      }
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "immediate",
+        "unknown"
+      ]
+    },
+    "desired_timeline": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "this_week",
+        "1_to_2_weeks",
+        "this_month",
+        "30_to_90_days",
+        "researching",
+        "unknown",
+        null
+      ]
+    },
+    "entity_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "llc",
+        "corporation",
+        "partnership",
+        "sole_proprietor",
+        "nonprofit",
+        "unknown",
+        "other",
+        null
+      ]
+    },
+    "employee_count_range": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "solo",
+        "2_to_5",
+        "6_to_20",
+        "21_to_50",
+        "51_plus",
+        "unknown",
+        null
+      ]
+    },
+    "has_existing_financing": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "yes",
+        "no",
+        "unknown",
+        null
+      ]
+    },
+    "revenue_trend": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "increasing",
+        "stable",
+        "seasonal",
+        "declining",
+        "unknown",
+        null
+      ]
+    },
+    "business_bank_account_active": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "yes",
+        "no",
+        "unknown",
+        null
+      ]
+    },
+    "bookkeeping_current": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "yes",
+        "partial",
+        "no",
+        "unknown",
+        null
+      ]
+    },
+    "personal_credit_band": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "720_plus",
+        "680_to_719",
+        "640_to_679",
+        "600_to_639",
+        "under_600",
+        "unknown",
+        "prefer_not_to_say",
+        null
+      ]
+    },
+    "recent_nsf_or_overdrafts": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "yes",
+        "no",
+        "unknown",
+        null
+      ]
+    },
+    "known_liens_or_judgments": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "yes",
+        "no",
+        "unknown",
+        null
+      ]
+    },
+    "consent_confirmed": {
+      "type": "boolean",
+      "const": true
+    },
+    "acknowledgment_confirmed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Confirms the submitter understands this is intake for review, not an approval."
+    },
+    "consent_notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000
+    },
+    "partner_relationship_notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1200
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 2500
+    },
+    "missing_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "needs_review",
+        "missing_info",
+        "qualified_for_review",
+        "routed",
+        "duplicate",
+        "rejected",
+        "archived"
+      ]
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "missing_consent",
+          "missing_contact_info",
+          "incomplete_business_profile",
+          "pre_revenue",
+          "very_new_business",
+          "high_urgency_low_info",
+          "possible_duplicate",
+          "restricted_or_unclear_industry",
+          "partner_quality_concern",
+          "unverified_claims",
+          "sensitive_docs_submitted",
+          "none"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "examples": [
+    {
+      "lead_id": "lead_20260706_001",
+      "partner_id": "ptr_broker_1042",
+      "tracking_id": "trk_broker_1042_wc",
+      "campaign_id": "cmp_working_capital_2026q3",
+      "referral_source": "tracking_link",
+      "business_name": "Harbor City HVAC LLC",
+      "owner_first_name": "Renee",
+      "owner_last_name": "Maddox",
+      "owner_email": "renee@example.com",
+      "owner_phone": "+1-555-010-4920",
+      "website": "https://example.com",
+      "industry": "home_services",
+      "location": "Baltimore, MD",
+      "time_in_business": "2_to_5_years",
+      "monthly_revenue_range": "50k_to_100k",
+      "requested_amount_range": "50k_to_100k",
+      "funding_purpose": [
+        "equipment",
+        "working_capital"
+      ],
+      "urgency": "medium",
+      "consent_confirmed": true,
+      "acknowledgment_confirmed": true,
+      "notes": "Owner wants to review possible equipment and working capital options.",
+      "missing_information": [],
+      "submitted_at": "2026-07-06T13:30:00Z",
+      "status": "submitted",
+      "risk_flags": [
+        "none"
+      ],
+      "metadata": {
+        "source_module": "submit-lead-demo"
+      }
+    }
+  ]
+}

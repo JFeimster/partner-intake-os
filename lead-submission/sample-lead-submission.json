@@ -1,0 +1,48 @@
+{
+  "lead_id": "lead_20260706_001",
+  "partner_id": "ptr_broker_1042",
+  "tracking_id": "trk_broker_1042_working_capital",
+  "campaign_id": "cmp_working_capital_2026q3",
+  "referral_source": "tracking_link",
+  "business_name": "Harbor City HVAC LLC",
+  "owner_first_name": "Renee",
+  "owner_last_name": "Maddox",
+  "owner_email": "renee.maddox@example.com",
+  "owner_phone": "+1-555-010-4920",
+  "website": "https://harborcityhvac.example.com",
+  "industry": "home_services",
+  "location": "Baltimore, MD",
+  "time_in_business": "2_to_5_years",
+  "monthly_revenue_range": "50k_to_100k",
+  "requested_amount_range": "50k_to_100k",
+  "funding_purpose": [
+    "equipment",
+    "working_capital"
+  ],
+  "urgency": "medium",
+  "desired_timeline": "this_month",
+  "entity_type": "llc",
+  "employee_count_range": "6_to_20",
+  "has_existing_financing": "yes",
+  "revenue_trend": "stable",
+  "business_bank_account_active": "yes",
+  "bookkeeping_current": "partial",
+  "personal_credit_band": "640_to_679",
+  "recent_nsf_or_overdrafts": "unknown",
+  "known_liens_or_judgments": "no",
+  "consent_confirmed": true,
+  "acknowledgment_confirmed": true,
+  "consent_notes": "Partner confirmed the owner requested a funding review and agreed to be contacted.",
+  "partner_relationship_notes": "Broker has worked with owner on insurance referrals and says the owner is responsive.",
+  "notes": "Looking at equipment replacement before a seasonal demand spike. Review for working capital and equipment-fit options. No approval or funding outcome promised.",
+  "missing_information": [],
+  "submitted_at": "2026-07-06T13:30:00Z",
+  "status": "submitted",
+  "risk_flags": [
+    "none"
+  ],
+  "metadata": {
+    "source_module": "partner_lead_submission_static_mvp",
+    "demo_record": true
+  }
+}

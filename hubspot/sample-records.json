@@ -1,0 +1,209 @@
+{
+  "records": [
+    {
+      "partner_id": "ptnr_20260706_broker_001",
+      "contact": {
+        "email": "marcus@riverbendfunding.example",
+        "firstname": "Marcus",
+        "lastname": "Hill",
+        "phone": "+1-202-555-0148",
+        "partner_type": "funding_broker",
+        "partner_tier": "tier_2",
+        "onboarding_path": "fast_track_revenue_partner",
+        "primary_audience": "general_smb",
+        "risk_level": "low",
+        "partner_status": "approved",
+        "partner_source": "tally",
+        "partner_score": 84,
+        "manual_review_required": false,
+        "risk_flags": "none",
+        "recommended_resources": "Funding Product Matrix; Broker onboarding checklist; Missing-docs workflow",
+        "recommended_campaign": "Broker missing-docs revival campaign",
+        "next_action": "Send onboarding packet and schedule activation call"
+      },
+      "company": {
+        "name": "Riverbend Funding Group",
+        "domain": "riverbendfunding.example",
+        "partner_company_type": "brokerage",
+        "primary_audience": "general_smb",
+        "partner_status": "approved"
+      },
+      "deal": {
+        "dealname": "Partner Intake \u2014 Riverbend Funding Group \u2014 funding_broker",
+        "pipeline": "Partner Intake Pipeline",
+        "stage": "Approved",
+        "partner_id": "ptnr_20260706_broker_001",
+        "partner_type": "funding_broker",
+        "partner_tier": "tier_2",
+        "risk_level": "low",
+        "next_action": "Send onboarding packet and schedule activation call"
+      }
+    },
+    {
+      "partner_id": "ptnr_20260706_cpa_002",
+      "contact": {
+        "email": "ana@ledgerlineadvisors.example",
+        "firstname": "Ana",
+        "lastname": "Morales",
+        "partner_type": "cpa_bookkeeper",
+        "partner_tier": "tier_2",
+        "onboarding_path": "referral_only_partner",
+        "primary_audience": "professional_services",
+        "risk_level": "low",
+        "partner_status": "needs_review",
+        "partner_source": "tally",
+        "partner_score": 76,
+        "manual_review_required": true,
+        "risk_flags": "needs referral process details",
+        "recommended_resources": "Client funding readiness checklist; Referral partner script",
+        "recommended_campaign": "Cash-flow gap referral campaign",
+        "next_action": "Review fit and request referral process details"
+      },
+      "company": {
+        "name": "LedgerLine Advisors",
+        "domain": "ledgerlineadvisors.example",
+        "partner_company_type": "accounting_firm",
+        "primary_audience": "professional_services",
+        "partner_status": "needs_review"
+      },
+      "deal": {
+        "dealname": "Partner Intake \u2014 LedgerLine Advisors \u2014 cpa_bookkeeper",
+        "pipeline": "Partner Intake Pipeline",
+        "stage": "Needs Review",
+        "partner_id": "ptnr_20260706_cpa_002"
+      }
+    },
+    {
+      "partner_id": "ptnr_20260706_attorney_003",
+      "contact": {
+        "email": "danielle@founderslegal.example",
+        "firstname": "Danielle",
+        "lastname": "Reed",
+        "partner_type": "business_attorney",
+        "partner_tier": "tier_2",
+        "onboarding_path": "education_first_partner",
+        "primary_audience": "acquisition_entrepreneurs",
+        "risk_level": "low",
+        "partner_status": "missing_info",
+        "partner_source": "manual",
+        "partner_score": 72,
+        "manual_review_required": true,
+        "risk_flags": "missing volume estimate",
+        "recommended_resources": "Acquisition funding readiness notes; Referral intake checklist",
+        "recommended_campaign": "Buyer readiness education campaign",
+        "next_action": "Request audience and referral volume details"
+      },
+      "company": {
+        "name": "Founders Legal Desk",
+        "domain": "founderslegal.example",
+        "partner_company_type": "law_firm",
+        "primary_audience": "acquisition_entrepreneurs"
+      },
+      "deal": {
+        "dealname": "Partner Intake \u2014 Founders Legal Desk \u2014 business_attorney",
+        "pipeline": "Partner Intake Pipeline",
+        "stage": "Missing Info",
+        "partner_id": "ptnr_20260706_attorney_003"
+      }
+    },
+    {
+      "partner_id": "ptnr_20260706_bizbroker_004",
+      "contact": {
+        "email": "owen@mainstreettransitions.example",
+        "firstname": "Owen",
+        "lastname": "Grant",
+        "partner_type": "business_broker",
+        "partner_tier": "tier_1",
+        "onboarding_path": "strategic_partner_review",
+        "primary_audience": "acquisition_entrepreneurs",
+        "risk_level": "medium",
+        "partner_status": "needs_review",
+        "partner_source": "referral",
+        "partner_score": 90,
+        "manual_review_required": true,
+        "risk_flags": "strategic partner; verify deal flow and referral process",
+        "recommended_resources": "Acquisition readiness checklist; Partner call agenda",
+        "recommended_campaign": "Acquisition buyer funding readiness campaign",
+        "next_action": "Jason/admin review and schedule strategic partner call"
+      },
+      "company": {
+        "name": "Main Street Transitions",
+        "domain": "mainstreettransitions.example",
+        "partner_company_type": "business_brokerage",
+        "primary_audience": "acquisition_entrepreneurs"
+      },
+      "deal": {
+        "dealname": "Partner Intake \u2014 Main Street Transitions \u2014 business_broker",
+        "pipeline": "Partner Intake Pipeline",
+        "stage": "Needs Review",
+        "partner_id": "ptnr_20260706_bizbroker_004"
+      }
+    },
+    {
+      "partner_id": "ptnr_20260706_veteran_005",
+      "contact": {
+        "email": "keisha@valorvetsnetwork.example",
+        "firstname": "Keisha",
+        "lastname": "Barnes",
+        "partner_type": "veteran_community_connector",
+        "partner_tier": "tier_1",
+        "onboarding_path": "strategic_partner_review",
+        "primary_audience": "veterans",
+        "risk_level": "low",
+        "partner_status": "needs_review",
+        "partner_source": "event",
+        "partner_score": 92,
+        "manual_review_required": true,
+        "risk_flags": "strategic community partner; confirm program fit",
+        "recommended_resources": "Veteran founder funding readiness guide; Referral partner script",
+        "recommended_campaign": "Veteran founder readiness workshop",
+        "next_action": "Schedule strategic partner review call"
+      },
+      "company": {
+        "name": "Valor Veterans Network",
+        "domain": "valorvetsnetwork.example",
+        "partner_company_type": "community_org",
+        "primary_audience": "veterans"
+      },
+      "deal": {
+        "dealname": "Partner Intake \u2014 Valor Veterans Network \u2014 veteran_community_connector",
+        "pipeline": "Partner Intake Pipeline",
+        "stage": "Needs Review",
+        "partner_id": "ptnr_20260706_veteran_005"
+      }
+    },
+    {
+      "partner_id": "ptnr_20260706_creator_006",
+      "contact": {
+        "email": "nina@hustleledger.example",
+        "firstname": "Nina",
+        "lastname": "Cho",
+        "partner_type": "creator_affiliate",
+        "partner_tier": "tier_3",
+        "onboarding_path": "standard_affiliate_partner",
+        "primary_audience": "ecommerce",
+        "risk_level": "low",
+        "partner_status": "approved",
+        "partner_source": "tally",
+        "partner_score": 68,
+        "manual_review_required": false,
+        "risk_flags": "none",
+        "recommended_resources": "Affiliate starter kit; Ecommerce cash-flow content prompts",
+        "recommended_campaign": "Ecommerce cash-flow readiness content kit",
+        "next_action": "Send affiliate onboarding and tracking link setup"
+      },
+      "company": {
+        "name": "Hustle Ledger",
+        "domain": "hustleledger.example",
+        "partner_company_type": "media_brand",
+        "primary_audience": "ecommerce"
+      },
+      "deal": {
+        "dealname": "Partner Intake \u2014 Hustle Ledger \u2014 creator_affiliate",
+        "pipeline": "Partner Intake Pipeline",
+        "stage": "Approved",
+        "partner_id": "ptnr_20260706_creator_006"
+      }
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Partner Intake OS HubSpot API Mapping",
+  "description": "Maps Partner Intake OS fields to HubSpot contact, company, deal, task, and activity note payload concepts.",
+  "version": "1.0.0",
+  "objects": {
+    "contact": {
+      "upsert_key": "email",
+      "fallback_keys": [
+        "partner_id",
+        "phone"
+      ],
+      "field_map": {
+        "partner_id": "partner_id",
+        "first_name": "firstname",
+        "last_name": "lastname",
+        "email": "email",
+        "phone": "phone",
+        "display_name": "display_name",
+        "partner_type": "partner_type",
+        "partner_tier": "partner_tier",
+        "onboarding_path": "onboarding_path",
+        "primary_audience": "primary_audience",
+        "risk_level": "risk_level",
+        "status": "partner_status",
+        "source": "partner_source",
+        "score": "partner_score",
+        "manual_review_required": "manual_review_required",
+        "risk_flags": "risk_flags",
+        "recommended_resources": "recommended_resources",
+        "recommended_campaign": "recommended_campaign",
+        "next_action": "next_action",
+        "last_synced_at": "last_partner_intake_sync"
+      },
+      "required_for_create": [
+        "email",
+        "partner_type",
+        "partner_status"
+      ],
+      "notes": "Email is the primary dedupe key. Partner ID should be applied after normalized record creation."
+    },
+    "company": {
+      "upsert_key": "domain",
+      "fallback_keys": [
+        "name"
+      ],
+      "field_map": {
+        "company": "name",
+        "website_domain": "domain",
+        "partner_id": "partner_id",
+        "partner_company_type": "partner_company_type",
+        "primary_audience": "primary_audience",
+        "status": "partner_status",
+        "source": "partner_source",
+        "last_synced_at": "last_partner_intake_sync"
+      },
+      "required_for_create": [
+        "name"
+      ],
+      "notes": "Create company when a valid organization, firm, brand, or domain exists. Do not create companies for obvious junk records."
+    },
+    "deal": {
+      "pipeline_name": "Partner Intake Pipeline",
+      "upsert_key": "partner_id",
+      "stage_map": {
+        "new": "New Intake",
+        "needs_review": "Needs Review",
+        "missing_info": "Missing Info",
+        "approved": "Approved",
+        "onboarding": "Onboarding",
+        "active": "Active Partner",
+        "watchlist": "Watchlist",
+        "rejected": "Rejected",
+        "archived": "Archived"
+      },
+      "field_map": {
+        "deal_name": "dealname",
+        "partner_id": "partner_id",
+        "partner_type": "partner_type",
+        "partner_tier": "partner_tier",
+        "onboarding_path": "onboarding_path",
+        "primary_audience": "primary_audience",
+        "risk_level": "risk_level",
+        "status": "partner_status",
+        "score": "partner_score",
+        "manual_review_required": "manual_review_required",
+        "risk_flags": "risk_flags",
+        "recommended_resources": "recommended_resources",
+        "recommended_campaign": "recommended_campaign",
+        "next_action": "next_action",
+        "last_synced_at": "last_partner_intake_sync"
+      },
+      "required_for_create": [
+        "dealname",
+        "partner_id",
+        "partner_type",
+        "partner_status"
+      ],
+      "notes": "One active Partner Pipeline deal per Partner ID."
+    },
+    "task": {
+      "task_type_rules": [
+        {
+          "condition": "manual_review_required == true",
+          "task_type": "Admin Review",
+          "priority": "high",
+          "due": "same_day"
+        },
+        {
+          "condition": "partner_tier == 'tier_1'",
+          "task_type": "Tier 1 Follow-Up",
+          "priority": "high",
+          "due": "same_day"
+        },
+        {
+          "condition": "status == 'missing_info'",
+          "task_type": "Missing Info Follow-Up",
+          "priority": "medium",
+          "due": "next_business_day"
+        },
+        {
+          "condition": "risk_level == 'high'",
+          "task_type": "Risk Review",
+          "priority": "high",
+          "due": "same_day"
+        },
+        {
+          "condition": "status == 'approved'",
+          "task_type": "Onboarding Kickoff",
+          "priority": "medium",
+          "due": "same_day"
+        }
+      ],
+      "subject_format": "Partner Intake OS \u2014 {{task_type}} \u2014 {{display_name_or_company}}",
+      "body_fields": [
+        "partner_id",
+        "partner_type",
+        "partner_tier",
+        "score",
+        "risk_level",
+        "risk_flags",
+        "recommended_decision",
+        "next_action",
+        "source"
+      ]
+    },
+    "note": {
+      "activity_title": "Partner Intake OS Review",
+      "body_template_fields": [
+        "partner_id",
+        "source",
+        "submitted_at",
+        "classification",
+        "tier",
+        "score",
+        "risk_level",
+        "manual_review_required",
+        "summary",
+        "risk_flags",
+        "recommended_onboarding_path",
+        "recommended_resources",
+        "recommended_campaign",
+        "next_action"
+      ]
+    }
+  },
+  "enum_map": {
+    "partner_type": [
+      "funding_broker",
+      "iso",
+      "referral_partner",
+      "cpa_bookkeeper",
+      "business_attorney",
+      "business_broker",
+      "veteran_community_connector",
+      "creator_affiliate",
+      "fintech_vendor_partner",
+      "strategic_partner",
+      "unqualified_not_fit"
+    ],
+    "partner_tier": [
+      "tier_1",
+      "tier_2",
+      "tier_3",
+      "tier_4",
+      "reject"
+    ],
+    "risk_level": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "partner_status": [
+      "new",
+      "needs_review",
+      "missing_info",
+      "approved",
+      "onboarding",
+      "active",
+      "watchlist",
+      "rejected",
+      "archived"
+    ]
+  },
+  "sync_order": [
+    "upsert_contact",
+    "upsert_company_when_valid",
+    "associate_contact_company",
+    "upsert_deal",
+    "associate_deal_contact_company",
+    "create_task_when_needed",
+    "create_activity_note"
+  ],
+  "do_not_store": [
+    "api_keys",
+    "private_keys",
+    "webhook_signing_secret",
+    "raw_secret_headers",
+    "unnecessary_sensitive_payloads",
+    "guaranteed_approval_claims"
+  ]
+}

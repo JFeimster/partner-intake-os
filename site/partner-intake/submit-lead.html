@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Submit Lead | Partner Intake OS</title>
+  <meta name="description" content="Static demo lead submission module for Partner Intake OS inside Partner Command Center.">
+  <link rel="stylesheet" href="./submit-lead.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <nav class="topbar" aria-label="Module navigation">
+        <a class="brand" href="./index.html" aria-label="Partner Intake OS home">
+          <span class="brand-mark">MS</span>
+          <span>
+            <strong>Partner Command Center</strong>
+            <small>Partner Intake OS</small>
+          </span>
+        </a>
+        <div class="status-pill">Static MVP · Demo Mode</div>
+      </nav>
+
+      <section class="hero-grid">
+        <div>
+          <p class="eyebrow">Partner Lead Submission</p>
+          <h1>Submit a business funding lead without turning ops into soup.</h1>
+          <p class="hero-copy">
+            This static module collects partner attribution, business profile, funding need,
+            readiness context, consent, and notes for admin review. No approval, funding amount,
+            rate, term, or timeline is guaranteed.
+          </p>
+          <div class="hero-actions">
+            <a href="#lead-form" class="button primary">Start Demo Submission</a>
+            <button class="button ghost" id="loadSampleBtn" type="button">Load Sample Lead</button>
+          </div>
+        </div>
+        <aside class="notice-card">
+          <h2>Compliance guardrail</h2>
+          <p>
+            Use this for intake and review only. Do not submit sensitive documents here.
+            Do not promise approval or funding certainty to applicants.
+          </p>
+          <ul>
+            <li>Consent required</li>
+            <li>Partner attribution preserved</li>
+            <li>Manual review for risk flags</li>
+          </ul>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section class="grid-panels" aria-label="Module summary">
+        <article class="metric-card">
+          <span>Routing</span>
+          <strong>Notion / HubSpot ready</strong>
+          <p>Designed for staging, CRM sync, and admin review.</p>
+        </article>
+        <article class="metric-card">
+          <span>Auth</span>
+          <strong>Future partner session</strong>
+          <p>Static now; authenticated dashboard later.</p>
+        </article>
+        <article class="metric-card">
+          <span>Status</span>
+          <strong id="formStatus">Waiting for input</strong>
+          <p>Demo validation runs in the browser.</p>
+        </article>
+      </section>
+
+      <form id="lead-form" class="lead-form" novalidate>
+        <div class="form-header">
+          <div>
+            <p class="eyebrow">Demo Form</p>
+            <h2>Lead Details</h2>
+          </div>
+          <p class="form-note">Fields marked <span aria-hidden="true">*</span> are required for demo validation.</p>
+        </div>
+
+        <fieldset>
+          <legend>Partner Attribution</legend>
+          <div class="form-grid">
+            <label>Partner ID *
+              <input name="partner_id" required placeholder="ptr_broker_1042">
+            </label>
+            <label>Tracking ID
+              <input name="tracking_id" placeholder="trk_broker_1042_working_capital">
+            </label>
+            <label>Campaign ID
+              <input name="campaign_id" placeholder="cmp_working_capital_2026q3">
+            </label>
+            <label>Referral Source *
+              <select name="referral_source" required>
+                <option value="">Select source</option>
+                <option value="partner_dashboard">Partner dashboard</option>
+                <option value="tracking_link">Tracking link</option>
+                <option value="affiliate">Affiliate</option>
+                <option value="broker">Broker</option>
+                <option value="coi">Center of influence</option>
+                <option value="event">Event</option>
+                <option value="direct_referral">Direct referral</option>
+                <option value="manual_entry">Manual entry</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Business Owner Contact</legend>
+          <div class="form-grid">
+            <label>Business Name *
+              <input name="business_name" required placeholder="Harbor City HVAC LLC">
+            </label>
+            <label>Owner First Name *
+              <input name="owner_first_name" required placeholder="Renee">
+            </label>
+            <label>Owner Last Name *
+              <input name="owner_last_name" required placeholder="Maddox">
+            </label>
+            <label>Owner Email *
+              <input name="owner_email" type="email" required placeholder="owner@example.com">
+            </label>
+            <label>Owner Phone *
+              <input name="owner_phone" required placeholder="+1-555-010-4920">
+            </label>
+            <label>Website
+              <input name="website" type="url" placeholder="https://example.com">
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Business Profile</legend>
+          <div class="form-grid">
+            <label>Industry *
+              <select name="industry" required>
+                <option value="">Select industry</option>
+                <option value="construction">Construction</option>
+                <option value="trucking_transportation">Trucking / Transportation</option>
+                <option value="ecommerce">Ecommerce</option>
+                <option value="restaurant_food_service">Restaurant / Food Service</option>
+                <option value="professional_services">Professional Services</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="real_estate">Real Estate</option>
+                <option value="retail">Retail</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="franchise">Franchise</option>
+                <option value="government_contracting">Government Contracting</option>
+                <option value="home_services">Home Services</option>
+                <option value="other">Other</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Location *
+              <input name="location" required placeholder="Baltimore, MD">
+            </label>
+            <label>Time in Business *
+              <select name="time_in_business" required>
+                <option value="">Select range</option>
+                <option value="pre_revenue">Pre-revenue</option>
+                <option value="less_than_6_months">Less than 6 months</option>
+                <option value="6_to_12_months">6 to 12 months</option>
+                <option value="1_to_2_years">1 to 2 years</option>
+                <option value="2_to_5_years">2 to 5 years</option>
+                <option value="5_plus_years">5+ years</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Entity Type
+              <select name="entity_type">
+                <option value="">Optional</option>
+                <option value="llc">LLC</option>
+                <option value="corporation">Corporation</option>
+                <option value="partnership">Partnership</option>
+                <option value="sole_proprietor">Sole proprietor</option>
+                <option value="nonprofit">Nonprofit</option>
+                <option value="unknown">Unknown</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Funding Need</legend>
+          <div class="form-grid">
+            <label>Monthly Revenue Range *
+              <select name="monthly_revenue_range" required>
+                <option value="">Select range</option>
+                <option value="pre_revenue">Pre-revenue</option>
+                <option value="under_5k">Under $5k</option>
+                <option value="5k_to_10k">$5k to $10k</option>
+                <option value="10k_to_25k">$10k to $25k</option>
+                <option value="25k_to_50k">$25k to $50k</option>
+                <option value="50k_to_100k">$50k to $100k</option>
+                <option value="100k_to_250k">$100k to $250k</option>
+                <option value="250k_plus">$250k+</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Requested Amount Range *
+              <select name="requested_amount_range" required>
+                <option value="">Select range</option>
+                <option value="under_10k">Under $10k</option>
+                <option value="10k_to_25k">$10k to $25k</option>
+                <option value="25k_to_50k">$25k to $50k</option>
+                <option value="50k_to_100k">$50k to $100k</option>
+                <option value="100k_to_250k">$100k to $250k</option>
+                <option value="250k_to_500k">$250k to $500k</option>
+                <option value="500k_plus">$500k+</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Urgency *
+              <select name="urgency" required>
+                <option value="">Select urgency</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="immediate">Immediate</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Funding Purpose *
+              <select name="funding_purpose" required>
+                <option value="">Select main purpose</option>
+                <option value="working_capital">Working capital</option>
+                <option value="equipment">Equipment</option>
+                <option value="inventory">Inventory</option>
+                <option value="payroll">Payroll</option>
+                <option value="marketing">Marketing</option>
+                <option value="expansion">Expansion</option>
+                <option value="acquisition">Acquisition</option>
+                <option value="franchise">Franchise</option>
+                <option value="real_estate">Real estate</option>
+                <option value="refinance_existing_debt">Refinance existing debt</option>
+                <option value="emergency_cash_flow">Emergency cash flow</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Readiness Context</legend>
+          <div class="form-grid">
+            <label>Revenue Trend
+              <select name="revenue_trend">
+                <option value="">Optional</option>
+                <option value="increasing">Increasing</option>
+                <option value="stable">Stable</option>
+                <option value="seasonal">Seasonal</option>
+                <option value="declining">Declining</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Bookkeeping Current?
+              <select name="bookkeeping_current">
+                <option value="">Optional</option>
+                <option value="yes">Yes</option>
+                <option value="partial">Partial</option>
+                <option value="no">No</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Business Bank Account Active?
+              <select name="business_bank_account_active">
+                <option value="">Optional</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+            <label>Estimated Personal Credit Band
+              <select name="personal_credit_band">
+                <option value="">Optional</option>
+                <option value="720_plus">720+</option>
+                <option value="680_to_719">680 to 719</option>
+                <option value="640_to_679">640 to 679</option>
+                <option value="600_to_639">600 to 639</option>
+                <option value="under_600">Under 600</option>
+                <option value="unknown">Unknown</option>
+                <option value="prefer_not_to_say">Prefer not to say</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Consent and Notes</legend>
+          <label class="check-row">
+            <input type="checkbox" name="consent_confirmed" required>
+            <span>I confirm the business owner gave permission to submit this information for review and understands that submission does not guarantee approval, funding, terms, rates, or timing. *</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" name="acknowledgment_confirmed">
+            <span>I understand this demo form does not submit to a live API or CRM.</span>
+          </label>
+          <label>Partner Notes
+            <textarea name="notes" rows="5" placeholder="Add context, missing info, urgency, or review notes."></textarea>
+          </label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button class="button primary" type="submit">Generate Demo Lead JSON</button>
+          <button class="button ghost" type="reset">Reset</button>
+        </div>
+      </form>
+
+      <section class="output-panel" aria-live="polite">
+        <div class="output-header">
+          <div>
+            <p class="eyebrow">Dashboard/API Preview</p>
+            <h2>Generated Lead Payload</h2>
+          </div>
+          <button id="copyPayloadBtn" class="button ghost" type="button">Copy JSON</button>
+        </div>
+        <pre id="payloadOutput">Submit the form or load the sample lead.</pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Partner Intake OS · Lead Submission Static MVP · No real API submission in this batch.</p>
+    </footer>
+  </div>
+
+  <script src="./submit-lead.js"></script>
+</body>
+</html>

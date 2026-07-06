@@ -1,0 +1,195 @@
+{
+  "database": "Partner Intake OS \u2014 Partner Review Queue",
+  "object": "partner_review_record",
+  "dedupe_priority": [
+    "partner_id",
+    "email",
+    "company + website",
+    "manual_review"
+  ],
+  "fields": {
+    "partner_id": {
+      "notion_property": "Partner ID",
+      "notion_type": "rich_text",
+      "required": true
+    },
+    "display_name": {
+      "notion_property": "Name",
+      "notion_type": "title",
+      "required": true
+    },
+    "email": {
+      "notion_property": "Email",
+      "notion_type": "email",
+      "required": true
+    },
+    "phone": {
+      "notion_property": "Phone",
+      "notion_type": "phone_number",
+      "required": false
+    },
+    "company": {
+      "notion_property": "Company",
+      "notion_type": "rich_text",
+      "required": false
+    },
+    "website": {
+      "notion_property": "Website",
+      "notion_type": "url",
+      "required": false
+    },
+    "partner_type": {
+      "notion_property": "Partner Type",
+      "notion_type": "select",
+      "required": true
+    },
+    "partner_tier": {
+      "notion_property": "Partner Tier",
+      "notion_type": "select",
+      "required": true
+    },
+    "onboarding_path": {
+      "notion_property": "Onboarding Path",
+      "notion_type": "select",
+      "required": true
+    },
+    "primary_audience": {
+      "notion_property": "Primary Audience",
+      "notion_type": "select",
+      "required": false
+    },
+    "secondary_audiences": {
+      "notion_property": "Secondary Audiences",
+      "notion_type": "multi_select",
+      "required": false
+    },
+    "risk_level": {
+      "notion_property": "Risk Level",
+      "notion_type": "select",
+      "required": true
+    },
+    "status": {
+      "notion_property": "Status",
+      "notion_type": "select",
+      "required": true
+    },
+    "source": {
+      "notion_property": "Source",
+      "notion_type": "select",
+      "required": true
+    },
+    "submitted_at": {
+      "notion_property": "Submitted At",
+      "notion_type": "date",
+      "required": false
+    },
+    "score": {
+      "notion_property": "Score",
+      "notion_type": "number",
+      "required": true
+    },
+    "manual_review_required": {
+      "notion_property": "Manual Review Required",
+      "notion_type": "checkbox",
+      "required": true
+    },
+    "risk_flags": {
+      "notion_property": "Risk Flags",
+      "notion_type": "multi_select",
+      "required": false
+    },
+    "recommended_resources": {
+      "notion_property": "Recommended Resources",
+      "notion_type": "multi_select",
+      "required": false
+    },
+    "recommended_campaign": {
+      "notion_property": "Recommended Campaign",
+      "notion_type": "rich_text",
+      "required": false
+    },
+    "next_action": {
+      "notion_property": "Next Action",
+      "notion_type": "select",
+      "required": true
+    },
+    "owner": {
+      "notion_property": "Owner",
+      "notion_type": "people",
+      "required": false
+    },
+    "notes": {
+      "notion_property": "Notes",
+      "notion_type": "rich_text",
+      "required": false
+    },
+    "last_synced_at": {
+      "notion_property": "Last Synced At",
+      "notion_type": "date",
+      "required": false
+    }
+  },
+  "status_mapping": {
+    "new": "New intake, not reviewed",
+    "needs_review": "Human review required",
+    "missing_info": "Need partner follow-up before decision",
+    "approved": "Approved for onboarding",
+    "onboarding": "Currently onboarding",
+    "active": "Activated partner",
+    "watchlist": "Nurture or revisit later",
+    "rejected": "Not fit or risk rejected",
+    "archived": "Inactive historical record"
+  },
+  "write_rules": {
+    "create_when": "No existing partner_id or email match is found",
+    "update_when": "partner_id matches an existing record",
+    "manual_review_when": "email matches but partner_id differs, or company/website match is ambiguous",
+    "never_write": "API keys, raw private keys, webhook signing secrets, unneeded applicant PII"
+  },
+  "example_notion_payload_shape": {
+    "parent": {
+      "database_id": "${NOTION_PARTNER_DATABASE_ID}"
+    },
+    "properties": {
+      "Name": {
+        "title": [
+          {
+            "text": {
+              "content": "Marcus Reed"
+            }
+          }
+        ]
+      },
+      "Partner ID": {
+        "rich_text": [
+          {
+            "text": {
+              "content": "ptr_20260706_broker_001"
+            }
+          }
+        ]
+      },
+      "Email": {
+        "email": "marcus.reed@example.com"
+      },
+      "Partner Type": {
+        "select": {
+          "name": "funding_broker"
+        }
+      },
+      "Partner Tier": {
+        "select": {
+          "name": "tier_2"
+        }
+      },
+      "Status": {
+        "select": {
+          "name": "approved"
+        }
+      },
+      "Score": {
+        "number": 84
+      }
+    }
+  }
+}
