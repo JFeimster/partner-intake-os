@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Partner Intake OS Actions API",
-    "version": "0.8.0",
-    "description": "Canonical OpenAPI Action spec for Partner Intake OS. This spec exposes safe GPT-facing endpoints only and intentionally excludes the Tally webhook endpoint. Core endpoints map to the Partner Intake OS Vercel API scaffold. Expansion endpoints are marked planned until implemented.",
+    "title": "Partner Intake OS Actions API — Bundled GPT Import",
+    "version": "0.9.0",
+    "description": "Self-contained bundled OpenAPI 3.1.0 spec for importing into a Custom GPT Action. All reusable schemas are included inline under components.schemas. This file uses Bearer API key authentication and intentionally excludes the Tally webhook endpoint.",
     "contact": {
       "name": "Moonshine Capital / Partner Command Center"
     }
@@ -801,7 +801,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "Partner Intake OS Action Token",
-        "description": "Use Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN. Store the live token in Vercel as PARTNER_INTAKE_ACTION_TOKEN and configure the Custom GPT Action with API key authentication in Bearer mode."
+        "description": "Configure in the Custom GPT Action editor as API key authentication using Bearer token mode. Use the value stored in Vercel as PARTNER_INTAKE_ACTION_TOKEN."
       }
     },
     "schemas": {
@@ -2346,6 +2346,22 @@
       "Do not expose Tally webhook endpoints through GPT Actions.",
       "Do not store secrets in this file.",
       "Expansion endpoints must not be presented as live until the backend routes exist."
+    ]
+  },
+  "x-partner-intake-os-bundle": {
+    "recommended_import_file": "/actions/openapi.bundle.yaml",
+    "self_contained": true,
+    "external_refs_allowed": false,
+    "excluded_endpoints": [
+      "/api/tally/partner-intake-webhook"
+    ],
+    "auth_header": "Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN",
+    "replace_server_url_before_import": true,
+    "notes": [
+      "Use this bundle for Custom GPT Action import.",
+      "Replace https://YOUR_VERCEL_DOMAIN.vercel.app with your deployed Vercel API domain.",
+      "Configure Custom GPT authentication as API key using Bearer token mode.",
+      "Expansion endpoints marked planned should only be tested after backend implementation."
     ]
   }
 }

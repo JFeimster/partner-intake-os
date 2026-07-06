@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/integration-sync-result.schema.json",
+  "title": "Integration Sync Result",
+  "description": "Result record for syncing Partner Intake OS objects with external systems such as Notion, HubSpot, Google Sheets, Supabase, JSON storage, n8n, or Activepieces.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "integration_sync_id": {
+      "$ref": "common.schema.json#/$defs/integration_sync_id"
+    },
+    "system": {
+      "$ref": "enums.schema.json#/$defs/integration_system"
+    },
+    "object_type": {
+      "type": "string",
+      "description": "The local object type that was synced.",
+      "enum": [
+        "partner_profile",
+        "partner_intake",
+        "classification_result",
+        "manual_review",
+        "admin_decision",
+        "partner_task",
+        "lead_submission",
+        "tracking_link",
+        "attribution_event",
+        "campaign_kit",
+        "welcome_packet",
+        "crm_event",
+        "audit_log"
+      ]
+    },
+    "local_object_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160,
+      "description": "The local Partner Intake OS object identifier."
+    },
+    "remote_object_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "The external system's object identifier when available."
+    },
+    "sync_status": {
+      "$ref": "enums.schema.json#/$defs/sync_status"
+    },
+    "direction": {
+      "type": "string",
+      "description": "Direction of the sync operation.",
+      "enum": [
+        "push",
+        "pull",
+        "bidirectional",
+        "verify",
+        "repair"
+      ]
+    },
+    "started_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Completion timestamp. Null when the sync is pending or still running."
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Structured error details when the sync fails.",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "details": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "retry_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20,
+      "description": "How many retry attempts have been made."
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "integration_sync_id",
+    "system",
+    "object_type",
+    "local_object_id",
+    "sync_status",
+    "direction",
+    "started_at",
+    "retry_count"
+  ],
+  "examples": [
+    {
+      "integration_sync_id": "sync_01JABCD4HUBSPOT9KQ8F3N2P6R",
+      "system": "hubspot",
+      "object_type": "partner_profile",
+      "local_object_id": "ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V",
+      "remote_object_id": "1234567890",
+      "sync_status": "synced",
+      "direction": "push",
+      "started_at": "2026-07-06T14:20:00Z",
+      "completed_at": "2026-07-06T14:20:03Z",
+      "error": null,
+      "retry_count": 0,
+      "metadata": {
+        "pipeline": "partner_command_center",
+        "storage_mode": "hubspot"
+      }
+    }
+  ]
+}

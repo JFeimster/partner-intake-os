@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/admin-review-card.schema.json",
+  "title": "Admin Review Card",
+  "description": "Admin-facing review card for Partner Intake OS review queues. Summarizes partner classification, score, risk flags, manual review status, recommended decision, next action, and reviewer notes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_card_id",
+    "partner_id",
+    "display_name",
+    "company",
+    "summary",
+    "score",
+    "partner_type",
+    "partner_tier",
+    "risk_level",
+    "risk_flags",
+    "manual_review_required",
+    "recommended_decision",
+    "next_action",
+    "reviewer_notes",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "review_card_id": {
+      "type": "string",
+      "pattern": "^review_card_[a-z0-9_\\-]{6,64}$",
+      "description": "Unique dashboard review card identifier."
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "company": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 1200,
+      "description": "Plain-English admin summary of the partner profile and recommended handling."
+    },
+    "score": {
+      "$ref": "common.schema.json#/$defs/score_0_100"
+    },
+    "partner_type": {
+      "$ref": "enums.schema.json#/$defs/partner_type"
+    },
+    "partner_tier": {
+      "$ref": "enums.schema.json#/$defs/partner_tier"
+    },
+    "risk_level": {
+      "$ref": "enums.schema.json#/$defs/risk_level"
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "guaranteed_approval_claim",
+          "guaranteed_funding_amount_claim",
+          "credit_repair_claim",
+          "deceptive_urgency",
+          "lead_quality_unclear",
+          "unverified_volume_claim",
+          "possible_spam",
+          "missing_contact_info",
+          "general_consumer_not_partner",
+          "high_compliance_risk",
+          "incomplete_profile",
+          "no_clear_audience",
+          "no_clear_partner_role"
+        ]
+      },
+      "uniqueItems": true,
+      "description": "Risk flags visible to internal admin reviewers."
+    },
+    "manual_review_required": {
+      "type": "boolean",
+      "description": "Whether an admin needs to review before approval or activation."
+    },
+    "recommended_decision": {
+      "$ref": "enums.schema.json#/$defs/decision"
+    },
+    "next_action": {
+      "$ref": "enums.schema.json#/$defs/next_action"
+    },
+    "reviewer_notes": {
+      "type": "string",
+      "maxLength": 1500,
+      "description": "Internal reviewer notes. May be empty if not yet reviewed."
+    },
+    "follow_up_questions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 240
+      },
+      "description": "Questions the admin should ask before approving or rejecting."
+    },
+    "recommended_resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/review_resource"
+      },
+      "description": "Resources the admin may send if approved or conditionally approved."
+    },
+    "recommended_campaigns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/review_campaign"
+      },
+      "description": "Campaigns the admin may assign if approved or conditionally approved."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "review_resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "resource_type",
+        "priority"
+      ],
+      "properties": {
+        "resource_id": {
+          "type": "string",
+          "pattern": "^res_[a-z0-9_\\-]{6,64}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "resource_type": {
+          "$ref": "enums.schema.json#/$defs/resource_type"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        }
+      }
+    },
+    "review_campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "campaign_id",
+        "campaign_name",
+        "status"
+      ],
+      "properties": {
+        "campaign_id": {
+          "$ref": "common.schema.json#/$defs/campaign_id"
+        },
+        "campaign_name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "ready_for_review",
+            "approved",
+            "active",
+            "paused",
+            "retired",
+            "needs_revision"
+          ]
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "review_card_id": "review_card_partner_8f3k2m9q_001",
+      "partner_id": "partner_8f3k2m9q",
+      "display_name": "Alex Carter",
+      "company": "Carter Contractor Advisory",
+      "summary": "Referral partner serving residential contractors. Audience fit is strong and risk is low. Recommend approval with standard affiliate onboarding and a contractor readiness campaign.",
+      "score": 78,
+      "partner_type": "referral_partner",
+      "partner_tier": "tier_2",
+      "risk_level": "low",
+      "risk_flags": [],
+      "manual_review_required": false,
+      "recommended_decision": "approve",
+      "next_action": "send_welcome",
+      "reviewer_notes": "",
+      "follow_up_questions": [
+        "Confirm preferred referral channel.",
+        "Ask whether they want a co-branded readiness checklist."
+      ],
+      "recommended_resources": [
+        {
+          "resource_id": "res_funding_readiness_001",
+          "title": "Funding Readiness Checklist",
+          "resource_type": "checklist",
+          "priority": "high"
+        }
+      ],
+      "recommended_campaigns": [
+        {
+          "campaign_id": "camp_contractor_cashflow_001",
+          "campaign_name": "Contractor Cash Flow Readiness Sprint",
+          "status": "draft"
+        }
+      ],
+      "created_at": "2026-07-06T15:00:00Z",
+      "updated_at": "2026-07-06T15:00:00Z",
+      "metadata": {
+        "queue": "standard_review"
+      }
+    }
+  ]
+}

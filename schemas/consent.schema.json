@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/consent.schema.json",
+  "title": "Consent",
+  "description": "Consent record for partner intake, lead submission, communications, attribution, and data-processing acknowledgments. This schema records consent status; it does not create legal, lending, approval, or credit-repair claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "consent_id": {
+      "type": "string",
+      "pattern": "^consent_[A-Za-z0-9_-]{8,80}$",
+      "description": "Unique consent record identifier."
+    },
+    "subject_type": {
+      "type": "string",
+      "enum": [
+        "partner",
+        "lead",
+        "admin_user",
+        "contact",
+        "organization"
+      ],
+      "description": "Entity that gave or revoked consent."
+    },
+    "subject_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160,
+      "description": "Identifier of the consenting subject."
+    },
+    "consent_status": {
+      "$ref": "enums.schema.json#/$defs/consent_status"
+    },
+    "consent_type": {
+      "type": "string",
+      "enum": [
+        "partner_terms_acknowledgment",
+        "lead_submission_permission",
+        "communication_permission",
+        "data_processing_acknowledgment",
+        "tracking_attribution_acknowledgment",
+        "resource_delivery_permission"
+      ]
+    },
+    "consent_text": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 3000,
+      "description": "Exact consent or acknowledgment text shown to the subject."
+    },
+    "accepted_at": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Timestamp when consent was accepted, if applicable."
+    },
+    "revoked_at": {
+      "anyOf": [
+        {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Timestamp when consent was revoked, if applicable."
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "tally",
+        "dashboard",
+        "api",
+        "manual",
+        "gpt_action",
+        "notion",
+        "hubspot"
+      ],
+      "description": "Where the consent status originated."
+    },
+    "ip_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 16,
+      "maxLength": 128,
+      "description": "Optional privacy-conscious hash of IP address. Do not store raw IP by default."
+    },
+    "user_agent": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1000,
+      "description": "Optional browser or client user agent."
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "consent_id",
+    "subject_type",
+    "subject_id",
+    "consent_status",
+    "consent_type",
+    "consent_text",
+    "source"
+  ],
+  "examples": [
+    {
+      "consent_id": "consent_01JABCDEFLEAD9KQ8F3N2P6R",
+      "subject_type": "lead",
+      "subject_id": "lead_01JABCD8LEAD7KQ8F3N2P6R",
+      "consent_status": "accepted",
+      "consent_type": "lead_submission_permission",
+      "consent_text": "I confirm I have permission to submit this business contact for funding readiness review and follow-up. Submission does not guarantee approval, funding, or eligibility.",
+      "accepted_at": "2026-07-06T14:50:00Z",
+      "revoked_at": null,
+      "source": "dashboard",
+      "ip_hash": "sha256_6df97f31a8d342f2b9a4",
+      "user_agent": "Mozilla/5.0",
+      "metadata": {
+        "form": "partner_lead_submission"
+      }
+    }
+  ]
+}

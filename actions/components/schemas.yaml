@@ -1,0 +1,1223 @@
+components:
+  schemas:
+    PartnerIntake:
+      type: object
+      description: Normalized partner intake record from Tally, manual review, API, or dashboard entry.
+      additionalProperties: false
+      properties:
+        first_name:
+          type: string
+          maxLength: 80
+        last_name:
+          type: string
+          maxLength: 80
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          maxLength: 40
+        company:
+          type: string
+          maxLength: 160
+        website:
+          type: string
+          format: uri
+        partner_type_claimed:
+          type: string
+          description: Self-selected or claimed partner type before classification.
+        audience:
+          type: string
+          description: Plain-language description of who the partner reaches.
+        industry:
+          type: string
+          maxLength: 120
+        location:
+          type: string
+          maxLength: 160
+        funding_experience:
+          type: string
+          description: Partner's stated experience with business funding referrals, brokering, or advisory.
+        current_tools:
+          type: array
+          items:
+            type: string
+          maxItems: 25
+        traffic_or_network_size:
+          type: string
+          maxLength: 160
+        referral_volume_estimate:
+          type: string
+          maxLength: 160
+        desired_partner_role:
+          type: string
+          maxLength: 160
+        notes:
+          type: string
+          maxLength: 5000
+        source:
+          type: string
+          enum: [tally, manual, gpt_action, api, dashboard, hubspot, notion, google_sheets, n8n, activepieces, unknown]
+        submitted_at:
+          type: string
+          format: date-time
+      required:
+        - email
+        - source
+
+    PartnerProfile:
+      type: object
+      description: Normalized partner profile used by the API, CRM, and dashboard.
+      additionalProperties: false
+      properties:
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        display_name:
+          type: string
+          maxLength: 160
+        company:
+          type: string
+          maxLength: 160
+        email:
+          type: string
+          format: email
+        partner_type:
+          type: string
+          enum: [funding_broker, iso, referral_partner, cpa_bookkeeper, small_business_attorney, business_broker, real_estate_investor_connector, contractor_trades_connector, franchise_consultant, veteran_community_connector, creator_affiliate, fintech_vendor_partner, strategic_partner, unqualified_not_fit, unknown]
+        partner_tier:
+          type: string
+          enum: [tier_1, tier_2, tier_3, tier_4, reject, pending]
+        onboarding_path:
+          type: string
+          enum: [fast_track_revenue_partner, standard_affiliate_partner, referral_only_partner, education_first_partner, strategic_partner_review, nurture_watchlist, reject_manual_risk_review, pending]
+        primary_audience:
+          type: string
+          maxLength: 160
+        secondary_audiences:
+          type: array
+          items:
+            type: string
+          maxItems: 10
+        risk_level:
+          type: string
+          enum: [low, medium, high, critical, unknown]
+        status:
+          type: string
+          enum: [new, classified, manual_review, approved, approved_conditional, active, nurture, watchlist, rejected, paused, archived]
+        tags:
+          type: array
+          items:
+            type: string
+          maxItems: 50
+        recommended_resources:
+          type: array
+          items:
+            type: string
+        recommended_campaigns:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - partner_id
+        - display_name
+        - partner_type
+        - partner_tier
+        - onboarding_path
+        - risk_level
+        - status
+
+    Scorecard:
+      type: object
+      description: Partner scorecard summary used to support tiering and review.
+      additionalProperties: false
+      properties:
+        urgency_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        audience_fit_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        trust_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        revenue_potential_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        activation_speed_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        compliance_risk_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Higher score means higher compliance risk.
+        strategic_value_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        overall_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        tier_recommendation:
+          type: string
+          enum: [tier_1, tier_2, tier_3, tier_4, reject, pending]
+        reasoning_summary:
+          type: string
+          maxLength: 2000
+        manual_review_required:
+          type: boolean
+      required:
+        - overall_score
+        - tier_recommendation
+        - manual_review_required
+
+    ClassificationResult:
+      type: object
+      description: Full classification response returned by Partner Intake OS.
+      additionalProperties: false
+      properties:
+        classification_id:
+          type: string
+          pattern: "^cls_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        intake_source:
+          type: string
+          enum: [tally, manual, gpt_action, api, dashboard, hubspot, notion, google_sheets, unknown]
+        partner_type:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_type"
+        partner_tier:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_tier"
+        onboarding_path:
+          $ref: "#/components/schemas/PartnerProfile/properties/onboarding_path"
+        primary_audience:
+          type: string
+          maxLength: 160
+        secondary_audiences:
+          type: array
+          items:
+            type: string
+        scorecard_summary:
+          $ref: "#/components/schemas/Scorecard"
+        risk_assessment:
+          $ref: "#/components/schemas/RiskAssessment"
+        manual_review_required:
+          type: boolean
+        recommended_next_action:
+          type: string
+          enum: [send_welcome, schedule_call, request_more_info, send_resources, assign_campaign, create_tracking_link, submit_lead, manual_review, reject, nurture, no_action]
+        recommended_resources:
+          type: array
+          items:
+            type: string
+        recommended_campaigns:
+          type: array
+          items:
+            type: string
+        crm_fields:
+          type: object
+          additionalProperties: true
+        dashboard_summary:
+          $ref: "#/components/schemas/DashboardSummary"
+        confidence_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        reasoning_summary:
+          type: string
+          maxLength: 3000
+        created_at:
+          type: string
+          format: date-time
+        model_or_engine_version:
+          type: string
+          maxLength: 80
+      required:
+        - partner_type
+        - partner_tier
+        - onboarding_path
+        - risk_assessment
+        - manual_review_required
+        - recommended_next_action
+        - confidence_score
+
+    RiskAssessment:
+      type: object
+      description: Partner risk and compliance assessment.
+      additionalProperties: false
+      properties:
+        risk_assessment_id:
+          type: string
+          pattern: "^risk_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        risk_level:
+          type: string
+          enum: [low, medium, high, critical, unknown]
+        risk_flags:
+          type: array
+          items:
+            type: string
+            enum: [guaranteed_approval_claim, guaranteed_funding_amount_claim, credit_repair_claim, deceptive_urgency, lead_quality_unclear, unverified_volume_claim, possible_spam, missing_contact_info, general_consumer_not_partner, high_compliance_risk]
+        compliance_flags:
+          type: array
+          items:
+            type: string
+        incomplete_data_flags:
+          type: array
+          items:
+            type: string
+        suspicious_claims:
+          type: array
+          items:
+            type: string
+        prohibited_language_detected:
+          type: boolean
+        manual_review_required:
+          type: boolean
+        recommended_mitigation:
+          type: string
+          maxLength: 2000
+        reviewer_notes:
+          type: string
+          maxLength: 3000
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - risk_level
+        - risk_flags
+        - prohibited_language_detected
+        - manual_review_required
+
+    ManualReview:
+      type: object
+      description: Admin review queue record for partners requiring human review.
+      additionalProperties: false
+      properties:
+        review_id:
+          type: string
+          pattern: "^rev_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        classification_id:
+          type: string
+          pattern: "^cls_[A-Za-z0-9_-]{8,80}$"
+        review_status:
+          type: string
+          enum: [not_required, queued, in_review, waiting_on_partner, approved, rejected, resolved, archived]
+        review_reason:
+          type: string
+          maxLength: 1200
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        recommended_decision:
+          type: string
+          enum: [approve, approve_conditional, request_more_info, nurture_watchlist, reject, escalate]
+        assigned_to:
+          type: string
+          maxLength: 160
+        reviewer_notes:
+          type: string
+          maxLength: 3000
+        required_follow_up_questions:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - review_id
+        - partner_id
+        - review_status
+        - review_reason
+        - severity
+        - recommended_decision
+
+    AdminDecision:
+      type: object
+      description: Final or interim admin decision for a partner record.
+      additionalProperties: false
+      properties:
+        decision_id:
+          type: string
+          pattern: "^dec_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        review_id:
+          type: string
+          pattern: "^rev_[A-Za-z0-9_-]{8,80}$"
+        decision:
+          type: string
+          enum: [approve, approve_conditional, request_more_info, nurture_watchlist, reject, escalate]
+        decided_by:
+          type: string
+          maxLength: 160
+        decision_reason:
+          type: string
+          maxLength: 2000
+        status_after_decision:
+          type: string
+          enum: [new, classified, manual_review, approved, approved_conditional, active, nurture, watchlist, rejected, paused, archived]
+        next_action:
+          type: string
+          enum: [send_welcome, schedule_call, request_more_info, send_resources, assign_campaign, create_tracking_link, manual_review, reject, nurture, no_action]
+        tasks_to_create:
+          type: array
+          items:
+            $ref: "#/components/schemas/PartnerTask"
+        resources_to_send:
+          type: array
+          items:
+            type: string
+        campaign_to_assign:
+          oneOf:
+            - $ref: "#/components/schemas/CampaignKit"
+            - type: "null"
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - decision_id
+        - partner_id
+        - decision
+        - decided_by
+        - decision_reason
+        - status_after_decision
+        - next_action
+        - created_at
+
+    PartnerNote:
+      type: object
+      description: CRM-ready note tied to a partner profile.
+      additionalProperties: false
+      properties:
+        note_id:
+          type: string
+          pattern: "^note_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        note_type:
+          type: string
+          enum: [intake, classification, admin, call, email, risk, onboarding, campaign, integration]
+        title:
+          type: string
+          maxLength: 160
+        body:
+          type: string
+          maxLength: 8000
+        visibility:
+          type: string
+          enum: [internal, partner_visible, admin_only]
+        created_by:
+          type: string
+          maxLength: 160
+        created_at:
+          type: string
+          format: date-time
+        related_event_id:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - note_id
+        - partner_id
+        - note_type
+        - body
+        - visibility
+        - created_at
+
+    PartnerTask:
+      type: object
+      description: Partner operations task for admin, onboarding, review, or campaign activation.
+      additionalProperties: false
+      properties:
+        task_id:
+          type: string
+          pattern: "^task_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        title:
+          type: string
+          maxLength: 160
+        description:
+          type: string
+          maxLength: 2000
+        task_type:
+          type: string
+          enum: [review, follow_up, onboarding, resource_delivery, campaign_setup, tracking_link, crm_update, compliance_check]
+        status:
+          type: string
+          enum: [open, in_progress, blocked, waiting, completed, canceled, archived]
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+        due_date:
+          type: string
+          format: date
+        owner:
+          type: string
+          maxLength: 160
+        related_review_id:
+          type: string
+          nullable: true
+        related_campaign_id:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - task_id
+        - partner_id
+        - title
+        - task_type
+        - status
+        - priority
+        - created_at
+
+    LeadSubmission:
+      type: object
+      description: Intake-only record for a partner-submitted business funding lead. This does not imply approval, eligibility, or funding certainty.
+      additionalProperties: false
+      properties:
+        lead_id:
+          type: string
+          pattern: "^lead_[A-Za-z0-9_-]{8,80}$"
+        submitted_by_partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        tracking_link_id:
+          type: string
+          nullable: true
+        attribution_event_id:
+          type: string
+          nullable: true
+        business_name:
+          type: string
+          maxLength: 180
+        contact_name:
+          type: string
+          maxLength: 160
+        contact_email:
+          type: string
+          format: email
+        contact_phone:
+          type: string
+          maxLength: 40
+        industry:
+          type: string
+          maxLength: 120
+        monthly_revenue_range:
+          type: string
+          maxLength: 80
+        time_in_business_range:
+          type: string
+          maxLength: 80
+        funding_need:
+          type: string
+          maxLength: 120
+        funding_amount_requested:
+          type: number
+          minimum: 0
+        use_of_funds:
+          type: string
+          maxLength: 1000
+        urgency:
+          type: string
+          enum: [low, medium, high, immediate]
+        consent:
+          $ref: "#/components/schemas/Consent"
+        notes:
+          type: string
+          maxLength: 3000
+        source:
+          type: string
+          enum: [dashboard, api, gpt_action, manual, partner_link, tally]
+        submitted_at:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - submitted_by_partner_id
+        - business_name
+        - contact_name
+        - contact_email
+        - funding_need
+        - consent
+        - source
+        - submitted_at
+
+    LeadSubmissionResponse:
+      type: object
+      description: API response after validating a partner lead submission.
+      additionalProperties: false
+      properties:
+        lead_id:
+          type: string
+          pattern: "^lead_[A-Za-z0-9_-]{8,80}$"
+        accepted:
+          type: boolean
+        status:
+          type: string
+          enum: [received, needs_review, missing_information, accepted_for_review, rejected, duplicate, archived]
+        next_action:
+          type: string
+          enum: [request_more_info, assign_owner, send_confirmation, manual_review, no_action]
+        assigned_owner:
+          type: string
+          nullable: true
+        missing_fields:
+          type: array
+          items:
+            type: string
+        validation_warnings:
+          type: array
+          items:
+            type: string
+        partner_visible_message:
+          type: string
+          maxLength: 1000
+        internal_message:
+          type: string
+          maxLength: 2000
+        created_at:
+          type: string
+          format: date-time
+        request_id:
+          type: string
+          pattern: "^req_[A-Za-z0-9_-]{8,80}$"
+      required:
+        - accepted
+        - status
+        - next_action
+        - partner_visible_message
+        - created_at
+        - request_id
+
+    TrackingLink:
+      type: object
+      description: Partner/campaign tracking link with UTM metadata.
+      additionalProperties: false
+      properties:
+        tracking_link_id:
+          type: string
+          pattern: "^trk_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        campaign_id:
+          type: string
+          pattern: "^camp_[A-Za-z0-9_-]{8,80}$"
+        destination_url:
+          type: string
+          format: uri
+        tracking_url:
+          type: string
+          format: uri
+        slug:
+          type: string
+          maxLength: 100
+        utm_source:
+          type: string
+          maxLength: 120
+        utm_medium:
+          type: string
+          maxLength: 120
+        utm_campaign:
+          type: string
+          maxLength: 120
+        utm_content:
+          type: string
+          maxLength: 120
+        status:
+          type: string
+          enum: [draft, active, paused, expired, archived]
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - tracking_link_id
+        - partner_id
+        - destination_url
+        - tracking_url
+        - slug
+        - status
+        - created_at
+
+    AttributionEvent:
+      type: object
+      description: Privacy-conscious attribution event. Store hashed IP only when needed; do not store raw IP by default.
+      additionalProperties: false
+      properties:
+        attribution_event_id:
+          type: string
+          pattern: "^attr_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        tracking_link_id:
+          type: string
+          nullable: true
+        campaign_id:
+          type: string
+          nullable: true
+        event_type:
+          type: string
+          enum: [link_created, link_clicked, page_viewed, form_started, lead_submitted, lead_accepted, lead_rejected, campaign_assigned]
+        event_source:
+          type: string
+          enum: [api, dashboard, gpt_action, partner_link, website, webhook, automation]
+        landing_url:
+          type: string
+          format: uri
+          nullable: true
+        referrer:
+          type: string
+          nullable: true
+        user_agent:
+          type: string
+          nullable: true
+        ip_hash:
+          type: string
+          nullable: true
+        occurred_at:
+          type: string
+          format: date-time
+        lead_id:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - attribution_event_id
+        - event_type
+        - event_source
+        - occurred_at
+
+    CampaignKit:
+      type: object
+      description: Campaign kit assigned to a partner for compliant activation.
+      additionalProperties: false
+      properties:
+        campaign_id:
+          type: string
+          pattern: "^camp_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        campaign_name:
+          type: string
+          maxLength: 160
+        campaign_type:
+          type: string
+          enum: [referral, affiliate, broker_activation, coi_education, strategic_partner, nurture, event, content]
+        audience:
+          type: string
+          maxLength: 160
+        offer:
+          type: string
+          maxLength: 500
+        cta:
+          type: string
+          maxLength: 240
+        channels:
+          type: array
+          items:
+            type: string
+            enum: [email, sms, phone, linkedin, facebook, instagram, youtube, substack, podcast, webinar, in_person, partner_website, paid_ads, community, crm]
+        copy_angle:
+          type: string
+          maxLength: 1000
+        suggested_assets:
+          type: array
+          items:
+            type: string
+        tracking_link:
+          $ref: "#/components/schemas/TrackingLink"
+        launch_checklist:
+          type: array
+          items:
+            type: string
+        compliance_notes:
+          type: string
+          maxLength: 2000
+        status:
+          type: string
+          enum: [draft, ready, active, paused, completed, archived]
+        created_at:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - campaign_id
+        - campaign_name
+        - campaign_type
+        - audience
+        - cta
+        - status
+
+    WelcomePacket:
+      type: object
+      description: Partner onboarding packet with safe, practical next steps.
+      additionalProperties: false
+      properties:
+        packet_id:
+          type: string
+          pattern: "^pkt_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        partner_type:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_type"
+        onboarding_path:
+          $ref: "#/components/schemas/PartnerProfile/properties/onboarding_path"
+        welcome_message:
+          type: string
+          maxLength: 2000
+        first_steps:
+          type: array
+          items:
+            type: string
+        recommended_resources:
+          type: array
+          items:
+            type: string
+        campaign_kit:
+          $ref: "#/components/schemas/CampaignKit"
+        dashboard_access_notes:
+          type: string
+          maxLength: 1000
+        support_contact:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+        compliance_notes:
+          type: string
+          maxLength: 2000
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - packet_id
+        - partner_id
+        - partner_type
+        - onboarding_path
+        - welcome_message
+        - first_steps
+        - created_at
+
+    DashboardSummary:
+      type: object
+      description: Compact partner snapshot for admin and dashboard cards.
+      additionalProperties: false
+      properties:
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        display_name:
+          type: string
+        company:
+          type: string
+          nullable: true
+        partner_type:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_type"
+        partner_tier:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_tier"
+        onboarding_path:
+          $ref: "#/components/schemas/PartnerProfile/properties/onboarding_path"
+        status:
+          $ref: "#/components/schemas/PartnerProfile/properties/status"
+        risk_level:
+          $ref: "#/components/schemas/PartnerProfile/properties/risk_level"
+        overall_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        next_action:
+          type: string
+        recommended_resources:
+          type: array
+          items:
+            type: string
+        recommended_campaigns:
+          type: array
+          items:
+            type: string
+        open_tasks_count:
+          type: integer
+          minimum: 0
+        latest_activity:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - partner_id
+        - display_name
+        - partner_type
+        - partner_tier
+        - status
+        - risk_level
+        - next_action
+
+    AdminReviewCard:
+      type: object
+      description: Review queue card for internal admin decision-making.
+      additionalProperties: false
+      properties:
+        review_card_id:
+          type: string
+          pattern: "^card_[A-Za-z0-9_-]{8,80}$"
+        partner_id:
+          type: string
+          pattern: "^ptr_[A-Za-z0-9_-]{8,80}$"
+        display_name:
+          type: string
+        company:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          maxLength: 1500
+        score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        partner_type:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_type"
+        partner_tier:
+          $ref: "#/components/schemas/PartnerProfile/properties/partner_tier"
+        risk_level:
+          $ref: "#/components/schemas/PartnerProfile/properties/risk_level"
+        risk_flags:
+          type: array
+          items:
+            type: string
+        manual_review_required:
+          type: boolean
+        recommended_decision:
+          type: string
+          enum: [approve, approve_conditional, request_more_info, nurture_watchlist, reject, escalate]
+        next_action:
+          type: string
+        reviewer_notes:
+          type: string
+          maxLength: 3000
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - review_card_id
+        - partner_id
+        - summary
+        - score
+        - risk_level
+        - manual_review_required
+        - recommended_decision
+        - next_action
+
+    IntegrationSyncResult:
+      type: object
+      description: Result record for external system sync operations.
+      additionalProperties: false
+      properties:
+        integration_sync_id:
+          type: string
+          pattern: "^sync_[A-Za-z0-9_-]{8,80}$"
+        system:
+          type: string
+          enum: [notion, hubspot, google_sheets, supabase, json, mock, activepieces, n8n]
+        object_type:
+          type: string
+        local_object_id:
+          type: string
+        remote_object_id:
+          type: string
+          nullable: true
+        sync_status:
+          type: string
+          enum: [pending, synced, failed, skipped, retrying, partial, stale]
+        direction:
+          type: string
+          enum: [push, pull, bidirectional, verify, repair]
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        error:
+          oneOf:
+            - type: object
+              properties:
+                code:
+                  type: string
+                message:
+                  type: string
+              required: [code, message]
+            - type: "null"
+        retry_count:
+          type: integer
+          minimum: 0
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - integration_sync_id
+        - system
+        - object_type
+        - local_object_id
+        - sync_status
+        - direction
+        - started_at
+
+    WebhookReceipt:
+      type: object
+      description: Internal webhook processing receipt. Do not expose Tally webhook processing through GPT Actions.
+      additionalProperties: false
+      properties:
+        webhook_receipt_id:
+          type: string
+          pattern: "^wh_[A-Za-z0-9_-]{8,80}$"
+        source_system:
+          type: string
+          enum: [tally, hubspot, notion, google_sheets, activepieces, n8n, api, dashboard, unknown]
+        event_type:
+          type: string
+        received_at:
+          type: string
+          format: date-time
+        signature_verified:
+          type: boolean
+        status:
+          type: string
+          enum: [received, verified, rejected, processed, failed, ignored, retrying]
+        request_id:
+          type: string
+          pattern: "^req_[A-Za-z0-9_-]{8,80}$"
+        payload_summary:
+          type: object
+          additionalProperties: true
+        processing_result:
+          type: object
+          nullable: true
+          additionalProperties: true
+        error:
+          type: object
+          nullable: true
+          additionalProperties: true
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - webhook_receipt_id
+        - source_system
+        - event_type
+        - received_at
+        - signature_verified
+        - status
+        - request_id
+
+    AuditLog:
+      type: object
+      description: Audit record for sensitive changes and operational history.
+      additionalProperties: false
+      properties:
+        audit_log_id:
+          type: string
+          pattern: "^audit_[A-Za-z0-9_-]{8,80}$"
+        actor:
+          type: object
+          additionalProperties: false
+          properties:
+            actor_id:
+              type: string
+              nullable: true
+            actor_type:
+              type: string
+              enum: [admin, partner, system, gpt_action, api, automation, integration]
+            display_name:
+              type: string
+              nullable: true
+            email:
+              type: string
+              format: email
+              nullable: true
+          required: [actor_type]
+        action:
+          type: string
+        object_type:
+          type: string
+        object_id:
+          type: string
+        before:
+          type: object
+          nullable: true
+          additionalProperties: true
+        after:
+          type: object
+          nullable: true
+          additionalProperties: true
+        reason:
+          type: string
+          nullable: true
+        occurred_at:
+          type: string
+          format: date-time
+        request_id:
+          type: string
+          pattern: "^req_[A-Za-z0-9_-]{8,80}$"
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - audit_log_id
+        - actor
+        - action
+        - object_type
+        - object_id
+        - occurred_at
+        - request_id
+
+    Consent:
+      type: object
+      description: Consent or acknowledgment record for partner intake, lead submission, communications, tracking attribution, or data processing.
+      additionalProperties: false
+      properties:
+        consent_id:
+          type: string
+          pattern: "^consent_[A-Za-z0-9_-]{8,80}$"
+        subject_type:
+          type: string
+          enum: [partner, lead, admin_user, contact, organization]
+        subject_id:
+          type: string
+        consent_status:
+          type: string
+          enum: [accepted, declined, revoked, pending, not_applicable]
+        consent_type:
+          type: string
+          enum: [partner_terms_acknowledgment, lead_submission_permission, communication_permission, data_processing_acknowledgment, tracking_attribution_acknowledgment, resource_delivery_permission]
+        consent_text:
+          type: string
+        accepted_at:
+          type: string
+          format: date-time
+          nullable: true
+        revoked_at:
+          type: string
+          format: date-time
+          nullable: true
+        source:
+          type: string
+          enum: [tally, dashboard, api, manual, gpt_action, notion, hubspot]
+        ip_hash:
+          type: string
+          nullable: true
+        user_agent:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - consent_id
+        - subject_type
+        - subject_id
+        - consent_status
+        - consent_type
+        - consent_text
+        - source
+
+    ApiError:
+      type: object
+      description: Standard API error response.
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          oneOf:
+            - type: object
+              additionalProperties: true
+            - type: array
+              items: {}
+            - type: string
+            - type: "null"
+        request_id:
+          type: string
+          pattern: "^req_[A-Za-z0-9_-]{8,80}$"
+      required:
+        - error
+        - message
+        - code
+        - request_id

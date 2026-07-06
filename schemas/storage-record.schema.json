@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/storage-record.schema.json",
+  "title": "Storage Record",
+  "description": "Generic persistence wrapper for Partner Intake OS records stored in mock, JSON, Notion, HubSpot, Google Sheets, Supabase, n8n, or Activepieces-backed storage.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "storage_record_id": {
+      "type": "string",
+      "pattern": "^stor_[A-Za-z0-9_-]{8,80}$",
+      "description": "Unique storage wrapper identifier."
+    },
+    "object_type": {
+      "type": "string",
+      "enum": [
+        "partner_profile",
+        "partner_intake",
+        "classification_result",
+        "risk_assessment",
+        "manual_review",
+        "admin_decision",
+        "partner_note",
+        "partner_task",
+        "lead_submission",
+        "tracking_link",
+        "attribution_event",
+        "campaign_kit",
+        "welcome_packet",
+        "dashboard_summary",
+        "webhook_receipt",
+        "audit_log",
+        "consent"
+      ]
+    },
+    "object_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160,
+      "description": "Identifier of the object contained in record."
+    },
+    "storage_mode": {
+      "type": "string",
+      "description": "Configured storage mode used by the API layer.",
+      "enum": [
+        "mock",
+        "json",
+        "notion",
+        "hubspot",
+        "google_sheets",
+        "supabase",
+        "activepieces",
+        "n8n"
+      ]
+    },
+    "system": {
+      "$ref": "enums.schema.json#/$defs/integration_system"
+    },
+    "record": {
+      "type": "object",
+      "description": "The stored business object. Validate this separately against its specific schema.",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Incrementing record version for optimistic updates and audit support."
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "storage_record_id",
+    "object_type",
+    "object_id",
+    "storage_mode",
+    "system",
+    "record",
+    "created_at",
+    "updated_at",
+    "version"
+  ],
+  "examples": [
+    {
+      "storage_record_id": "stor_01JABCD7JSON9KQ8F3N2P6R",
+      "object_type": "partner_profile",
+      "object_id": "ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V",
+      "storage_mode": "json",
+      "system": "json",
+      "record": {
+        "partner_id": "ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V",
+        "display_name": "Riley Grant",
+        "company": "Grant Contractor Advisory"
+      },
+      "created_at": "2026-07-06T14:30:00Z",
+      "updated_at": "2026-07-06T14:30:00Z",
+      "version": 1,
+      "metadata": {
+        "source": "api"
+      }
+    }
+  ]
+}

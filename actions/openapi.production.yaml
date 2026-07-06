@@ -1,15 +1,14 @@
 openapi: 3.1.0
 info:
-  title: Partner Intake OS Actions API
-  version: 0.8.0
-  description: Canonical OpenAPI Action spec for Partner Intake OS. This spec exposes safe GPT-facing endpoints only and intentionally
-    excludes the Tally webhook endpoint. Core endpoints map to the Partner Intake OS Vercel API scaffold. Expansion endpoints
-    are marked planned until implemented.
+  title: Partner Intake OS Production Actions API
+  version: 1.0.0-production
+  description: Production OpenAPI variant for Partner Intake OS core GPT-facing endpoints. Includes only core routes expected
+    from the current API scaffold. Expansion/admin routes are intentionally excluded until implemented and tested.
   contact:
     name: Moonshine Capital / Partner Command Center
 servers:
-- url: https://YOUR_VERCEL_DOMAIN.vercel.app
-  description: Replace with the deployed Partner Intake OS Vercel domain.
+- url: https://YOUR_PRODUCTION_VERCEL_DOMAIN.vercel.app
+  description: Production Partner Intake OS Vercel API. Replace this placeholder before importing into a live Custom GPT.
 security:
 - bearerAuth: []
 tags:
@@ -32,7 +31,10 @@ paths:
       tags:
       - System
       summary: Check Partner Intake OS API health
-      description: Core endpoint. Returns system status for the Partner Intake OS API.
+      description: 'Core endpoint. Returns system status for the Partner Intake OS API.
+
+
+        Production variant. Use only after replacing placeholder server URL and verifying live routes.'
       security: []
       x-partner-intake-status: core
       responses:
@@ -48,14 +50,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: production
   /api/partners/classify:
     post:
       operationId: classifyPartnerIntake
       tags:
       - Partner Classification
       summary: Classify a partner intake
-      description: Core endpoint. Accepts normalized intake or manual intake details and returns classification, tier, risk
+      description: 'Core endpoint. Accepts normalized intake or manual intake details and returns classification, tier, risk
         level, scorecard, recommendations, and next action.
+
+
+        Production variant. Use only after replacing placeholder server URL and verifying live routes.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -95,13 +101,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: production
   /api/partners/recommend-resources:
     post:
       operationId: recommendPartnerResources
       tags:
       - Partner Activation
       summary: Recommend resources for a partner
-      description: Core endpoint. Returns resource recommendations based on partner type, audience, tier, and goals.
+      description: 'Core endpoint. Returns resource recommendations based on partner type, audience, tier, and goals.
+
+
+        Production variant. Use only after replacing placeholder server URL and verifying live routes.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -134,14 +144,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: production
   /api/partners/generate-onboarding-plan:
     post:
       operationId: generatePartnerOnboardingPlan
       tags:
       - Partner Activation
       summary: Generate a partner onboarding plan
-      description: Core endpoint. Returns first 24 hours, first 7 days, first 30 days, required assets, training, and next
+      description: 'Core endpoint. Returns first 24 hours, first 7 days, first 30 days, required assets, training, and next
         action.
+
+
+        Production variant. Use only after replacing placeholder server URL and verifying live routes.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -174,14 +188,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: production
   /api/partners/generate-campaign-kit:
     post:
       operationId: generatePartnerCampaignKit
       tags:
       - Partner Activation
       summary: Generate a partner campaign kit
-      description: Core endpoint. Returns campaign concept, CTA, suggested channels, tracking notes, copy angle, and compliance
+      description: 'Core endpoint. Returns campaign concept, CTA, suggested channels, tracking notes, copy angle, and compliance
         notes.
+
+
+        Production variant. Use only after replacing placeholder server URL and verifying live routes.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -214,13 +232,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: production
   /api/partners/log-event:
     post:
       operationId: logPartnerEvent
       tags:
       - Event Logging
       summary: Log a partner event
-      description: Core endpoint. Logs a safe GPT-facing partner event. For MVP this may return mock logged status.
+      description: 'Core endpoint. Logs a safe GPT-facing partner event. For MVP this may return mock logged status.
+
+
+        Production variant. Use only after replacing placeholder server URL and verifying live routes.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -253,267 +275,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /api/partners/submit-lead:
-    post:
-      operationId: submitPartnerLead
-      tags:
-      - Lead Submission
-      summary: Submit a partner lead
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
-        and is tested. Accepts partner-submitted business funding lead intake. Intake only; no approval, eligibility, or funding
-        certainty is implied.
-      x-partner-intake-status: planned
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LeadSubmission'
-      responses:
-        '200':
-          description: Lead submission response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LeadSubmissionResponse'
-        '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized. Missing or invalid Bearer token.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /api/partners/create-tracking-link:
-    post:
-      operationId: createPartnerTrackingLink
-      tags:
-      - Lead Submission
-      summary: Create a partner tracking link
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
-        and is tested. Creates a partner/campaign tracking URL with UTM metadata.
-      x-partner-intake-status: planned
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TrackingLinkRequest'
-      responses:
-        '200':
-          description: Tracking link record.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TrackingLink'
-        '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized. Missing or invalid Bearer token.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /api/partners/log-attribution-event:
-    post:
-      operationId: logPartnerAttributionEvent
-      tags:
-      - Lead Submission
-      summary: Log a partner attribution event
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
-        and is tested. Logs privacy-conscious attribution events such as link clicks, form starts, and lead submissions. Store
-        hashed IP only when needed; do not store raw IP by default.
-      x-partner-intake-status: planned
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AttributionEvent'
-      responses:
-        '200':
-          description: Attribution event record.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AttributionEvent'
-        '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized. Missing or invalid Bearer token.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /api/admin/review-partner:
-    post:
-      operationId: reviewPartner
-      tags:
-      - Admin Review
-      summary: Submit an admin review decision
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
-        and is tested. Internal/admin endpoint for partner review decisions. Do not expose in partner-facing GPTs.
-      x-partner-intake-status: planned_admin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AdminReviewRequest'
-      responses:
-        '200':
-          description: Admin decision record.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminDecision'
-        '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized. Missing or invalid Bearer token.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /api/admin/update-partner-status:
-    post:
-      operationId: updatePartnerStatus
-      tags:
-      - Admin Review
-      summary: Update partner status
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
-        and is tested. Internal/admin endpoint for partner lifecycle status changes. Do not expose in partner-facing GPTs.
-      x-partner-intake-status: planned_admin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StatusUpdateRequest'
-      responses:
-        '200':
-          description: Partner status update response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StatusUpdateResponse'
-        '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized. Missing or invalid Bearer token.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /api/admin/review-queue:
-    get:
-      operationId: getPartnerReviewQueue
-      tags:
-      - Admin Review
-      summary: Get partner review queue
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
-        and is tested. Internal/admin endpoint for retrieving partners queued for review. Do not expose in partner-facing
-        GPTs.
-      x-partner-intake-status: planned_admin
-      parameters:
-      - name: status
-        in: query
-        required: false
-        description: Filter queue by review status.
-        schema:
-          type: string
-          enum:
-          - queued
-          - in_review
-          - waiting_on_partner
-          - resolved
-          - archived
-      - name: limit
-        in: query
-        required: false
-        description: Maximum number of review records to return.
-        schema:
-          type: integer
-          minimum: 1
-          maximum: 100
-          default: 25
-      responses:
-        '200':
-          description: Review queue response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReviewQueueResponse'
-        '401':
-          description: Unauthorized.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: production
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: Partner Intake OS Action Token
-      description: 'Use Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN. Store the live token in Vercel as PARTNER_INTAKE_ACTION_TOKEN
-        and configure the Custom GPT Action with API key authentication in Bearer mode.'
+      description: Configure in the Custom GPT Action editor as API key authentication using Bearer token mode. Use the value
+        stored in Vercel as PARTNER_INTAKE_ACTION_TOKEN.
   schemas:
     ApiError:
       type: object
@@ -1635,3 +1405,27 @@ x-partner-intake-os:
   - Do not expose Tally webhook endpoints through GPT Actions.
   - Do not store secrets in this file.
   - Expansion endpoints must not be presented as live until the backend routes exist.
+x-partner-intake-os-bundle:
+  recommended_import_file: /actions/openapi.bundle.yaml
+  self_contained: true
+  external_refs_allowed: false
+  excluded_endpoints:
+  - /api/tally/partner-intake-webhook
+  auth_header: 'Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN'
+  replace_server_url_before_import: true
+  notes:
+  - Use this bundle for Custom GPT Action import.
+  - Replace https://YOUR_VERCEL_DOMAIN.vercel.app with your deployed Vercel API domain.
+  - Configure Custom GPT authentication as API key using Bearer token mode.
+  - Expansion endpoints marked planned should only be tested after backend implementation.
+x-partner-intake-os-variant:
+  variant: production
+  safe_for_gpt_actions: true
+  excluded_endpoints:
+  - /api/tally/partner-intake-webhook
+  auth_header: 'Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN'
+  notes:
+  - Use this for live Custom GPT Actions after route and token validation.
+  - Only core GPT-facing endpoints are included.
+  - Expansion/admin endpoints are excluded from this production core spec until implemented and tested.
+  - Do not expose Tally webhook routes.

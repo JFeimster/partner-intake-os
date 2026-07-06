@@ -1,0 +1,216 @@
+components:
+  examples:
+    LowInfoPartnerIntake:
+      summary: Low-info partner intake requiring follow-up
+      value:
+        first_name: Jay
+        last_name: M
+        email: jay@example.com
+        phone: "+1-202-555-0199"
+        company: ""
+        website: ""
+        partner_type_claimed: referral partner
+        audience: small businesses
+        industry: general_smb
+        funding_experience: not sure yet
+        current_tools: []
+        traffic_or_network_size: ""
+        referral_volume_estimate: unknown
+        desired_partner_role: affiliate
+        notes: "Interested but did not provide much context."
+        source: manual
+        submitted_at: "2026-07-06T15:00:00Z"
+
+    FundingBrokerIntake:
+      summary: Funding broker with existing deal flow
+      value:
+        first_name: Morgan
+        last_name: Reyes
+        email: morgan@examplebroker.com
+        phone: "+1-202-555-0123"
+        company: Reyes Funding Group
+        website: "https://examplebroker.com"
+        partner_type_claimed: funding broker
+        audience: contractors and trucking operators doing 50k to 250k monthly revenue
+        industry: business_funding
+        funding_experience: "5 years brokering working capital and equipment finance referrals."
+        current_tools: [HubSpot, Google Sheets, RingCentral]
+        traffic_or_network_size: "1,800 CRM contacts"
+        referral_volume_estimate: "8-12 submissions per month"
+        desired_partner_role: broker_partner
+        notes: "Wants faster intake routing, better follow-up, and partner tracking links."
+        source: tally
+        submitted_at: "2026-07-06T15:10:00Z"
+
+    CpaBookkeeperReferralPartner:
+      summary: CPA/bookkeeper referral partner
+      value:
+        first_name: Avery
+        last_name: Chen
+        email: avery@examplecpa.com
+        phone: "+1-202-555-0148"
+        company: Chen Advisory
+        website: "https://examplecpa.com"
+        partner_type_claimed: CPA/bookkeeper
+        audience: service businesses, e-commerce sellers, and trades clients with cash-flow gaps
+        industry: accounting
+        funding_experience: "Refers clients occasionally when cash flow gets tight."
+        current_tools: [QuickBooks, Notion, Mailchimp]
+        traffic_or_network_size: "250 active advisory clients"
+        referral_volume_estimate: "2-4 per month"
+        desired_partner_role: referral_partner
+        notes: "Needs education-first scripts, safe positioning, and simple readiness checklist."
+        source: manual
+        submitted_at: "2026-07-06T15:15:00Z"
+
+    HighRiskLeadSeller:
+      summary: High-risk lead seller requiring manual review
+      value:
+        first_name: Blake
+        last_name: Stone
+        email: blake@exampleleads.com
+        phone: "+1-202-555-0111"
+        company: Fast Cash Leads
+        website: "https://exampleleads.com"
+        partner_type_claimed: lead seller
+        audience: "Thousands of business owners who need guaranteed approvals"
+        industry: lead_generation
+        funding_experience: "Sells aged leads and says everyone can get approved."
+        current_tools: [CSV exports]
+        traffic_or_network_size: "100k records"
+        referral_volume_estimate: "500 leads/month"
+        desired_partner_role: bulk_lead_seller
+        notes: "Claims guaranteed funding outcomes and asks for payout before quality review."
+        source: manual
+        submitted_at: "2026-07-06T15:20:00Z"
+
+    LeadSubmission:
+      summary: Partner lead submission for intake review only
+      value:
+        lead_id: lead_01JABCD8LEAD7KQ8F3N2P6R
+        submitted_by_partner_id: ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V
+        tracking_link_id: trk_01JABCDETRACK7KQ8F3N2P6R
+        attribution_event_id: attr_01JABCDECLICK7KQ8F3N2P6R
+        business_name: Harbor Trades LLC
+        contact_name: Sam Rivera
+        contact_email: sam@example.com
+        contact_phone: "+1-202-555-0177"
+        industry: construction
+        monthly_revenue_range: "50000_100000"
+        time_in_business_range: "2_5_years"
+        funding_need: working_capital
+        funding_amount_requested: 75000
+        use_of_funds: "Payroll bridge and materials for two upcoming jobs."
+        urgency: high
+        consent:
+          consent_id: consent_01JABCDEFLEAD9KQ8F3N2P6R
+          subject_type: lead
+          subject_id: lead_01JABCD8LEAD7KQ8F3N2P6R
+          consent_status: accepted
+          consent_type: lead_submission_permission
+          consent_text: "I confirm I have permission to submit this business contact for funding readiness review and follow-up. Submission does not guarantee approval, funding, or eligibility."
+          accepted_at: "2026-07-06T15:25:00Z"
+          revoked_at: null
+          source: dashboard
+          ip_hash: sha256_example
+          user_agent: Mozilla/5.0
+          metadata: {}
+        notes: "Owner asked for a readiness review and follow-up."
+        source: dashboard
+        submitted_at: "2026-07-06T15:25:00Z"
+        metadata:
+          campaign: contractor_cash_flow_gap
+
+    TrackingLinkCreation:
+      summary: Tracking link creation response
+      value:
+        tracking_link_id: trk_01JABCDETRACK7KQ8F3N2P6R
+        partner_id: ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V
+        campaign_id: camp_01JABCDECAMPAIGN7KQ8F3
+        destination_url: "https://distilledfunding.com/apply"
+        tracking_url: "https://partner-command-center.vercel.app/r/harbor-trades"
+        slug: harbor-trades
+        utm_source: partner
+        utm_medium: referral
+        utm_campaign: contractor_cash_flow_gap
+        utm_content: harbor_trades_partner
+        status: active
+        created_at: "2026-07-06T15:30:00Z"
+        expires_at: null
+        metadata:
+          created_by: gpt_action
+
+    AttributionEvent:
+      summary: Privacy-conscious attribution event
+      value:
+        attribution_event_id: attr_01JABCDECLICK7KQ8F3N2P6R
+        partner_id: ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V
+        tracking_link_id: trk_01JABCDETRACK7KQ8F3N2P6R
+        campaign_id: camp_01JABCDECAMPAIGN7KQ8F3
+        event_type: link_clicked
+        event_source: partner_link
+        landing_url: "https://distilledfunding.com/apply?utm_source=partner&utm_medium=referral"
+        referrer: "https://examplepartner.com/resources"
+        user_agent: Mozilla/5.0
+        ip_hash: sha256_example
+        occurred_at: "2026-07-06T15:32:00Z"
+        lead_id: null
+        metadata:
+          privacy_note: "Raw IP is not stored by default."
+
+    AdminApproval:
+      summary: Admin approval decision
+      value:
+        decision_id: dec_01JABCDEADMIN7KQ8F3N2P6R
+        partner_id: ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V
+        review_id: rev_01JABCDE8KQ8F3N2P6R
+        decision: approve
+        decided_by: Jason
+        decision_reason: "Relevant contractor audience, credible referral path, low compliance risk."
+        status_after_decision: approved
+        next_action: send_welcome
+        tasks_to_create:
+          - task_id: task_01JABCDEFOLLOW7KQ8F3N2
+            partner_id: ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V
+            title: Send welcome packet
+            description: Send onboarding packet and first campaign resources.
+            task_type: onboarding
+            status: open
+            priority: high
+            created_at: "2026-07-06T15:40:00Z"
+        resources_to_send:
+          - Funding Product Matrix
+          - Contractor Cash Flow Gap Checklist
+        campaign_to_assign: null
+        created_at: "2026-07-06T15:40:00Z"
+
+    ManualReviewRequired:
+      summary: Manual review triggered by risk flags
+      value:
+        review_id: rev_01JABCDE8KQ8F3N2P6R
+        partner_id: ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V
+        classification_id: cls_01JABCDECLASSIFY7KQ8F3
+        review_status: queued
+        review_reason: "Partner made claims around guaranteed approvals and bulk lead quality is unclear."
+        severity: high
+        recommended_decision: request_more_info
+        assigned_to: Jason
+        reviewer_notes: "Ask for traffic source, consent path, lead age, and sample quality before approval."
+        required_follow_up_questions:
+          - "How are leads generated and permissioned?"
+          - "Can you remove guaranteed approval language from all partner-facing copy?"
+          - "What percentage of leads are business owners actively seeking funding?"
+        created_at: "2026-07-06T15:45:00Z"
+        updated_at: "2026-07-06T15:45:00Z"
+        resolved_at: null
+
+    ApiError:
+      summary: Standard API error
+      value:
+        error: unauthorized
+        message: "Missing or invalid Bearer token."
+        code: AUTH_INVALID_TOKEN
+        details:
+          header: Authorization
+          expected_format: "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN"
+        request_id: req_01JABCDEERROR7KQ8F3N2P6R

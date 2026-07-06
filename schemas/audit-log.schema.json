@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/audit-log.schema.json",
+  "title": "Audit Log",
+  "description": "Immutable-style audit record for sensitive Partner Intake OS changes, including admin decisions, status changes, integration syncs, consent changes, and webhook processing.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "audit_log_id": {
+      "type": "string",
+      "pattern": "^audit_[A-Za-z0-9_-]{8,80}$",
+      "description": "Unique audit log identifier."
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 160
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "partner",
+            "system",
+            "gpt_action",
+            "api",
+            "automation",
+            "integration"
+          ]
+        },
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 160
+        },
+        "email": {
+          "anyOf": [
+            {
+              "$ref": "common.schema.json#/$defs/email"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "actor_type"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 160,
+      "description": "Action taken, such as status_update, admin_decision, sync_retry, consent_revoked, or webhook_processed."
+    },
+    "object_type": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120,
+      "description": "Type of object changed or observed."
+    },
+    "object_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160,
+      "description": "Identifier of the object changed or observed."
+    },
+    "before": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "State before the action. Keep PII minimized.",
+      "additionalProperties": true
+    },
+    "after": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "State after the action. Keep PII minimized.",
+      "additionalProperties": true
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1200,
+      "description": "Human-readable reason for the action."
+    },
+    "occurred_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "request_id": {
+      "$ref": "common.schema.json#/$defs/request_id"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "audit_log_id",
+    "actor",
+    "action",
+    "object_type",
+    "object_id",
+    "occurred_at",
+    "request_id"
+  ],
+  "examples": [
+    {
+      "audit_log_id": "audit_01JABCDEADMIN9KQ8F3N2P6R",
+      "actor": {
+        "actor_id": "usr_jason",
+        "actor_type": "admin",
+        "display_name": "Jason",
+        "email": "admin@example.com"
+      },
+      "action": "admin_decision",
+      "object_type": "partner_profile",
+      "object_id": "ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V",
+      "before": {
+        "status": "manual_review"
+      },
+      "after": {
+        "status": "approved"
+      },
+      "reason": "Partner has relevant contractor audience and low compliance risk.",
+      "occurred_at": "2026-07-06T14:45:00Z",
+      "request_id": "req_01JABCDEADMIN",
+      "metadata": {
+        "review_id": "rev_01JABCDE8KQ8F3N2P6R"
+      }
+    }
+  ]
+}

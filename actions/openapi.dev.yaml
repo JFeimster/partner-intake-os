@@ -1,15 +1,16 @@
 openapi: 3.1.0
 info:
-  title: Partner Intake OS Actions API
-  version: 0.8.0
-  description: Canonical OpenAPI Action spec for Partner Intake OS. This spec exposes safe GPT-facing endpoints only and intentionally
-    excludes the Tally webhook endpoint. Core endpoints map to the Partner Intake OS Vercel API scaffold. Expansion endpoints
-    are marked planned until implemented.
+  title: Partner Intake OS Dev Actions API
+  version: 1.0.0-dev
+  description: Development/testing OpenAPI variant for local and preview testing of Partner Intake OS endpoints. Use this
+    for route repair, GPT Action testing, and endpoint validation before production import.
   contact:
     name: Moonshine Capital / Partner Command Center
 servers:
-- url: https://YOUR_VERCEL_DOMAIN.vercel.app
-  description: Replace with the deployed Partner Intake OS Vercel domain.
+- url: http://localhost:3000
+  description: Local development server.
+- url: https://YOUR_DEV_VERCEL_DOMAIN.vercel.app
+  description: Preview/development Vercel deployment.
 security:
 - bearerAuth: []
 tags:
@@ -32,7 +33,10 @@ paths:
       tags:
       - System
       summary: Check Partner Intake OS API health
-      description: Core endpoint. Returns system status for the Partner Intake OS API.
+      description: 'Core endpoint. Returns system status for the Partner Intake OS API.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       security: []
       x-partner-intake-status: core
       responses:
@@ -48,14 +52,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/classify:
     post:
       operationId: classifyPartnerIntake
       tags:
       - Partner Classification
       summary: Classify a partner intake
-      description: Core endpoint. Accepts normalized intake or manual intake details and returns classification, tier, risk
+      description: 'Core endpoint. Accepts normalized intake or manual intake details and returns classification, tier, risk
         level, scorecard, recommendations, and next action.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -95,13 +103,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/recommend-resources:
     post:
       operationId: recommendPartnerResources
       tags:
       - Partner Activation
       summary: Recommend resources for a partner
-      description: Core endpoint. Returns resource recommendations based on partner type, audience, tier, and goals.
+      description: 'Core endpoint. Returns resource recommendations based on partner type, audience, tier, and goals.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -134,14 +146,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/generate-onboarding-plan:
     post:
       operationId: generatePartnerOnboardingPlan
       tags:
       - Partner Activation
       summary: Generate a partner onboarding plan
-      description: Core endpoint. Returns first 24 hours, first 7 days, first 30 days, required assets, training, and next
+      description: 'Core endpoint. Returns first 24 hours, first 7 days, first 30 days, required assets, training, and next
         action.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -174,14 +190,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/generate-campaign-kit:
     post:
       operationId: generatePartnerCampaignKit
       tags:
       - Partner Activation
       summary: Generate a partner campaign kit
-      description: Core endpoint. Returns campaign concept, CTA, suggested channels, tracking notes, copy angle, and compliance
+      description: 'Core endpoint. Returns campaign concept, CTA, suggested channels, tracking notes, copy angle, and compliance
         notes.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -214,13 +234,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/log-event:
     post:
       operationId: logPartnerEvent
       tags:
       - Event Logging
       summary: Log a partner event
-      description: Core endpoint. Logs a safe GPT-facing partner event. For MVP this may return mock logged status.
+      description: 'Core endpoint. Logs a safe GPT-facing partner event. For MVP this may return mock logged status.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: core
       requestBody:
         required: true
@@ -253,15 +277,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/submit-lead:
     post:
       operationId: submitPartnerLead
       tags:
       - Lead Submission
       summary: Submit a partner lead
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
+      description: 'Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
         and is tested. Accepts partner-submitted business funding lead intake. Intake only; no approval, eligibility, or funding
         certainty is implied.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: planned
       requestBody:
         required: true
@@ -294,14 +322,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/create-tracking-link:
     post:
       operationId: createPartnerTrackingLink
       tags:
       - Lead Submission
       summary: Create a partner tracking link
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
+      description: 'Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
         and is tested. Creates a partner/campaign tracking URL with UTM metadata.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: planned
       requestBody:
         required: true
@@ -334,15 +366,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/partners/log-attribution-event:
     post:
       operationId: logPartnerAttributionEvent
       tags:
       - Lead Submission
       summary: Log a partner attribution event
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
+      description: 'Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
         and is tested. Logs privacy-conscious attribution events such as link clicks, form starts, and lead submissions. Store
         hashed IP only when needed; do not store raw IP by default.
+
+
+        Development/testing variant. Use only for local or preview testing.'
       x-partner-intake-status: planned
       requestBody:
         required: true
@@ -375,14 +411,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: dev
   /api/admin/review-partner:
     post:
       operationId: reviewPartner
       tags:
       - Admin Review
       summary: Submit an admin review decision
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
+      description: 'Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
         and is tested. Internal/admin endpoint for partner review decisions. Do not expose in partner-facing GPTs.
+
+
+        Admin-only operation. Do not expose this operation in partner-facing GPTs. Development/testing variant. Use only for
+        local or preview testing.'
       x-partner-intake-status: planned_admin
       requestBody:
         required: true
@@ -415,14 +456,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: admin
   /api/admin/update-partner-status:
     post:
       operationId: updatePartnerStatus
       tags:
       - Admin Review
       summary: Update partner status
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
+      description: 'Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
         and is tested. Internal/admin endpoint for partner lifecycle status changes. Do not expose in partner-facing GPTs.
+
+
+        Admin-only operation. Do not expose this operation in partner-facing GPTs. Development/testing variant. Use only for
+        local or preview testing.'
       x-partner-intake-status: planned_admin
       requestBody:
         required: true
@@ -455,15 +501,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: admin
   /api/admin/review-queue:
     get:
       operationId: getPartnerReviewQueue
       tags:
       - Admin Review
       summary: Get partner review queue
-      description: Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
+      description: 'Planned expansion endpoint. Include in documentation/spec planning only until the backend route exists
         and is tested. Internal/admin endpoint for retrieving partners queued for review. Do not expose in partner-facing
         GPTs.
+
+
+        Admin-only operation. Do not expose this operation in partner-facing GPTs. Development/testing variant. Use only for
+        local or preview testing.'
       x-partner-intake-status: planned_admin
       parameters:
       - name: status
@@ -506,14 +557,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+      x-partner-intake-scope: admin
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: Partner Intake OS Action Token
-      description: 'Use Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN. Store the live token in Vercel as PARTNER_INTAKE_ACTION_TOKEN
-        and configure the Custom GPT Action with API key authentication in Bearer mode.'
+      description: Configure in the Custom GPT Action editor as API key authentication using Bearer token mode. Use the value
+        stored in Vercel as PARTNER_INTAKE_ACTION_TOKEN.
   schemas:
     ApiError:
       type: object
@@ -1635,3 +1687,27 @@ x-partner-intake-os:
   - Do not expose Tally webhook endpoints through GPT Actions.
   - Do not store secrets in this file.
   - Expansion endpoints must not be presented as live until the backend routes exist.
+x-partner-intake-os-bundle:
+  recommended_import_file: /actions/openapi.bundle.yaml
+  self_contained: true
+  external_refs_allowed: false
+  excluded_endpoints:
+  - /api/tally/partner-intake-webhook
+  auth_header: 'Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN'
+  replace_server_url_before_import: true
+  notes:
+  - Use this bundle for Custom GPT Action import.
+  - Replace https://YOUR_VERCEL_DOMAIN.vercel.app with your deployed Vercel API domain.
+  - Configure Custom GPT authentication as API key using Bearer token mode.
+  - Expansion endpoints marked planned should only be tested after backend implementation.
+x-partner-intake-os-variant:
+  variant: dev
+  safe_for_gpt_actions: true
+  excluded_endpoints:
+  - /api/tally/partner-intake-webhook
+  auth_header: 'Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN'
+  notes:
+  - Use for local testing and Vercel preview testing.
+  - Replace preview domain before import.
+  - Expansion endpoints may be planned until implemented.
+  - Never use production secrets for local testing.

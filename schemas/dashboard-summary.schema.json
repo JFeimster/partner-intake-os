@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/dashboard-summary.schema.json",
+  "title": "Dashboard Summary",
+  "description": "Compact partner dashboard summary for Partner Intake OS and Partner Command Center. Designed for admin dashboards, partner snapshots, and API response cards.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "partner_id",
+    "display_name",
+    "company",
+    "partner_type",
+    "partner_tier",
+    "onboarding_path",
+    "status",
+    "risk_level",
+    "overall_score",
+    "next_action",
+    "recommended_resources",
+    "recommended_campaigns",
+    "open_tasks_count",
+    "latest_activity",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "description": "Partner display name for dashboard cards."
+    },
+    "company": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180,
+      "description": "Company or brand name."
+    },
+    "partner_type": {
+      "$ref": "enums.schema.json#/$defs/partner_type"
+    },
+    "partner_tier": {
+      "$ref": "enums.schema.json#/$defs/partner_tier"
+    },
+    "onboarding_path": {
+      "$ref": "enums.schema.json#/$defs/onboarding_path"
+    },
+    "status": {
+      "$ref": "enums.schema.json#/$defs/partner_status"
+    },
+    "risk_level": {
+      "$ref": "enums.schema.json#/$defs/risk_level"
+    },
+    "overall_score": {
+      "$ref": "common.schema.json#/$defs/score_0_100"
+    },
+    "next_action": {
+      "$ref": "enums.schema.json#/$defs/next_action"
+    },
+    "recommended_resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dashboard_resource"
+      },
+      "description": "Short list of recommended resources for dashboard display."
+    },
+    "recommended_campaigns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dashboard_campaign"
+      },
+      "description": "Short list of recommended campaigns for dashboard display."
+    },
+    "open_tasks_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "description": "Number of open tasks currently associated with the partner."
+    },
+    "latest_activity": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/latest_activity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Most recent meaningful activity shown in the dashboard."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "dashboard_resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "resource_type",
+        "priority"
+      ],
+      "properties": {
+        "resource_id": {
+          "type": "string",
+          "pattern": "^res_[a-z0-9_\\-]{6,64}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 140
+        },
+        "resource_type": {
+          "$ref": "enums.schema.json#/$defs/resource_type"
+        },
+        "url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        }
+      }
+    },
+    "dashboard_campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "campaign_id",
+        "campaign_name",
+        "status"
+      ],
+      "properties": {
+        "campaign_id": {
+          "$ref": "common.schema.json#/$defs/campaign_id"
+        },
+        "campaign_name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140
+        },
+        "campaign_type": {
+          "$ref": "enums.schema.json#/$defs/campaign_type"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "ready_for_review",
+            "approved",
+            "active",
+            "paused",
+            "retired",
+            "needs_revision"
+          ]
+        }
+      }
+    },
+    "latest_activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activity_type",
+        "title",
+        "occurred_at"
+      ],
+      "properties": {
+        "activity_id": {
+          "type": "string",
+          "pattern": "^activity_[a-z0-9_\\-]{6,64}$"
+        },
+        "activity_type": {
+          "$ref": "enums.schema.json#/$defs/activity_type"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "occurred_at": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "partner_id": "partner_8f3k2m9q",
+      "display_name": "Alex Carter",
+      "company": "Carter Contractor Advisory",
+      "partner_type": "referral_partner",
+      "partner_tier": "tier_2",
+      "onboarding_path": "standard_affiliate_partner",
+      "status": "approved",
+      "risk_level": "low",
+      "overall_score": 78,
+      "next_action": "send_welcome",
+      "recommended_resources": [
+        {
+          "resource_id": "res_funding_readiness_001",
+          "title": "Funding Readiness Checklist",
+          "resource_type": "checklist",
+          "url": "https://distilledfunding.com/resources/funding-readiness",
+          "priority": "high"
+        }
+      ],
+      "recommended_campaigns": [
+        {
+          "campaign_id": "camp_contractor_cashflow_001",
+          "campaign_name": "Contractor Cash Flow Readiness Sprint",
+          "campaign_type": "referral",
+          "status": "draft"
+        }
+      ],
+      "open_tasks_count": 3,
+      "latest_activity": {
+        "activity_id": "activity_partner_8f3k2m9q_001",
+        "activity_type": "classification_completed",
+        "title": "Partner classified as referral partner",
+        "description": "Standard affiliate onboarding path recommended.",
+        "occurred_at": "2026-07-06T15:00:00Z"
+      },
+      "created_at": "2026-07-06T15:00:00Z",
+      "updated_at": "2026-07-06T15:00:00Z",
+      "metadata": {
+        "dashboard_view": "admin_summary"
+      }
+    }
+  ]
+}

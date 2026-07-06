@@ -1,0 +1,33 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Partner Intake OS Action Token
+      description: >
+        Use a private Partner Intake OS Action token. Configure this in the Custom GPT
+        Action editor as API key authentication using Bearer token mode. The token should
+        match the Vercel environment variable PARTNER_INTAKE_ACTION_TOKEN.
+
+security:
+  - bearerAuth: []
+
+x-auth-notes:
+  header: Authorization
+  format: "Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN"
+  vercel_env_var: PARTNER_INTAKE_ACTION_TOKEN
+  rotation_guidance:
+    - Rotate the token if it is exposed in screenshots, logs, code, or chat transcripts.
+    - Store the token in Vercel environment variables, not in repo files.
+    - Use a different token for development and production when possible.
+  do_not_expose:
+    - TALLY_SIGNING_SECRET
+    - webhook signing secrets
+    - CRM access tokens
+    - Notion API keys
+    - HubSpot access tokens
+  curl_example: |
+    curl -X POST "https://YOUR_VERCEL_DOMAIN.vercel.app/api/partners/classify" \
+      -H "Authorization: Bearer YOUR_PARTNER_INTAKE_ACTION_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"intake":{"email":"partner@example.com","source":"manual"},"context":"manual_review"}'

@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/campaign-kit.schema.json",
+  "title": "Campaign Kit",
+  "description": "Partner-facing campaign activation kit for Partner Intake OS. Defines the campaign concept, audience, offer, CTA, channels, tracking link, launch checklist, and compliance-safe notes. This schema does not imply guaranteed approvals, guaranteed funding amounts, or lender certainty.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "campaign_id",
+    "partner_id",
+    "campaign_name",
+    "campaign_type",
+    "audience",
+    "offer",
+    "cta",
+    "channels",
+    "copy_angle",
+    "suggested_assets",
+    "tracking_link",
+    "launch_checklist",
+    "compliance_notes",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "campaign_id": {
+      "$ref": "common.schema.json#/$defs/campaign_id"
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "campaign_name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 140,
+      "description": "Human-readable campaign name."
+    },
+    "campaign_type": {
+      "$ref": "enums.schema.json#/$defs/campaign_type"
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 160,
+      "description": "Primary audience segment the campaign is built for."
+    },
+    "offer": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 240,
+      "description": "Educational/readiness-based campaign offer. Must avoid guarantees, fake urgency, and approval certainty."
+    },
+    "cta": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 160,
+      "description": "Primary call to action for the campaign."
+    },
+    "channels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "enums.schema.json#/$defs/campaign_channel"
+      },
+      "description": "Recommended distribution channels."
+    },
+    "copy_angle": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 500,
+      "description": "Strategic messaging angle for the partner campaign."
+    },
+    "suggested_assets": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/suggested_asset"
+      },
+      "description": "Assets, resources, prompts, templates, or landing pages recommended for this campaign."
+    },
+    "tracking_link": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tracking_link_summary"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Tracking link summary when a link has been assigned; null if not created yet."
+    },
+    "launch_checklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/launch_checklist_item"
+      },
+      "description": "Practical launch steps for the partner or admin."
+    },
+    "compliance_notes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/compliance_note"
+      },
+      "description": "Compliance-safe copy notes and guardrails for this campaign."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "ready_for_review",
+        "approved",
+        "active",
+        "paused",
+        "retired",
+        "needs_revision"
+      ],
+      "description": "Campaign kit lifecycle status."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "suggested_asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_type",
+        "title",
+        "reason"
+      ],
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "pattern": "^asset_[a-z0-9_\\-]{6,64}$",
+          "description": "Optional internal asset identifier."
+        },
+        "asset_type": {
+          "type": "string",
+          "enum": [
+            "lead_magnet",
+            "landing_page",
+            "email_sequence",
+            "sms_script",
+            "call_script",
+            "social_post_pack",
+            "notion_template",
+            "checklist",
+            "calculator",
+            "scorecard",
+            "training_video",
+            "resource_page",
+            "prompt_pack"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 360
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "default": "medium"
+        }
+      }
+    },
+    "tracking_link_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tracking_link_id",
+        "tracking_url",
+        "status"
+      ],
+      "properties": {
+        "tracking_link_id": {
+          "$ref": "common.schema.json#/$defs/tracking_link_id"
+        },
+        "tracking_url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "destination_url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "active",
+            "paused",
+            "expired",
+            "retired"
+          ]
+        }
+      }
+    },
+    "launch_checklist_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "status",
+        "owner"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 180
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "blocked",
+            "complete",
+            "skipped"
+          ]
+        },
+        "owner": {
+          "$ref": "common.schema.json#/$defs/owner"
+        },
+        "due_date": {
+          "$ref": "common.schema.json#/$defs/date"
+        }
+      }
+    },
+    "compliance_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "note_type",
+        "message"
+      ],
+      "properties": {
+        "note_type": {
+          "type": "string",
+          "enum": [
+            "safe_language",
+            "restricted_language",
+            "required_disclaimer",
+            "review_flag"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "campaign_id": "camp_contractor_cashflow_001",
+      "partner_id": "partner_8f3k2m9q",
+      "campaign_name": "Contractor Cash Flow Readiness Sprint",
+      "campaign_type": "referral",
+      "audience": "Residential contractors with seasonal cash flow swings",
+      "offer": "A readiness checklist that helps contractors organize funding documents before they apply.",
+      "cta": "Check funding readiness",
+      "channels": [
+        "email",
+        "linkedin",
+        "direct_referral"
+      ],
+      "copy_angle": "Help contractors stop guessing what lenders may ask for before a busy season or payroll crunch.",
+      "suggested_assets": [
+        {
+          "asset_id": "asset_cashflow_checklist_001",
+          "asset_type": "checklist",
+          "title": "Contractor Funding Readiness Checklist",
+          "url": "https://distilledfunding.com/resources/contractor-readiness",
+          "reason": "Matches the partner audience and keeps the offer educational."
+        }
+      ],
+      "tracking_link": {
+        "tracking_link_id": "trk_partner_8f3k2m9q_001",
+        "tracking_url": "https://distilledfunding.com/p/contractor-readiness?ref=partner_8f3k2m9q",
+        "destination_url": "https://distilledfunding.com/resources/contractor-readiness",
+        "status": "active"
+      },
+      "launch_checklist": [
+        {
+          "label": "Review campaign copy for prohibited claims",
+          "description": "Remove any approval certainty or guaranteed funding language before launch.",
+          "status": "not_started",
+          "owner": "partner_ops",
+          "due_date": "2026-07-10"
+        }
+      ],
+      "compliance_notes": [
+        {
+          "note_type": "restricted_language",
+          "message": "Do not claim guaranteed approval, guaranteed funding amount, or everyone qualifies."
+        }
+      ],
+      "status": "draft",
+      "created_at": "2026-07-06T15:00:00Z",
+      "updated_at": "2026-07-06T15:00:00Z",
+      "metadata": {
+        "source": "gpt_generated"
+      }
+    }
+  ]
+}

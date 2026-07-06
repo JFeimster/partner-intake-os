@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moonshine-capital.local/schemas/welcome-packet.schema.json",
+  "title": "Welcome Packet",
+  "description": "Partner onboarding welcome packet for Partner Intake OS. Defines first steps, recommended resources, campaign kit assignment, dashboard access notes, support contact, and compliance-safe operating notes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_id",
+    "partner_id",
+    "partner_type",
+    "onboarding_path",
+    "welcome_message",
+    "first_steps",
+    "recommended_resources",
+    "campaign_kit",
+    "dashboard_access_notes",
+    "support_contact",
+    "compliance_notes",
+    "created_at"
+  ],
+  "properties": {
+    "packet_id": {
+      "type": "string",
+      "pattern": "^packet_[a-z0-9_\\-]{6,64}$",
+      "description": "Unique welcome packet identifier."
+    },
+    "partner_id": {
+      "$ref": "common.schema.json#/$defs/partner_id"
+    },
+    "partner_type": {
+      "$ref": "enums.schema.json#/$defs/partner_type"
+    },
+    "onboarding_path": {
+      "$ref": "enums.schema.json#/$defs/onboarding_path"
+    },
+    "welcome_message": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 1500,
+      "description": "Plain-English welcome message tailored to partner type and onboarding path."
+    },
+    "first_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/first_step"
+      },
+      "description": "Immediate onboarding steps for the partner."
+    },
+    "recommended_resources": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/resource_summary"
+      },
+      "description": "Resource recommendations to include in the welcome packet."
+    },
+    "campaign_kit": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/campaign_kit_summary"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Campaign kit summary assigned to the partner, or null if no campaign kit is ready."
+    },
+    "dashboard_access_notes": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 800,
+      "description": "Notes explaining dashboard access status, next steps, or placeholder access instructions."
+    },
+    "support_contact": {
+      "$ref": "#/$defs/support_contact"
+    },
+    "compliance_notes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 500
+      },
+      "description": "Copy, disclosure, and operating guardrails for partner onboarding."
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "updated_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "$defs": {
+    "first_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step_id",
+        "title",
+        "description",
+        "owner",
+        "status"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string",
+          "pattern": "^step_[a-z0-9_\\-]{3,64}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "description": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 700
+        },
+        "owner": {
+          "$ref": "common.schema.json#/$defs/owner"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "blocked",
+            "complete",
+            "skipped"
+          ]
+        },
+        "due_date": {
+          "$ref": "common.schema.json#/$defs/date"
+        }
+      }
+    },
+    "resource_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "resource_type",
+        "reason"
+      ],
+      "properties": {
+        "resource_id": {
+          "type": "string",
+          "pattern": "^res_[a-z0-9_\\-]{6,64}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "resource_type": {
+          "$ref": "enums.schema.json#/$defs/resource_type"
+        },
+        "url": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 360
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        }
+      }
+    },
+    "campaign_kit_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "campaign_id",
+        "campaign_name",
+        "status"
+      ],
+      "properties": {
+        "campaign_id": {
+          "$ref": "common.schema.json#/$defs/campaign_id"
+        },
+        "campaign_name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140
+        },
+        "tracking_link_id": {
+          "$ref": "common.schema.json#/$defs/tracking_link_id"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "ready_for_review",
+            "approved",
+            "active",
+            "paused",
+            "retired",
+            "needs_revision"
+          ]
+        }
+      }
+    },
+    "support_contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "email"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "email": {
+          "$ref": "common.schema.json#/$defs/email"
+        },
+        "phone": {
+          "$ref": "common.schema.json#/$defs/phone"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "packet_id": "packet_partner_8f3k2m9q_001",
+      "partner_id": "partner_8f3k2m9q",
+      "partner_type": "referral_partner",
+      "onboarding_path": "standard_affiliate_partner",
+      "welcome_message": "Welcome aboard. Your first job is simple: learn the referral path, use approved educational resources, and send clients through the right intake flow without making promises about approval or funding amounts.",
+      "first_steps": [
+        {
+          "step_id": "step_profile_review",
+          "title": "Review partner profile",
+          "description": "Confirm contact details, audience, and preferred referral workflow.",
+          "owner": "partner",
+          "status": "not_started",
+          "due_date": "2026-07-12"
+        }
+      ],
+      "recommended_resources": [
+        {
+          "resource_id": "res_funding_readiness_001",
+          "title": "Funding Readiness Checklist",
+          "resource_type": "checklist",
+          "url": "https://distilledfunding.com/resources/funding-readiness",
+          "reason": "Gives referral partners a safe first resource to share.",
+          "priority": "high"
+        }
+      ],
+      "campaign_kit": {
+        "campaign_id": "camp_contractor_cashflow_001",
+        "campaign_name": "Contractor Cash Flow Readiness Sprint",
+        "tracking_link_id": "trk_partner_8f3k2m9q_001",
+        "status": "draft"
+      },
+      "dashboard_access_notes": "Dashboard access is pending admin approval. Use the welcome resources first.",
+      "support_contact": {
+        "name": "Partner Ops",
+        "email": "partners@example.com",
+        "role": "Partner Operations"
+      },
+      "compliance_notes": [
+        "Use readiness and next-step language only.",
+        "Do not promise approvals, funding amounts, lender matches, or credit outcomes."
+      ],
+      "created_at": "2026-07-06T15:00:00Z",
+      "updated_at": "2026-07-06T15:00:00Z",
+      "metadata": {
+        "source": "partner_intake_os"
+      }
+    }
+  ]
+}

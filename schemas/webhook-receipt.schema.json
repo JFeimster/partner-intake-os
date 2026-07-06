@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.partner-intake-os.local/webhook-receipt.schema.json",
+  "title": "Webhook Receipt",
+  "description": "Receipt and processing status record for inbound webhooks such as Tally partner intake submissions. This is an internal API record and should not be exposed through GPT Actions.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "webhook_receipt_id": {
+      "type": "string",
+      "pattern": "^wh_[A-Za-z0-9_-]{8,80}$",
+      "description": "Unique webhook receipt identifier."
+    },
+    "source_system": {
+      "$ref": "enums.schema.json#/$defs/integration_system"
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120,
+      "description": "Source event type, such as FORM_RESPONSE."
+    },
+    "received_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "signature_verified": {
+      "type": "boolean",
+      "description": "Whether the webhook signature was verified."
+    },
+    "status": {
+      "$ref": "enums.schema.json#/$defs/webhook_status"
+    },
+    "request_id": {
+      "$ref": "common.schema.json#/$defs/request_id"
+    },
+    "payload_summary": {
+      "type": "object",
+      "description": "Minimal payload summary for operational diagnostics. Avoid storing unnecessary PII here.",
+      "additionalProperties": false,
+      "properties": {
+        "form_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 160
+        },
+        "response_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 160
+        },
+        "field_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 250
+        },
+        "contains_contact_info": {
+          "type": "boolean"
+        },
+        "normalized_partner_id": {
+          "anyOf": [
+            {
+              "$ref": "common.schema.json#/$defs/partner_id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "field_count",
+        "contains_contact_info"
+      ]
+    },
+    "processing_result": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Structured processing outcome.",
+      "additionalProperties": false,
+      "properties": {
+        "normalized": {
+          "type": "boolean"
+        },
+        "classified": {
+          "type": "boolean"
+        },
+        "stored": {
+          "type": "boolean"
+        },
+        "manual_review_required": {
+          "type": "boolean"
+        },
+        "next_action": {
+          "anyOf": [
+            {
+              "$ref": "enums.schema.json#/$defs/next_action"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "normalized",
+        "classified",
+        "stored",
+        "manual_review_required"
+      ]
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "details": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "webhook_receipt_id",
+    "source_system",
+    "event_type",
+    "received_at",
+    "signature_verified",
+    "status",
+    "request_id",
+    "payload_summary"
+  ],
+  "examples": [
+    {
+      "webhook_receipt_id": "wh_01JABCD9TALLY7KQ8F3N2P6R",
+      "source_system": "tally",
+      "event_type": "FORM_RESPONSE",
+      "received_at": "2026-07-06T14:40:00Z",
+      "signature_verified": true,
+      "status": "processed",
+      "request_id": "req_01JABCD9Q8F3N2P6R7TALLY",
+      "payload_summary": {
+        "form_id": "mOe658",
+        "response_id": "resp_7KQ8F3N2P6R",
+        "field_count": 14,
+        "contains_contact_info": true,
+        "normalized_partner_id": "ptr_01JABCD2M7Y3F4K8NQ9R0S1T2V"
+      },
+      "processing_result": {
+        "normalized": true,
+        "classified": true,
+        "stored": true,
+        "manual_review_required": false,
+        "next_action": "send_welcome"
+      },
+      "error": null,
+      "metadata": {
+        "environment": "production"
+      }
+    }
+  ]
+}
