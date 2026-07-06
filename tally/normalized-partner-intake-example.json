@@ -1,0 +1,24 @@
+{
+  "first_name": "Dana",
+  "last_name": "Fields",
+  "email": "dana@example.com",
+  "phone": "+1 202-555-0183",
+  "company": "Field Ledger Advisory",
+  "website": "https://fieldledger.example",
+  "partner_type_claimed": "cpa_bookkeeper",
+  "audience": "Service businesses, contractors, and local operators that need cash flow planning before tax deadlines.",
+  "industry": "Accounting and bookkeeping",
+  "location": "Washington, DC",
+  "funding_experience": "Refers clients to banks occasionally but wants a clearer funding readiness workflow.",
+  "current_tools": [
+    "QuickBooks",
+    "HubSpot",
+    "Google Sheets"
+  ],
+  "traffic_or_network_size": "100-500 active client or audience relationships",
+  "referral_volume_estimate": "3-5 relevant conversations per month",
+  "desired_partner_role": "Referral partner",
+  "notes": "Wants safe language and does not want to make funding promises to clients. Currently refers funding: Sometimes. Referral process: Usually makes warm email introductions and tracks notes in HubSpot. Success goal: A simple client-safe referral path and educational resources that do not overpromise outcomes. Launch timeline: This month. Preferred next step: Send resources. Partner acknowledgment: true. Contact permission: true.",
+  "source": "tally",
+  "submitted_at": "2026-07-06T10:15:31-04:00"
+}

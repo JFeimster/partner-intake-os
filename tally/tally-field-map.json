@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tally Field Map",
+  "description": "Maps human-readable Tally partner intake labels to normalized Partner Intake OS fields from schemas/intake.schema.json. This is mapping configuration only, not webhook code.",
+  "version": "1.0.0",
+  "source": "tally",
+  "normalized_schema": "schemas/intake.schema.json",
+  "recommended_event_type": "FORM_RESPONSE",
+  "field_map": [
+    {
+      "tally_label": "First name",
+      "tally_type": "INPUT_TEXT",
+      "internal_field": "first_name",
+      "required": true,
+      "transform": "trim"
+    },
+    {
+      "tally_label": "Last name",
+      "tally_type": "INPUT_TEXT",
+      "internal_field": "last_name",
+      "required": true,
+      "transform": "trim"
+    },
+    {
+      "tally_label": "Email",
+      "tally_type": "INPUT_EMAIL",
+      "internal_field": "email",
+      "required": true,
+      "transform": "trim_lowercase"
+    },
+    {
+      "tally_label": "Phone",
+      "tally_type": "INPUT_PHONE_NUMBER",
+      "internal_field": "phone",
+      "required": false,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "Company / brand",
+      "tally_type": "INPUT_TEXT",
+      "internal_field": "company",
+      "required": false,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "Website or profile URL",
+      "tally_type": "INPUT_LINK",
+      "internal_field": "website",
+      "required": false,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "Primary location / market",
+      "tally_type": "INPUT_TEXT",
+      "internal_field": "location",
+      "required": false,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "Which best describes you?",
+      "tally_type": "DROPDOWN",
+      "internal_field": "partner_type_claimed",
+      "required": true,
+      "transform": "map_partner_type_claimed"
+    },
+    {
+      "tally_label": "Who do you serve?",
+      "tally_type": "TEXTAREA",
+      "internal_field": "audience",
+      "required": true,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "What industries do you usually work with?",
+      "tally_type": "INPUT_TEXT",
+      "internal_field": "industry",
+      "required": false,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "Approximate audience, client, or network size",
+      "tally_type": "MULTIPLE_CHOICE",
+      "internal_field": "traffic_or_network_size",
+      "required": false,
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "Describe your funding, finance, or referral experience",
+      "tally_type": "TEXTAREA",
+      "internal_field": "funding_experience",
+      "required": false,
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "Estimated monthly referral volume",
+      "tally_type": "MULTIPLE_CHOICE",
+      "internal_field": "referral_volume_estimate",
+      "required": false,
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "What tools do you currently use?",
+      "tally_type": "CHECKBOXES",
+      "internal_field": "current_tools",
+      "required": false,
+      "transform": "selected_labels_array"
+    },
+    {
+      "tally_label": "What partner role are you most interested in?",
+      "tally_type": "MULTIPLE_CHOICE",
+      "internal_field": "desired_partner_role",
+      "required": true,
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "Anything else we should know?",
+      "tally_type": "TEXTAREA",
+      "internal_field": "notes",
+      "required": false,
+      "transform": "trim_or_null"
+    }
+  ],
+  "metadata_fields": [
+    {
+      "tally_label": "Are you applying as an individual, company, or organization?",
+      "metadata_key": "applicant_entity_type",
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "Do you currently refer business funding deals?",
+      "metadata_key": "currently_refers_funding",
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "How do you currently send or manage referrals?",
+      "metadata_key": "referral_process",
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "If you selected Other tools, list them here",
+      "metadata_key": "current_tools_other",
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "What would make this partnership successful for you?",
+      "metadata_key": "success_goal",
+      "transform": "trim_or_null"
+    },
+    {
+      "tally_label": "How quickly are you hoping to launch?",
+      "metadata_key": "launch_timeline",
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "Best next step",
+      "metadata_key": "preferred_next_step",
+      "transform": "selected_label_or_null"
+    },
+    {
+      "tally_label": "Partner acknowledgment",
+      "metadata_key": "partner_acknowledgment",
+      "transform": "boolean_checked"
+    },
+    {
+      "tally_label": "Contact permission",
+      "metadata_key": "contact_permission",
+      "transform": "boolean_checked"
+    }
+  ],
+  "partner_type_claimed_map": {
+    "Funding broker": "funding_broker",
+    "ISO": "iso",
+    "Referral partner": "referral_partner",
+    "CPA / bookkeeper": "cpa_bookkeeper",
+    "Small business attorney": "small_business_attorney",
+    "Business broker": "business_broker",
+    "Real estate investor connector": "real_estate_investor_connector",
+    "Contractor / trades connector": "contractor_trades_connector",
+    "Franchise consultant": "franchise_consultant",
+    "Veteran community connector": "veteran_community_connector",
+    "Creator / affiliate": "creator_affiliate",
+    "Fintech / vendor partner": "fintech_vendor_partner",
+    "Strategic partner": "strategic_partner",
+    "Other": "other",
+    "Not sure yet": "unknown"
+  },
+  "default_values": {
+    "phone": null,
+    "company": null,
+    "website": null,
+    "location": null,
+    "audience": null,
+    "industry": null,
+    "funding_experience": null,
+    "current_tools": [],
+    "traffic_or_network_size": null,
+    "referral_volume_estimate": null,
+    "desired_partner_role": null,
+    "notes": null,
+    "source": "tally"
+  },
+  "normalization_rules": [
+    "Use the Tally response submission timestamp for submitted_at when available.",
+    "Keep raw Tally fields in raw_payload or metadata even when not mapped to the normalized intake schema.",
+    "Do not treat claimed referral volume, audience size, or partner type as verified facts.",
+    "Append useful metadata such as launch timeline, current referral process, and success goal into notes until a future storage contract stores them separately.",
+    "If partner_acknowledgment or contact_permission is missing or false, mark for manual review later; do not auto-approve.",
+    "Use compliance-safe wording only: no guaranteed approvals, no guaranteed funding amounts, no lender certainty, no credit repair positioning, no deceptive urgency, and no invented social proof."
+  ],
+  "example_output": {
+    "first_name": "Dana",
+    "last_name": "Fields",
+    "email": "dana@example.com",
+    "phone": "+1 202-555-0183",
+    "company": "Field Ledger Advisory",
+    "website": "https://fieldledger.example",
+    "partner_type_claimed": "cpa_bookkeeper",
+    "audience": "Service businesses, contractors, and local operators that need cash flow planning before tax deadlines.",
+    "industry": "Accounting and bookkeeping",
+    "location": "Washington, DC",
+    "funding_experience": "Refers clients to banks occasionally but wants a clearer funding readiness workflow.",
+    "current_tools": [
+      "QuickBooks",
+      "HubSpot",
+      "Google Sheets"
+    ],
+    "traffic_or_network_size": "100-500 active client or audience relationships",
+    "referral_volume_estimate": "3-5 relevant conversations per month",
+    "desired_partner_role": "Referral partner",
+    "notes": "Wants safe language and educational resources. Launch timeline: This month. Preferred next step: Send resources.",
+    "source": "tally",
+    "submitted_at": "2026-07-06T10:15:00-04:00"
+  }
+}

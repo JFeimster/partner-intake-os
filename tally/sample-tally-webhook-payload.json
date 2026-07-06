@@ -1,0 +1,279 @@
+{
+  "event_id": "evt_tally_partner_20260706_001",
+  "event_type": "FORM_RESPONSE",
+  "created_at": "2026-07-06T10:15:31-04:00",
+  "form_id": "form_partner_intake_demo_001",
+  "form_name": "Moonshine Capital Partner Intake",
+  "response_id": "resp_partner_20260706_001",
+  "submission_id": "sub_partner_20260706_001",
+  "respondent_id": "respondent_demo_001",
+  "fields": [
+    {
+      "key": "first_name",
+      "label": "First name",
+      "type": "INPUT_TEXT",
+      "value": "Dana",
+      "options": []
+    },
+    {
+      "key": "last_name",
+      "label": "Last name",
+      "type": "INPUT_TEXT",
+      "value": "Fields",
+      "options": []
+    },
+    {
+      "key": "email",
+      "label": "Email",
+      "type": "INPUT_EMAIL",
+      "value": "dana@example.com",
+      "options": []
+    },
+    {
+      "key": "phone",
+      "label": "Phone",
+      "type": "INPUT_PHONE_NUMBER",
+      "value": "+1 202-555-0183",
+      "options": []
+    },
+    {
+      "key": "company_brand",
+      "label": "Company / brand",
+      "type": "INPUT_TEXT",
+      "value": "Field Ledger Advisory",
+      "options": []
+    },
+    {
+      "key": "website_or_profile_url",
+      "label": "Website or profile URL",
+      "type": "INPUT_LINK",
+      "value": "https://fieldledger.example",
+      "options": []
+    },
+    {
+      "key": "primary_location_market",
+      "label": "Primary location / market",
+      "type": "INPUT_TEXT",
+      "value": "Washington, DC",
+      "options": []
+    },
+    {
+      "key": "which_best_describes_you",
+      "label": "Which best describes you?",
+      "type": "DROPDOWN",
+      "value": "CPA / bookkeeper",
+      "options": [
+        "Funding broker",
+        "ISO",
+        "Referral partner",
+        "CPA / bookkeeper",
+        "Small business attorney",
+        "Business broker",
+        "Real estate investor connector",
+        "Contractor / trades connector",
+        "Franchise consultant",
+        "Veteran community connector",
+        "Creator / affiliate",
+        "Fintech / vendor partner",
+        "Strategic partner",
+        "Other",
+        "Not sure yet"
+      ]
+    },
+    {
+      "key": "applicant_entity_type",
+      "label": "Are you applying as an individual, company, or organization?",
+      "type": "MULTIPLE_CHOICE",
+      "value": "Company / agency",
+      "options": [
+        "Individual",
+        "Company / agency",
+        "Nonprofit / community org",
+        "Vendor / platform",
+        "Other"
+      ]
+    },
+    {
+      "key": "who_do_you_serve",
+      "label": "Who do you serve?",
+      "type": "TEXTAREA",
+      "value": "Service businesses, contractors, and local operators that need cash flow planning before tax deadlines.",
+      "options": []
+    },
+    {
+      "key": "industries",
+      "label": "What industries do you usually work with?",
+      "type": "INPUT_TEXT",
+      "value": "Accounting and bookkeeping",
+      "options": []
+    },
+    {
+      "key": "network_size",
+      "label": "Approximate audience, client, or network size",
+      "type": "MULTIPLE_CHOICE",
+      "value": "100-500 active client or audience relationships",
+      "options": [
+        "Under 100",
+        "100-500 active client or audience relationships",
+        "501-2,500",
+        "2,501-10,000",
+        "10,001+",
+        "Not sure"
+      ]
+    },
+    {
+      "key": "currently_refers_funding",
+      "label": "Do you currently refer business funding deals?",
+      "type": "MULTIPLE_CHOICE",
+      "value": "Sometimes",
+      "options": [
+        "Yes, regularly",
+        "Sometimes",
+        "Rarely",
+        "No, but interested",
+        "Not applicable"
+      ]
+    },
+    {
+      "key": "funding_experience",
+      "label": "Describe your funding, finance, or referral experience",
+      "type": "TEXTAREA",
+      "value": "Refers clients to banks occasionally but wants a clearer funding readiness workflow.",
+      "options": []
+    },
+    {
+      "key": "monthly_referral_volume",
+      "label": "Estimated monthly referral volume",
+      "type": "MULTIPLE_CHOICE",
+      "value": "3-5 relevant conversations per month",
+      "options": [
+        "0",
+        "1-2",
+        "3-5 relevant conversations per month",
+        "6-10",
+        "11-25",
+        "26+",
+        "Not sure"
+      ]
+    },
+    {
+      "key": "referral_process",
+      "label": "How do you currently send or manage referrals?",
+      "type": "TEXTAREA",
+      "value": "Usually makes warm email introductions and tracks notes in HubSpot.",
+      "options": []
+    },
+    {
+      "key": "current_tools",
+      "label": "What tools do you currently use?",
+      "type": "CHECKBOXES",
+      "value": [
+        "QuickBooks",
+        "HubSpot",
+        "Google Sheets"
+      ],
+      "options": [
+        "HubSpot",
+        "GoHighLevel",
+        "Salesforce",
+        "Notion",
+        "Google Sheets",
+        "Airtable",
+        "Zapier",
+        "n8n",
+        "Activepieces",
+        "Mailchimp",
+        "ConvertKit",
+        "Calendly",
+        "Slack",
+        "QuickBooks",
+        "Other",
+        "None"
+      ]
+    },
+    {
+      "key": "current_tools_other",
+      "label": "If you selected Other tools, list them here",
+      "type": "INPUT_TEXT",
+      "value": "",
+      "options": []
+    },
+    {
+      "key": "desired_partner_role",
+      "label": "What partner role are you most interested in?",
+      "type": "MULTIPLE_CHOICE",
+      "value": "Referral partner",
+      "options": [
+        "Affiliate partner",
+        "Referral partner",
+        "Broker / funding advisor",
+        "Strategic channel partner",
+        "Education / community partner",
+        "Vendor / integration partner",
+        "Not sure yet"
+      ]
+    },
+    {
+      "key": "success_goal",
+      "label": "What would make this partnership successful for you?",
+      "type": "TEXTAREA",
+      "value": "A simple client-safe referral path and educational resources that do not overpromise outcomes.",
+      "options": []
+    },
+    {
+      "key": "launch_timeline",
+      "label": "How quickly are you hoping to launch?",
+      "type": "MULTIPLE_CHOICE",
+      "value": "This month",
+      "options": [
+        "Immediately",
+        "This week",
+        "This month",
+        "Next quarter",
+        "Still exploring"
+      ]
+    },
+    {
+      "key": "notes",
+      "label": "Anything else we should know?",
+      "type": "TEXTAREA",
+      "value": "Wants safe language and does not want to make funding promises to clients.",
+      "options": []
+    },
+    {
+      "key": "preferred_next_step",
+      "label": "Best next step",
+      "type": "MULTIPLE_CHOICE",
+      "value": "Send resources",
+      "options": [
+        "Send resources",
+        "Schedule intro call",
+        "Review my audience fit",
+        "Help me launch a campaign",
+        "Not sure"
+      ]
+    },
+    {
+      "key": "partner_acknowledgment",
+      "label": "Partner acknowledgment",
+      "type": "CHECKBOX",
+      "value": true,
+      "options": [
+        "I understand that Moonshine Capital reviews partner fit and does not guarantee funding approvals, funding amounts, lender matches, business credit results, or partner revenue."
+      ]
+    },
+    {
+      "key": "contact_permission",
+      "label": "Contact permission",
+      "type": "CHECKBOX",
+      "value": true,
+      "options": [
+        "I agree to be contacted about partner onboarding, resources, and next steps."
+      ]
+    }
+  ],
+  "raw_payload": {
+    "source": "sample_fixture",
+    "note": "Representative Tally-style payload for local mapping tests. Do not use real PII in committed fixtures."
+  }
+}
