@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/schemas/tracking-link.schema.json",
+  "title": "Partner Tracking Link",
+  "description": "A generated partner tracking link record for Partner Intake OS attribution.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "tracking_id": {
+      "type": "string",
+      "pattern": "^trk_[a-z0-9_]+$",
+      "description": "Unique tracking record ID."
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[a-z0-9_]+$"
+    },
+    "campaign_id": {
+      "type": "string",
+      "pattern": "^ck_[a-z0-9_]+$"
+    },
+    "destination_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "generated_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "partner",
+        "broker",
+        "affiliate",
+        "coi",
+        "event",
+        "email",
+        "social",
+        "manual",
+        "watchlist_test"
+      ]
+    },
+    "medium": {
+      "type": "string",
+      "enum": [
+        "email",
+        "sms",
+        "linkedin",
+        "facebook",
+        "instagram",
+        "youtube",
+        "podcast",
+        "newsletter",
+        "qr",
+        "event",
+        "direct",
+        "resource"
+      ]
+    },
+    "campaign": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]+$"
+    },
+    "content": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]+$"
+    },
+    "term": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]*$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "paused",
+        "retired",
+        "test",
+        "archived"
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "tracking_id",
+    "partner_id",
+    "campaign_id",
+    "destination_url",
+    "generated_url",
+    "source",
+    "medium",
+    "campaign",
+    "content",
+    "term",
+    "created_at",
+    "status",
+    "notes"
+  ],
+  "examples": [
+    {
+      "tracking_id": "trk_ptr_cpa_ledgerlane_2026q3_cashflow_newsletter",
+      "partner_id": "ptr_cpa_ledgerlane",
+      "campaign_id": "ck_cpa_cashflow_gap_2026q3",
+      "destination_url": "https://distilledfunding.com/partner-intake/submit-lead",
+      "generated_url": "https://distilledfunding.com/partner-intake/submit-lead?partner_id=ptr_cpa_ledgerlane&campaign_id=ck_cpa_cashflow_gap_2026q3&tracking_id=trk_ptr_cpa_ledgerlane_2026q3_cashflow_newsletter&referral_source=coi&utm_source=partner&utm_medium=newsletter&utm_campaign=cpa_cashflow_gap_2026q3&utm_content=monthly_client_note&utm_term=cash_flow",
+      "source": "partner",
+      "medium": "newsletter",
+      "campaign": "cpa_cashflow_gap_2026q3",
+      "content": "monthly_client_note",
+      "term": "cash_flow",
+      "created_at": "2026-07-06T14:00:00Z",
+      "status": "active",
+      "notes": "CPA/bookkeeper newsletter link for cash-flow gap checklist."
+    }
+  ]
+}

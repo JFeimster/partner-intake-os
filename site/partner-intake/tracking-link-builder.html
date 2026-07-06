@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Partner Tracking Link Builder | Partner Intake OS</title>
+  <link rel="stylesheet" href="tracking-link-builder.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="hero panel">
+      <div>
+        <p class="eyebrow">Partner Intake OS · Batch 19</p>
+        <h1>Partner Tracking Link Builder</h1>
+        <p class="lede">Generate partner-specific URLs with clean campaign attribution for lead submission, campaign kits, and future Partner Command Center reporting.</p>
+        <p class="notice">Static MVP: this page builds demo URLs in your browser. It does not shorten links, track clicks, store data, sync CRM records, or promise funding outcomes.</p>
+      </div>
+      <div class="hero-card">
+        <span class="status-dot"></span>
+        <strong>Attribution layer</strong>
+        <small>partner_id + campaign_id + tracking_id + UTM parameters</small>
+      </div>
+    </section>
+
+    <section class="grid two">
+      <form id="builderForm" class="panel form-panel">
+        <div class="section-head">
+          <p class="eyebrow">Builder</p>
+          <h2>Create a demo tracking URL</h2>
+        </div>
+
+        <label>Sample preset
+          <select id="presetSelect">
+            <option value="">Choose a preset...</option>
+          </select>
+        </label>
+
+        <div class="grid two compact">
+          <label>Partner ID
+            <input id="partner_id" required placeholder="ptr_cpa_ledgerlane" />
+          </label>
+          <label>Campaign ID
+            <input id="campaign_id" required placeholder="ck_cpa_cashflow_gap_2026q3" />
+          </label>
+        </div>
+
+        <label>Destination URL
+          <input id="destination_url" required placeholder="https://distilledfunding.com/partner-intake/submit-lead" />
+        </label>
+
+        <div class="grid two compact">
+          <label>Source
+            <select id="source">
+              <option>partner</option>
+              <option>broker</option>
+              <option>affiliate</option>
+              <option>coi</option>
+              <option>event</option>
+              <option>email</option>
+              <option>social</option>
+              <option>manual</option>
+              <option>watchlist_test</option>
+            </select>
+          </label>
+          <label>Medium
+            <select id="medium">
+              <option>email</option>
+              <option>sms</option>
+              <option>linkedin</option>
+              <option>facebook</option>
+              <option>instagram</option>
+              <option>youtube</option>
+              <option>podcast</option>
+              <option>newsletter</option>
+              <option>qr</option>
+              <option>event</option>
+              <option>direct</option>
+              <option>resource</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid two compact">
+          <label>UTM Campaign
+            <input id="campaign" required placeholder="cpa_cashflow_gap_2026q3" />
+          </label>
+          <label>UTM Content
+            <input id="content" required placeholder="newsletter_link_v1" />
+          </label>
+        </div>
+
+        <label>UTM Term
+          <input id="term" placeholder="cash_flow" />
+        </label>
+
+        <label>Notes
+          <textarea id="notes" rows="4" placeholder="Internal notes only. Do not include applicant PII."></textarea>
+        </label>
+
+        <div class="button-row">
+          <button type="submit">Generate tracking link</button>
+          <button type="button" class="secondary" id="resetBtn">Reset</button>
+        </div>
+      </form>
+
+      <section class="panel output-panel">
+        <div class="section-head">
+          <p class="eyebrow">Output</p>
+          <h2>Generated record</h2>
+        </div>
+        <div class="metric-row">
+          <div><span id="trackingIdPreview">trk_pending</span><small>tracking_id</small></div>
+          <div><span id="statusPreview">draft</span><small>status</small></div>
+        </div>
+        <label>Generated URL
+          <textarea id="generatedUrl" rows="7" readonly></textarea>
+        </label>
+        <div class="button-row">
+          <button type="button" id="copyUrlBtn">Copy generated URL</button>
+          <button type="button" class="secondary" id="copyJsonBtn">Copy JSON</button>
+        </div>
+        <pre id="jsonOutput" class="json-box">{}</pre>
+      </section>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <p class="eyebrow">Samples</p>
+        <h2>Preset tracking links</h2>
+      </div>
+      <div id="sampleCards" class="cards"></div>
+    </section>
+
+    <section class="panel guardrails">
+      <div>
+        <p class="eyebrow">Compliance guardrails</p>
+        <h2>Attribution is not approval</h2>
+      </div>
+      <ul>
+        <li>Do not place applicant PII in tracking URLs or UTM fields.</li>
+        <li>Do not use “guaranteed approval,” “everyone qualifies,” or credit repair language.</li>
+        <li>Use readiness, review, and routing language. Keep the claims sober; let the system be sharp.</li>
+      </ul>
+    </section>
+  </main>
+  <script src="tracking-link-builder.js"></script>
+</body>
+</html>

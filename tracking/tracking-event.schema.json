@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/schemas/tracking-event.schema.json",
+  "title": "Partner Tracking Event",
+  "description": "Click/conversion-style tracking event for future Partner Intake OS tracking API.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[a-z0-9_]+$"
+    },
+    "tracking_id": {
+      "type": "string",
+      "pattern": "^trk_[a-z0-9_]+$"
+    },
+    "partner_id": {
+      "type": "string",
+      "pattern": "^ptr_[a-z0-9_]+$"
+    },
+    "campaign_id": {
+      "type": "string",
+      "pattern": "^ck_[a-z0-9_]+$"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "link_created",
+        "link_clicked",
+        "lead_form_started",
+        "lead_submitted",
+        "campaign_assigned",
+        "manual_note",
+        "conversion_reported",
+        "test_event"
+      ]
+    },
+    "event_source": {
+      "type": "string",
+      "enum": [
+        "browser",
+        "server",
+        "gpt_action",
+        "admin_dashboard",
+        "lead_submission",
+        "hubspot",
+        "notion",
+        "manual"
+      ]
+    },
+    "landing_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "referrer": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "event_id",
+    "tracking_id",
+    "partner_id",
+    "campaign_id",
+    "event_type",
+    "event_source",
+    "landing_url",
+    "referrer",
+    "timestamp",
+    "metadata"
+  ],
+  "examples": [
+    {
+      "event_id": "evt_trk_ptr_cpa_ledgerlane_2026q3_click_001",
+      "tracking_id": "trk_ptr_cpa_ledgerlane_2026q3_cashflow_newsletter",
+      "partner_id": "ptr_cpa_ledgerlane",
+      "campaign_id": "ck_cpa_cashflow_gap_2026q3",
+      "event_type": "link_clicked",
+      "event_source": "server",
+      "landing_url": "https://distilledfunding.com/partner-intake/submit-lead?partner_id=ptr_cpa_ledgerlane",
+      "referrer": "https://ledgerlane.example/newsletter",
+      "timestamp": "2026-07-06T15:00:00Z",
+      "metadata": {
+        "user_agent_family": "desktop",
+        "ip_country": "US",
+        "note": "No PII stored in metadata."
+      }
+    }
+  ]
+}
