@@ -1,0 +1,103 @@
+{
+  "valid_partner_lead_submission": {
+    "description": "Standard partner-attributed lead submission that should return manual_review.",
+    "request": {
+      "partner_id": "partner_broker_001",
+      "tracking_id": "trk_broker_campaign_q3",
+      "referral_source": "partner_dashboard",
+      "source": "partner_api",
+      "external_id": "external-demo-001",
+      "business": {
+        "name": "Harborline Contractors LLC",
+        "industry": "Contracting",
+        "monthly_revenue_estimate": 85000,
+        "time_in_business": "3 years"
+      },
+      "contact": {
+        "name": "Morgan Lee",
+        "email": "morgan.lee@example.com",
+        "phone": "555-0101"
+      },
+      "funding": {
+        "requested_amount_estimate": 75000,
+        "use_of_funds": "Equipment purchase and working capital",
+        "timeline": "30 days"
+      },
+      "consent_confirmed": true,
+      "consent": {
+        "confirmed": true,
+        "method": "partner_form_checkbox",
+        "captured_at": "2026-07-06T12:00:00.000Z"
+      },
+      "notes": "Business owner gave permission to submit for funding options review."
+    },
+    "expected_status": 202,
+    "expected_review_status": "needs_review"
+  },
+  "missing_consent_submission": {
+    "description": "Submission should fail because consent is missing/false.",
+    "request": {
+      "partner_id": "partner_referral_002",
+      "business": {
+        "name": "Northstar Retail LLC"
+      },
+      "contact": {
+        "name": "Avery Client",
+        "email": "avery@example.com"
+      },
+      "consent_confirmed": false,
+      "consent": {
+        "confirmed": false
+      }
+    },
+    "expected_status": 400,
+    "expected_error": "VALIDATION_ERROR"
+  },
+  "high_risk_language_submission": {
+    "description": "Submission should be accepted for manual review with risk flags.",
+    "request": {
+      "partner_id": "partner_affiliate_003",
+      "tracking_id": "trk_affiliate_aggressive_copy",
+      "referral_source": "affiliate_content",
+      "source": "partner_api",
+      "business": {
+        "name": "Fast Growth Retail LLC",
+        "industry": "Retail",
+        "monthly_revenue_estimate": 25000,
+        "time_in_business": "10 months"
+      },
+      "contact": {
+        "name": "Taylor Owner",
+        "email": "taylor@example.com"
+      },
+      "funding": {
+        "requested_amount_estimate": 400000,
+        "use_of_funds": "Expansion",
+        "timeline": "Immediate"
+      },
+      "consent_confirmed": true,
+      "consent": {
+        "confirmed": true,
+        "method": "verbal_permission_logged"
+      },
+      "notes": "Partner said they promised guaranteed approval. Needs compliance review."
+    },
+    "expected_status": 202,
+    "expected_risk_flag": "restricted_or_guarantee_language_detected"
+  },
+  "log_event_payload": {
+    "description": "Lead event logging payload.",
+    "request": {
+      "event_type": "manual_review",
+      "lead_id": "lead_demo123456",
+      "partner_id": "partner_broker_001",
+      "tracking_id": "trk_broker_campaign_q3",
+      "summary": "Operator flagged lead for manual attribution review.",
+      "metadata": {
+        "source": "admin_review",
+        "reason": "Confirm consent capture before CRM sync."
+      }
+    },
+    "expected_status": 202
+  }
+}
