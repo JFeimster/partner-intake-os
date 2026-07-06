@@ -1,17 +1,23 @@
 {
-  "phase": "Phase 21 \u2014 Repo Integration + Merge Validation",
-  "created_at": "2026-07-06T17:34:49.348399",
+  "phase": "Phase 22",
+  "name": "Vercel Deployment Test Window",
+  "created_at": "2026-07-06T19:04:36.629236Z",
   "files": [
-    "repo-integration/README.md",
-    "repo-integration/batches-13-20-merge-plan.md",
-    "repo-integration/file-conflict-resolution.md",
-    "repo-integration/post-merge-checklist.md",
-    "repo-integration/pr-description.md",
-    "repo-integration/pre-merge-checklist.md",
-    "repo-integration/root-folder-audit.md",
-    "repo-integration/static-path-validation.md",
-    "scripts/validate-partner-intake-structure.ps1",
-    "tests/merge-validation-checklist.md"
+    "deployment/test-window-guide.md",
+    "deployment/vercel-deploy-runbook.md",
+    "deployment/static-route-smoke-tests.md",
+    "deployment/api-smoke-tests.md",
+    "deployment/env-var-verification.md",
+    "deployment/deploy-lockdown-plan.md",
+    "deployment/deployment-incident-log.md",
+    "scripts/vercel-smoke-test.ps1",
+    "tests/vercel-test-window-checklist.md"
   ],
-  "notes": "Generated as a downloadable manual-add package. No secrets or live credentials included."
+  "notes": [
+    "No secrets included.",
+    "No API code implemented.",
+    "No static dashboard files modified.",
+    "No GitHub or Vercel settings changed by this package.",
+    "Designed to be copied into repo root."
+  ]
 }
