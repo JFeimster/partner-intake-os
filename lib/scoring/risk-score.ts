@@ -1,114 +1,40 @@
-import type { PartnerIntake } from "../normalizers/normalize-tally-submission";
+/**
+ * Explainable risk scoring
+ * Partner Intake OS — generated production scaffold.
+ * No secrets, tokens, partner PII, lead PII, borrower data, or admin sessions should be stored in this file.
+ */
 
-const highRiskTerms = [
-  "guaranteed approval",
-  "guarantee approval",
-  "no denial",
-  "everyone qualifies",
-  "credit repair",
-  "fake docs",
-  "synthetic identity",
-  "aged tradeline",
-  "lead scrape",
-  "scraped leads",
-  "mass text",
-  "spam",
-  "bypass underwriting"
+export type RiskLevel = "low" | "medium" | "high" | "blocked";
+
+export interface RiskScanResult {
+  risk_level: RiskLevel;
+  risk_score: number;
+  flags: Array<{ id: string; severity: "low" | "medium" | "high" | "blocked"; phrase?: string; reason: string }>;
+  manual_review_required: boolean;
+}
+
+const RISK_PATTERNS = [
+  { id: "guarantee_language", severity: "high" as const, phrases: ["guaranteed approval", "everyone qualifies", "instant funding"], reason: "Potential approval or funding certainty language." },
+  { id: "lead_seller", severity: "high" as const, phrases: ["aged leads", "bulk leads", "guaranteed exclusive leads"], reason: "Lead source quality and consent risk." },
+  { id: "credit_repair", severity: "blocked" as const, phrases: ["credit repair", "delete tradelines", "remove collections"], reason: "Credit repair positioning is outside approved framing." }
 ];
 
-const cautionTerms = [
-  "mca stacking",
-  "high volume cold sms",
-  "purchased leads",
-  "no consent",
-  "instant funding",
-  "bad credit guaranteed",
-  "same day approval"
-];
+export function scoreRisk(text: string): RiskScanResult {
+  const lower = text.toLowerCase();
+  const flags = RISK_PATTERNS.flatMap((pattern) =>
+    pattern.phrases
+      .filter((phrase) => lower.includes(phrase))
+      .map((phrase) => ({ id: pattern.id, severity: pattern.severity, phrase, reason: pattern.reason }))
+  );
 
-function haystack(intake: PartnerIntake): string {
-  return [
-    intake.partner_type_claimed,
-    intake.audience,
-    intake.industry,
-    intake.funding_experience,
-    intake.current_tools?.join(" "),
-    intake.traffic_or_network_size,
-    intake.referral_volume_estimate,
-    intake.desired_partner_role,
-    intake.notes
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-}
-
-export function collectRiskFlags(intake: PartnerIntake): string[] {
-  const text = haystack(intake);
-  const flags: string[] = [];
-
-  for (const term of highRiskTerms) {
-    if (text.includes(term)) {
-      flags.push(`high_risk_language:${term.replace(/\s+/g, "_")}`);
-    }
+  if (flags.some((flag) => flag.severity === "blocked")) {
+    return { risk_level: "blocked", risk_score: 100, flags, manual_review_required: true };
   }
-
-  for (const term of cautionTerms) {
-    if (text.includes(term)) {
-      flags.push(`caution_language:${term.replace(/\s+/g, "_")}`);
-    }
+  if (flags.some((flag) => flag.severity === "high")) {
+    return { risk_level: "high", risk_score: 80, flags, manual_review_required: true };
   }
-
-  if (!intake.email) {
-    flags.push("missing_email");
+  if (flags.length > 0) {
+    return { risk_level: "medium", risk_score: 45, flags, manual_review_required: true };
   }
-
-  if (!intake.audience && !intake.industry) {
-    flags.push("missing_audience_or_industry");
-  }
-
-  if (intake.partner_type_claimed === "unknown" || intake.partner_type_claimed === "other") {
-    flags.push("unclear_partner_type");
-  }
-
-  return flags;
-}
-
-export function estimateComplianceRiskScore(intake: PartnerIntake): number {
-  const flags = collectRiskFlags(intake);
-  let score = 1;
-
-  if (flags.some((flag) => flag.startsWith("caution_language"))) {
-    score += 2;
-  }
-
-  if (flags.some((flag) => flag.startsWith("high_risk_language"))) {
-    score += 4;
-  }
-
-  if (flags.includes("missing_email")) {
-    score += 2;
-  }
-
-  if (flags.includes("unclear_partner_type")) {
-    score += 1;
-  }
-
-  return Math.min(5, score);
-}
-
-export function determineRiskLevel(complianceRiskScore: number, riskFlags: string[]): "low" | "medium" | "high" | "critical" {
-  if (riskFlags.some((flag) => flag.startsWith("high_risk_language"))) {
-    return "critical";
-  }
-
-  if (complianceRiskScore >= 4) {
-    return "high";
-  }
-
-  if (complianceRiskScore >= 3 || riskFlags.length >= 2) {
-    return "medium";
-  }
-
-  return "low";
+  return { risk_level: "low", risk_score: 10, flags, manual_review_required: false };
 }

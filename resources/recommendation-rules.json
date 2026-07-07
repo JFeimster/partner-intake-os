@@ -1,0 +1,113 @@
+{
+  "version": "2026-07-batch-42",
+  "rules": [
+    {
+      "partner_type": "broker",
+      "tier": [
+        "tier_1_review",
+        "tier_2",
+        "tier_3"
+      ],
+      "risk_level": [
+        "low",
+        "medium"
+      ],
+      "resources": [
+        "lead-submission-kit",
+        "funding-product-matrix",
+        "missing-docs-checklist"
+      ]
+    },
+    {
+      "partner_type": "cpa_bookkeeper",
+      "tier": [
+        "tier_2",
+        "tier_3"
+      ],
+      "risk_level": [
+        "low",
+        "medium"
+      ],
+      "resources": [
+        "client-readiness-kit",
+        "cash-flow-gap-checklist",
+        "referral-script"
+      ]
+    },
+    {
+      "partner_type": "affiliate",
+      "tier": [
+        "tier_2",
+        "tier_3",
+        "tier_4_nurture"
+      ],
+      "risk_level": [
+        "low",
+        "medium"
+      ],
+      "resources": [
+        "compliant-promo-kit",
+        "tracking-link-guide",
+        "content-angle-library"
+      ]
+    },
+    {
+      "partner_type": "attorney",
+      "tier": [
+        "tier_1_review",
+        "tier_2"
+      ],
+      "risk_level": [
+        "low",
+        "medium"
+      ],
+      "resources": [
+        "intro-referral-kit",
+        "client-readiness-one-pager",
+        "disclosure-language"
+      ]
+    },
+    {
+      "partner_type": "veteran_connector",
+      "tier": [
+        "tier_1_review",
+        "tier_2",
+        "tier_3"
+      ],
+      "risk_level": [
+        "low",
+        "medium"
+      ],
+      "resources": [
+        "community-education-kit",
+        "funding-readiness-workshop-outline",
+        "partner-intro-script"
+      ]
+    },
+    {
+      "partner_type": "strategic_partner",
+      "tier": [
+        "tier_1_review"
+      ],
+      "risk_level": [
+        "low",
+        "medium"
+      ],
+      "resources": [
+        "co-marketing-kit",
+        "api-intake-brief",
+        "partner-workflow-map"
+      ]
+    }
+  ],
+  "safe_language": {
+    "required_notice": "Funding options may vary. No approval, funding, rates, terms, timelines, lender review, commissions, income, or specific business outcome is guaranteed.",
+    "forbidden": [
+      "guaranteed approval",
+      "everyone qualifies",
+      "instant funding",
+      "guaranteed commission",
+      "risk-free"
+    ]
+  }
+}

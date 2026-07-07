@@ -1,0 +1,55 @@
+{
+  "version": "2026-07-batch-41",
+  "risk_levels": [
+    "low",
+    "medium",
+    "high",
+    "blocked"
+  ],
+  "rules": [
+    {
+      "id": "guarantee_language",
+      "severity": "high",
+      "matches": [
+        "guaranteed approval",
+        "everyone qualifies",
+        "instant funding"
+      ],
+      "risk_level": "high",
+      "manual_review_required": true
+    },
+    {
+      "id": "lead_seller_language",
+      "severity": "high",
+      "matches": [
+        "aged leads",
+        "bulk leads",
+        "exclusive leads guaranteed"
+      ],
+      "risk_level": "high",
+      "manual_review_required": true
+    },
+    {
+      "id": "missing_consent",
+      "severity": "medium",
+      "matches": [
+        "no consent",
+        "not sure about opt in"
+      ],
+      "risk_level": "medium",
+      "manual_review_required": true
+    },
+    {
+      "id": "consumer_credit_repair",
+      "severity": "blocked",
+      "matches": [
+        "credit repair",
+        "delete tradelines",
+        "remove collections"
+      ],
+      "risk_level": "blocked",
+      "manual_review_required": true
+    }
+  ],
+  "safe_response": "Manual review required. Keep all messaging educational, readiness-based, and non-guaranteed."
+}

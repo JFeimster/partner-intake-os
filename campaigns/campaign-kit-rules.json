@@ -1,0 +1,76 @@
+{
+  "version": "2026-07-batch-42",
+  "campaigns": [
+    {
+      "id": "broker-lead-submission-kit",
+      "partner_type": "broker",
+      "channels": [
+        "email",
+        "crm",
+        "partner_portal"
+      ],
+      "cta": "Submit a client for review",
+      "angle": "Turn stalled SMB funding conversations into structured intake."
+    },
+    {
+      "id": "cpa-client-readiness-kit",
+      "partner_type": "cpa_bookkeeper",
+      "channels": [
+        "email",
+        "client_meeting",
+        "newsletter"
+      ],
+      "cta": "Check funding readiness",
+      "angle": "Help clients understand cash-flow gaps before they need emergency capital."
+    },
+    {
+      "id": "affiliate-compliant-promo-kit",
+      "partner_type": "affiliate",
+      "channels": [
+        "social",
+        "newsletter",
+        "landing_page"
+      ],
+      "cta": "Request funding options review",
+      "angle": "Educational funding readiness content for business owners."
+    },
+    {
+      "id": "attorney-intro-referral-kit",
+      "partner_type": "attorney",
+      "channels": [
+        "email",
+        "referral_intro"
+      ],
+      "cta": "Request partner access",
+      "angle": "Structured capital-readiness handoff for business clients."
+    },
+    {
+      "id": "veteran-community-education-kit",
+      "partner_type": "veteran_connector",
+      "channels": [
+        "workshop",
+        "community_email"
+      ],
+      "cta": "Apply to become a partner",
+      "angle": "Practical funding readiness education for veteran-owned businesses."
+    },
+    {
+      "id": "strategic-co-marketing-kit",
+      "partner_type": "strategic_partner",
+      "channels": [
+        "webinar",
+        "integration",
+        "co_marketing"
+      ],
+      "cta": "Request strategic partner review",
+      "angle": "Shared partner workflow that routes SMBs into readiness-based review."
+    }
+  ],
+  "forbidden_copy": [
+    "get approved instantly",
+    "everyone qualifies",
+    "guaranteed commission",
+    "guaranteed funding",
+    "risk-free funding"
+  ]
+}

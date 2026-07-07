@@ -1,21 +1,20 @@
-import { createSuccess, readJson, sendJson, withApiHandler, type ApiRequest, type ApiResponse } from "../../lib/http";
-import { asObject, inferAudience, inferPartnerType, recommendResources } from "../../lib/validation";
+/**
+ * Resource recommendation endpoint
+ * Partner Intake OS — generated production scaffold.
+ * No secrets, tokens, partner PII, lead PII, borrower data, or admin sessions should be stored in this file.
+ */
 
-export default async function handler(req: ApiRequest, res: ApiResponse): Promise<void> {
-  return withApiHandler(req, res, { methods: ["POST"], auth: "bearer" }, async ({ requestId }) => {
-    const payload = asObject(await readJson(req));
-    const intake = (payload.intake && typeof payload.intake === "object") ? payload.intake as Record<string, unknown> : payload;
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { recommendResources } from "../../lib/resources/recommend-resources";
 
-    const partnerType = String(payload.partner_type || inferPartnerType(intake));
-    const audience = String(payload.audience || inferAudience(intake));
-    const resources = recommendResources(partnerType, audience);
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST") return res.status(405).json({ error: "method_not_allowed" });
 
-    sendJson(res, 200, createSuccess(requestId, {
-      partner_type: partnerType,
-      audience,
-      recommended_resources: resources,
-      next_action: "Attach the highest-priority resource to the partner onboarding record.",
-      compliance_note: "Resources are educational and operational only. They must not imply funding approval, guaranteed terms, or guaranteed commissions."
-    }));
+  const recommendations = recommendResources(req.body ?? {});
+  return res.status(200).json({
+    ok: true,
+    recommendations,
+    status: "received_for_review",
+    note: "Recommendations are educational and operational. No funding, approval, commission, or business outcome is guaranteed."
   });
 }

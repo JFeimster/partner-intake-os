@@ -1,0 +1,44 @@
+{
+  "version": "2026-07-batch-41",
+  "score_range": {
+    "min": 0,
+    "max": 100
+  },
+  "tiers": [
+    {
+      "tier": "tier_1_review",
+      "min_score": 85,
+      "max_score": 100,
+      "description": "High-value strategic or channel partner requiring senior review before activation."
+    },
+    {
+      "tier": "tier_2",
+      "min_score": 70,
+      "max_score": 84,
+      "description": "Strong active referral or affiliate partner candidate."
+    },
+    {
+      "tier": "tier_3",
+      "min_score": 50,
+      "max_score": 69,
+      "description": "New or unproven partner with usable audience fit."
+    },
+    {
+      "tier": "tier_4_nurture",
+      "min_score": 25,
+      "max_score": 49,
+      "description": "Nurture/watchlist partner; education-first path."
+    },
+    {
+      "tier": "reject_or_risk_review",
+      "min_score": 0,
+      "max_score": 24,
+      "description": "Reject, pause, or risk-review path."
+    }
+  ],
+  "manual_review_overrides": {
+    "severe_compliance_flag": "reject_or_risk_review",
+    "missing_consent": "needs_review",
+    "strategic_partner_claim": "tier_1_review"
+  }
+}
