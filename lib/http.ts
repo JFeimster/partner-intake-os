@@ -9,6 +9,7 @@ export type ApiRequest = {
   headers?: Record<string, HeaderValue>;
   body?: unknown;
   query?: Record<string, string | string[]>;
+  rawBody?: string | Buffer;
   [key: string]: unknown;
 };
 
@@ -120,8 +121,15 @@ export async function readJson(req: ApiRequest): Promise<unknown> {
 }
 
 export async function readRawBody(req: ApiRequest): Promise<string> {
+  if (typeof req.rawBody === "string") return req.rawBody;
+  if (Buffer.isBuffer(req.rawBody)) return req.rawBody.toString("utf8");
   if (typeof req.body === "string") return req.body;
-  if (req.body && typeof req.body === "object") return JSON.stringify(req.body);
+
+  // Do not reconstruct a raw body from a parsed object. HMAC signatures must be
+  // verified against the original byte sequence, not JSON.stringify(req.body).
+  // Returning an empty string makes signed webhook verification fail closed if
+  // the platform/middleware parsed the body before this helper received it.
+  if (req.body && typeof req.body === "object") return "";
 
   const maybeStream = req as unknown as AsyncIterable<Buffer | string>;
 

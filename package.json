@@ -1,0 +1,13 @@
+{
+  "name": "partner-intake-os",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:json": "node scripts/validate-json.mjs",
+    "validate:openapi": "node scripts/validate-openapi.mjs",
+    "validate:structure": "powershell -ExecutionPolicy Bypass -File scripts/validate-partner-intake-structure.ps1 -Root .",
+    "validate": "npm run validate:json && npm run validate:openapi"
+  },
+  "devDependencies": {}
+}

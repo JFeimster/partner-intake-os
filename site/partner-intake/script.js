@@ -25,6 +25,14 @@ function safeText(value, fallback = "—") {
   return String(value);
 }
 
+function appendText(parent, tagName, text, className) {
+  const element = document.createElement(tagName);
+  if (className) element.className = className;
+  element.textContent = text;
+  parent.append(element);
+  return element;
+}
+
 async function fetchJson(path) {
   const response = await fetch(path, { cache: "no-store" });
   if (!response.ok) {
@@ -68,6 +76,28 @@ function renderPartnerProfile(profile) {
   renderScorecard(scorecard);
 }
 
+function createScoreRow(label, rawScore) {
+  const score = Math.max(0, Math.min(100, Number(rawScore || 0)));
+  const row = document.createElement("div");
+  row.className = "score-row";
+
+  const scoreLabel = document.createElement("div");
+  scoreLabel.className = "score-label";
+  appendText(scoreLabel, "span", label);
+  appendText(scoreLabel, "strong", String(score));
+
+  const scoreBar = document.createElement("div");
+  scoreBar.className = "score-bar";
+  scoreBar.setAttribute("aria-label", `${label} score ${score} out of 100`);
+
+  const fill = document.createElement("span");
+  fill.style.width = `${score}%`;
+  scoreBar.append(fill);
+
+  row.append(scoreLabel, scoreBar);
+  return row;
+}
+
 function renderScorecard(scorecard) {
   const scores = [
     ["Urgency", scorecard.urgency_score],
@@ -80,18 +110,15 @@ function renderScorecard(scorecard) {
   ];
 
   const list = $("#scorecardList");
-  list.replaceChildren();
+  list.replaceChildren(...scores.map(([label, rawScore]) => createScoreRow(label, rawScore)));
+}
 
-  scores.forEach(([label, rawScore]) => {
-    const score = Math.max(0, Math.min(100, Number(rawScore || 0)));
-    const row = document.createElement("div");
-    row.className = "score-row";
-    row.innerHTML = `
-      <div class="score-label"><span>${label}</span><strong>${score}</strong></div>
-      <div class="score-bar" aria-label="${label} score ${score} out of 100"><span style="width: ${score}%"></span></div>
-    `;
-    list.append(row);
-  });
+function createTimelineItem(label, itemText) {
+  const item = document.createElement("div");
+  item.className = "timeline-item";
+  appendText(item, "span", label);
+  appendText(item, "p", safeText(itemText, "No task assigned yet."));
+  return item;
 }
 
 function renderOnboarding(onboarding) {
@@ -102,58 +129,59 @@ function renderOnboarding(onboarding) {
     ["First 30 days", onboarding.first_30_days]
   ];
 
-  preview.replaceChildren();
-  phases.forEach(([label, items]) => {
-    const item = document.createElement("div");
-    item.className = "timeline-item";
-    const firstItem = Array.isArray(items) ? items[0] : items;
-    item.innerHTML = `<span>${label}</span><p>${safeText(firstItem, "No task assigned yet.")}</p>`;
-    preview.append(item);
+  const items = phases.map(([label, values]) => {
+    const firstItem = Array.isArray(values) ? values[0] : values;
+    return createTimelineItem(label, firstItem);
   });
+
+  preview.replaceChildren(...items);
+}
+
+function createMetaRow(values) {
+  const row = document.createElement("div");
+  row.className = "card-meta";
+  values.forEach((value) => appendText(row, "span", value));
+  return row;
+}
+
+function createResourceCard(resource) {
+  const card = document.createElement("article");
+  card.className = "resource-item";
+  appendText(card, "h4", safeText(resource.title));
+  appendText(card, "p", safeText(resource.description));
+  card.append(createMetaRow([
+    safeText(resource.resource_type),
+    titleCase(resource.priority || "standard"),
+    safeText(resource.cta, "Send resource")
+  ]));
+  return card;
 }
 
 function renderResources(resourcesPayload) {
   const resources = resourcesPayload.resources || [];
   const grid = $("#resourceGrid");
   $("#resourceCount").textContent = `${resources.length} assets`;
-  grid.replaceChildren();
+  grid.replaceChildren(...resources.map(createResourceCard));
+}
 
-  resources.forEach((resource) => {
-    const card = document.createElement("article");
-    card.className = "resource-item";
-    card.innerHTML = `
-      <h4>${safeText(resource.title)}</h4>
-      <p>${safeText(resource.description)}</p>
-      <div class="card-meta">
-        <span>${safeText(resource.resource_type)}</span>
-        <span>${titleCase(resource.priority || "standard")}</span>
-        <span>${safeText(resource.cta, "Send resource")}</span>
-      </div>
-    `;
-    grid.append(card);
-  });
+function createCampaignCard(campaign) {
+  const card = document.createElement("article");
+  card.className = "campaign-item";
+  appendText(card, "h4", safeText(campaign.title));
+  appendText(card, "p", safeText(campaign.offer));
+  card.append(createMetaRow([
+    safeText(campaign.audience),
+    safeText(campaign.cta),
+    safeText(campaign.status)
+  ]));
+  return card;
 }
 
 function renderCampaigns(campaignsPayload) {
   const campaigns = campaignsPayload.campaigns || [];
   const list = $("#campaignList");
   $("#campaignCount").textContent = `${campaigns.length} kits`;
-  list.replaceChildren();
-
-  campaigns.forEach((campaign) => {
-    const card = document.createElement("article");
-    card.className = "campaign-item";
-    card.innerHTML = `
-      <h4>${safeText(campaign.title)}</h4>
-      <p>${safeText(campaign.offer)}</p>
-      <div class="card-meta">
-        <span>${safeText(campaign.audience)}</span>
-        <span>${safeText(campaign.cta)}</span>
-        <span>${safeText(campaign.status)}</span>
-      </div>
-    `;
-    list.append(card);
-  });
+  list.replaceChildren(...campaigns.map(createCampaignCard));
 }
 
 function renderAdmin(admin) {
