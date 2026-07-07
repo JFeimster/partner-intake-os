@@ -1,137 +1,22 @@
-import { isLeadId, normalizeLeadId } from "../../lib/leads/lead-id";
-import { buildLeadLookupStub } from "../../lib/leads/lead-router";
-
-
-type ApiRequest = {
-  method?: string;
-  headers: Record<string, string | string[] | undefined>;
-  body?: unknown;
-  query?: Record<string, string | string[] | undefined>;
-  [key: string]: unknown;
-};
-
-type ApiResponse = {
-  statusCode?: number;
-  setHeader(name: string, value: string): void;
-  end(body?: string): void;
-};
-
-function setNoStore(res: ApiResponse): void {
-  res.setHeader("Cache-Control", "no-store, max-age=0");
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
+function requireAdmin(req: any): boolean {
+  const token = req.headers?.authorization?.replace(/^Bearer\s+/i, "");
+  return Boolean(token && process.env.PARTNER_INTAKE_ADMIN_TOKEN && token === process.env.PARTNER_INTAKE_ADMIN_TOKEN);
 }
 
-function sendJson(res: ApiResponse, statusCode: number, payload: Record<string, unknown>): void {
-  res.statusCode = statusCode;
-  setNoStore(res);
-  res.end(JSON.stringify(payload, null, 2));
-}
+export default async function handler(req: any, res: any) {
+  if (!requireAdmin(req)) return res.status(401).json({ error: "unauthorized" });
 
-async function readJson(req: ApiRequest): Promise<unknown> {
-  if (req.body && typeof req.body === "object") return req.body;
+  const { lead_id } = req.query ?? {};
+  if (!lead_id) return res.status(400).json({ error: "missing_lead_id" });
 
-  const chunks: Buffer[] = [];
-  const stream = req as unknown as AsyncIterable<Buffer | string>;
-
-  if (!stream || typeof stream[Symbol.asyncIterator] !== "function") {
-    return {};
-  }
-
-  for await (const chunk of stream) {
-    chunks.push(Buffer.from(chunk));
-  }
-
-  if (!chunks.length) return {};
-
-  const raw = Buffer.concat(chunks).toString("utf8");
-  if (!raw.trim()) return {};
-  return JSON.parse(raw);
-}
-
-function getHeader(req: ApiRequest, name: string): string {
-  const direct = req.headers[name] || req.headers[name.toLowerCase()];
-  if (Array.isArray(direct)) return direct[0] || "";
-  return direct || "";
-}
-
-function requireBearerAuth(req: ApiRequest): { ok: true } | { ok: false; code: string; message: string } {
-  const expected = process.env.PARTNER_INTAKE_ACTION_TOKEN || process.env.PARTNER_LEAD_SUBMISSION_TOKEN;
-  const authorization = getHeader(req, "authorization");
-  const received = authorization.replace(/^Bearer\s+/i, "").trim();
-
-  if (!expected) {
-    return {
-      ok: false,
-      code: "AUTH_NOT_CONFIGURED",
-      message: "Lead submission auth is not configured."
-    };
-  }
-
-  if (!received || received !== expected) {
-    return {
-      ok: false,
-      code: "UNAUTHORIZED",
-      message: "Valid Bearer token is required."
-    };
-  }
-
-  return { ok: true };
-}
-
-function requestId(req: ApiRequest): string {
-  return getHeader(req, "x-request-id") || `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function getLeadId(req: ApiRequest): string {
-  const raw = req.query?.lead_id;
-  return normalizeLeadId(Array.isArray(raw) ? raw[0] : raw);
-}
-
-export default async function handler(req: ApiRequest, res: ApiResponse): Promise<void> {
-  const rid = requestId(req);
-  res.setHeader("X-Request-Id", rid);
-
-  if (req.method !== "GET") {
-    return sendJson(res, 405, {
-      ok: false,
-      error: {
-        code: "METHOD_NOT_ALLOWED",
-        message: "Use GET for lead lookup."
-      },
-      request_id: rid
+  if (req.method === "GET") {
+    return res.status(200).json({
+      ok: true,
+      lead_id,
+      status: "received_for_review",
+      note: "Placeholder response. Production implementation should load sanitized lead data from Postgres.",
     });
   }
 
-  const auth = requireBearerAuth(req);
-  if (!auth.ok) {
-    return sendJson(res, auth.code === "AUTH_NOT_CONFIGURED" ? 500 : 401, {
-      ok: false,
-      error: {
-        code: auth.code,
-        message: auth.message
-      },
-      request_id: rid
-    });
-  }
-
-  const leadId = getLeadId(req);
-  if (!isLeadId(leadId)) {
-    return sendJson(res, 400, {
-      ok: false,
-      error: {
-        code: "INVALID_LEAD_ID",
-        message: "Lead ID must match lead_* format."
-      },
-      request_id: rid
-    });
-  }
-
-  const lead = buildLeadLookupStub(leadId);
-
-  return sendJson(res, 200, {
-    ok: true,
-    message: "Lead lookup returned a review-safe record. Status does not represent approval, funding, or lender decisioning.",
-    lead,
-    request_id: rid
-  });
+  return res.status(405).json({ error: "method_not_allowed" });
 }
