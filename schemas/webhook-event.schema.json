@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://partner-command-center.local/schemas/webhook-event.schema.json",
+  "title": "Partner Intake OS Webhook Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_type",
+    "created_at",
+    "data"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "partner.created",
+        "partner.review_required",
+        "partner.onboarding_ready",
+        "lead.received",
+        "lead.needs_info",
+        "tracking.link_created",
+        "campaign.generated",
+        "resource.recommended"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "partner_id": {
+          "type": "string"
+        },
+        "lead_id": {
+          "type": "string"
+        },
+        "tracking_link_id": {
+          "type": "string"
+        },
+        "campaign_id": {
+          "type": "string"
+        },
+        "resource_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "next_retry_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "event_id": "evt_demo_001",
+      "event_type": "partner.review_required",
+      "created_at": "2026-07-06T12:00:00.000Z",
+      "data": {
+        "partner_id": "ptr_demo_001",
+        "status": "needs_review"
+      }
+    }
+  ]
+}
