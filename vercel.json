@@ -5,6 +5,16 @@
   "git": {
     "deploymentEnabled": true
   },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/site/partner-intake/index.html"
+    },
+    {
+      "source": "/site/partner-intake",
+      "destination": "/site/partner-intake/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
