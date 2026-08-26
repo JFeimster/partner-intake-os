@@ -1,9 +1,9 @@
 const DATA_FILES = {
-  profile: "data/sample-partner-profile.json",
-  onboarding: "data/sample-onboarding-plan.json",
-  resources: "data/sample-resource-recommendations.json",
-  campaigns: "data/sample-campaign-recommendations.json",
-  admin: "data/sample-admin-review-card.json"
+  profile: "/site/partner-intake/data/sample-partner-profile.json",
+  onboarding: "/site/partner-intake/data/sample-onboarding-plan.json",
+  resources: "/site/partner-intake/data/sample-resource-recommendations.json",
+  campaigns: "/site/partner-intake/data/sample-campaign-recommendations.json",
+  admin: "/site/partner-intake/data/sample-admin-review-card.json"
 };
 
 const $ = (selector) => document.querySelector(selector);
