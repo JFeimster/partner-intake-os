@@ -8,11 +8,11 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/site/partner-intake/index.html"
+      "destination": "/site/partner-intake/"
     },
     {
       "source": "/site/partner-intake",
-      "destination": "/site/partner-intake/index.html"
+      "destination": "/site/partner-intake/"
     }
   ],
   "headers": [
