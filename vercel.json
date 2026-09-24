@@ -8,11 +8,11 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/site/partner-intake/"
+      "destination": "/site/partner-intake-os-launch-site/"
     },
     {
-      "source": "/site/partner-intake",
-      "destination": "/site/partner-intake/"
+      "source": "/site/partner-intake-os-launch-site",
+      "destination": "/site/partner-intake-os-launch-site/"
     }
   ],
   "headers": [
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "source": "/site/partner-intake/(.*)",
+      "source": "/site/partner-intake-os-launch-site/(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
